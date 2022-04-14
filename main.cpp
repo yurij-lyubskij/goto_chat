@@ -1,10 +1,11 @@
 #include <algorithm>
 #include <iostream>
-#include "Router.h"
+#include "Server.h"
 
 int main () {
     size_t n;
     Router A();
+    Server server();
 
     return 0;
 }

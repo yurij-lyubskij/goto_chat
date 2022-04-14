@@ -3,3 +3,11 @@
 //
 
 #include "MiddleWare.h"
+
+void CheckAuth::CanHandle() {
+
+}
+
+void CheckAuth::Handle() {
+
+}

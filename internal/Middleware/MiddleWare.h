@@ -15,10 +15,10 @@ public:
     virtual void Handle() = 0;
 };
 
-class defaultMiddle : public iMiddle {
+class CheckAuth : public iMiddle {
 public:
-    void CanHandle() override{};
-    void Handle() override  {};
+    void CanHandle() override;
+    void Handle() override;
 };
 
 

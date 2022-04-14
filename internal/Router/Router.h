@@ -9,27 +9,30 @@
 #include <vector>
 #include "Handler.h"
 #include "MiddleWare.h"
+#include "Request.h"
 
 class iRouter {
 public:
     virtual ~iRouter() = default;
+private:
     virtual void AddHandler(std::shared_ptr<iHandler>) = 0;
     virtual void RemoveHandler(std::shared_ptr<iHandler>) = 0;
     virtual void AddMiddle(std::shared_ptr<iMiddle>) = 0;
-    virtual void UseMiddle() = 0;
-    virtual bool SelectHandler() = 0;
-    virtual void CallHandler() = 0;
+    virtual Request& UseMiddle(Request&) = 0;
+    virtual bool SelectHandler(Request&) = 0;
+    virtual void CallHandler(Request&) = 0;
 };
 
 class Router : public iRouter {
     Router();
     ~Router() = default;
+private:
     void AddHandler(std::shared_ptr<iHandler>);
     void RemoveHandler(std::shared_ptr<iHandler>);
     void AddMiddle(std::shared_ptr<iMiddle>);
-    void UseMiddle();
-    bool SelectHandler();
-    void CallHandler();
+    Request& UseMiddle(Request&);
+    bool SelectHandler(Request&);
+    void CallHandler(Request&);
 
 private:
     std::vector<std::shared_ptr<iHandler>> handlers;

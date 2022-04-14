@@ -4,11 +4,24 @@
 
 #include "Router.h"
 
-void Router::AddHandler(std::shared_ptr<iHandler>){};
-void Router::RemoveHandler(std::shared_ptr<iHandler>){};
-void Router::AddMiddle(std::shared_ptr<iMiddle>){};
-void Router::UseMiddle(){};
-bool Router::SelectHandler(){
+void Router::AddHandler(std::shared_ptr<iHandler>) {
+
+};
+
+void Router::RemoveHandler(std::shared_ptr<iHandler>) {
+
+};
+
+void Router::AddMiddle(std::shared_ptr<iMiddle>) {
+
+};
+
+Request &Router::UseMiddle(Request & request) {
+    return request;
+};
+
+bool Router::SelectHandler(Request &) {
     return false;
 };
-void Router::CallHandler() {};
+
+void Router::CallHandler(Request &) {};
