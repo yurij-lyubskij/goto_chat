@@ -1,15 +1,21 @@
 #ifndef DATA_BASE_REPOS
 #define DATA_BASE_REPOS
 
+
+
+#include <stdlib.h>
 #include <string>
 #include <time.h>
+#include <vector>
+#include <queue>
+#include <memory>
+#include <mutex>
+#include <condition_variable>
+#include <libpq-fe.h>
 
 #include "ChatRoom.h"
 #include "User.h"
-#include "DBConnection.h"
 #include "Message.h"
-
-enum DBObjectType { user, chat, message, input };
 
 typedef struct{
 	int id;
@@ -33,10 +39,64 @@ typedef struct{
 	FILE* content;
 } InputDB;
 
+
+
+enum DBObjectType { user, chat, message, input };
+
+typedef struct{
+    DBObjectType objectType;
+    std::string request;
+} DBRequest;
+
+enum Operation { putIt, deleteIt, updateIt };
+
+class DBObject{
+    public:
+        DBObjectType type;
+        std::vector<std::string> attr;
+        DBObject();
+        DBObject(&UserDB);
+        DBObject(&ChatDB);
+        DBObject(&MessageDB);
+        //DBObject(InputDB);        
+};
+
+class iConnection{
+    public:
+        virtual bool exec(Operation, std::vector<DBObject>) = 0;
+        virtual std::vector<DBObject> get(DBRequest);
+        
+};
+
+class PGConnection : public iConnection{
+    private:
+        void establish_connection();
+        std::shared_ptr<PGconn>  m_connection;
+   public:
+    PGConnection();
+    std::shared_ptr<PGconn> connection() const;
+};
+
+template <class Connection>
+class DBConnection{
+public:
+    DBConnection();
+    DBConnection(int _pool);
+    std::shared_ptr<Connection> connection();					
+    void freeConnection(std::shared_ptr<Connection>);
+private:
+    void createPool();
+    std::mutex m_mutex;
+    std::condition_variable m_condition;
+    std::queue<std::shared_ptr<Connection>> m_pool;				//multiple connections to evade creating new connections
+
+    const int POOL = 4;
+};
+
 //Interface Block
 class iUserRepo{
 	private:
-		DBConnection *connection;
+		DBConnection<PGConnection> *connection;
 	public:
 		virtual bool doesEsixt(int id);
 		virtual User* getByID(int id[], int len);
@@ -48,7 +108,7 @@ class iUserRepo{
 
 class iChatRepo{
 	private:
-		DBConnection *connection;
+		DBConnection<PGConnection> *connection;
 	public:
 		virtual bool doesEsixt(int id);
 		virtual ChatRoom* getByID(int id[], int len);
@@ -61,7 +121,7 @@ class iChatRepo{
 
 class iMessageRepo{
 	private:
-		DBConnection *connection;
+		DBConnection<PGConnection> *connection;
 	public:
 		virtual bool doesEsixt(int id);
 		virtual Message* getByID(int id[], int len);
@@ -73,7 +133,7 @@ class iMessageRepo{
 //Declaration block
 class UserRepo: public iUserRepo{
 	public:
-		UserRepo(DBConnection*);
+		UserRepo(*DBConnection);
 		bool doesEsixt(int id);
 		User* getByID(int id[], int len);
 		bool update(User users[], int len);
