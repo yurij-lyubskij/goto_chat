@@ -4,10 +4,12 @@
 #include <string>
 #include <time.h>
 
+#include "ChatRoom.h"
 #include "User.h"
 #include "DBConnection.h"
+#include "Message.h"
 
-enum DBObjectType = { User, Chat, Message, Input };
+enum DBObjectType { user, chat, message, input };
 
 typedef struct{
 	int id;
@@ -65,7 +67,7 @@ class iMessageRepo{
 		virtual Message* getByID(int id[], int len);
 		virtual bool update(Message mes[], int len);
 		virtual bool put(Message mes[], int len);
-		virtual Message* getFromRange(int start, int end, Chat chat);
+		virtual Message* getFromRange(int start, int end, ChatRoom chat);
 };
 
 //Declaration block
@@ -97,7 +99,7 @@ class MessageRepo: public iMessageRepo{
 		Message* getByID(int id[], int len);
 		bool update(Message mes[], int len);
 		bool put(Message mes[], int len);
-		Message* getFromRange(int start, int end, Chat chat);
+		Message* getFromRange(int start, int end, ChatRoom chat);
 };
 
 /*

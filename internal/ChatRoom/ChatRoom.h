@@ -2,6 +2,7 @@
 #define CHATROOM
 
 #include "User.h"
+#include "Message.h"
 
 class iChatRoom{
 	protected:
