@@ -1,7 +1,7 @@
 #ifndef CHATROOM
 #define CHATROOM
 
-#include "server.h"
+#include "User.h"
 
 class iChatRoom{
 	protected:

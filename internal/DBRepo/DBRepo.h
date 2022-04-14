@@ -3,7 +3,8 @@
 
 #include <string>
 #include <time.h>
-#include "server.h"
+
+#include "User.h"
 #include "DBConnection.h"
 
 enum DBObjectType = { User, Chat, Message, Input };
