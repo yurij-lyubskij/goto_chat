@@ -3,3 +3,67 @@
 //
 
 #include "Handler.h"
+
+void GetChatHistory::CanHandle() {
+
+}
+
+void GetChatHistory::Handle() {
+
+}
+
+void CreateChatRoom::CanHandle() {
+
+}
+
+void CreateChatRoom::Handle() {
+
+}
+
+void FindChatRoom::CanHandle() {
+
+}
+
+void FindChatRoom::Handle() {
+
+}
+
+void JoiChatRoom::CanHandle() {
+
+}
+
+void JoiChatRoom::Handle() {
+
+}
+
+void CreateNewUser::CanHandle() {
+
+}
+
+void CreateNewUser::Handle() {
+
+}
+
+void Login::CanHandle() {
+
+}
+
+void Login::Handle() {
+
+}
+
+void Logout::CanHandle() {
+
+}
+
+void Logout::Handle() {
+
+}
+
+void GetNewMessages::CanHandle() {
+
+}
+
+void GetNewMessages::Handle() {
+
+}
