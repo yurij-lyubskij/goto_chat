@@ -14,23 +14,34 @@
 class iRouter {
 public:
     virtual ~iRouter() = default;
+
 private:
     virtual void AddHandler(std::shared_ptr<iHandler>) = 0;
+
     virtual void RemoveHandler(std::shared_ptr<iHandler>) = 0;
+
     virtual void AddMiddle(std::shared_ptr<iMiddle>) = 0;
-    virtual Request& UseMiddle(Request&) = 0;
-    virtual bool SelectHandler(Request&) = 0;
-    virtual Response CallHandler(Request&) = 0;
+
+    virtual Request &UseMiddle(Request &) = 0;
+
+    virtual bool SelectHandler(Request &) = 0;
+
+    virtual Response CallHandler(Request &) = 0;
 };
 
 class Router : public iRouter {
 private:
     void AddHandler(std::shared_ptr<iHandler>) override;
+
     void RemoveHandler(std::shared_ptr<iHandler>) override;
+
     void AddMiddle(std::shared_ptr<iMiddle>) override;
-    Request& UseMiddle(Request&) override;
-    bool SelectHandler(Request&) override;
-    Response CallHandler(Request&) override;
+
+    Request &UseMiddle(Request &) override;
+
+    bool SelectHandler(Request &) override;
+
+    Response CallHandler(Request &) override;
 
 private:
     std::vector<std::shared_ptr<iHandler>> handlers;

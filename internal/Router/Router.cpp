@@ -16,7 +16,7 @@ void Router::AddMiddle(std::shared_ptr<iMiddle>) {
 
 };
 
-Request &Router::UseMiddle(Request & request) {
+Request &Router::UseMiddle(Request &request) {
     return request;
 };
 

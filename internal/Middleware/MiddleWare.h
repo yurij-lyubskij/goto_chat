@@ -18,6 +18,7 @@ public:
 class CheckAuth : public iMiddle {
 public:
     void CanHandle() override;
+
     void Handle() override;
 };
 

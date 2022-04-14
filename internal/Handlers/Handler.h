@@ -17,48 +17,57 @@ public:
 class GetChatHistory : public iHandler {
 public:
     void CanHandle() override;
+
     void Handle() override;
 };
 
 class CreateChatRoom : public iHandler {
 public:
     void CanHandle() override;
+
     void Handle() override;
 };
 
 class FindChatRoom : public iHandler {
 public:
     void CanHandle() override;
+
     void Handle() override;
 };
 
 class JoiChatRoom : public iHandler {
 public:
     void CanHandle() override;
+
     void Handle() override;
 };
 
 class CreateNewUser : public iHandler {
 public:
     void CanHandle() override;
+
     void Handle() override;
 };
 
 class Login : public iHandler {
 public:
     void CanHandle() override;
+
     void Handle() override;
 };
 
 class Logout : public iHandler {
 public:
     void CanHandle() override;
+
     void Handle() override;
 };
 
 class GetNewMessages : public iHandler {
 public:
     void CanHandle() override;
+
     void Handle() override;
 };
+
 #endif //GOTO_CHAT_HANDLER_H
