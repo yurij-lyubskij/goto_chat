@@ -6,7 +6,7 @@
 #define GOTO_CHAT_REQUEST_H
 
 #include "Response.h"
-
+#include <map>
 
 class Request {
 public:
@@ -16,6 +16,7 @@ public:
     std::string cookie;
     std::string body;
     std::string URL;
+    std::map<std::string, std::string> parameters;
     Response response;
 
 };
