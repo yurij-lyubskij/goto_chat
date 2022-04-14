@@ -6,16 +6,18 @@
 #define GOTO_CHAT_REQUEST_H
 
 #include "Response.h"
-#include "UserSession.h"
+
 
 class Request {
-private:
+public:
+    UserSession session;
     std::vector<std::string> headers;
     std::string method;
+    std::string cookie;
     std::string body;
     std::string URL;
     Response response;
-    UserSession session;
+
 };
 
 

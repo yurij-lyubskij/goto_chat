@@ -14,10 +14,10 @@ public:
     virtual void Handle() = 0;
 };
 
-class defaultHandler : public iHandler {
+class Handler : public iHandler {
 public:
-    void CanHandle() override{};
-    void Handle() override  {};
+    void CanHandle() override;
+    void Handle() override;
 };
 
 

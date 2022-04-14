@@ -20,24 +20,21 @@ private:
     virtual void AddMiddle(std::shared_ptr<iMiddle>) = 0;
     virtual Request& UseMiddle(Request&) = 0;
     virtual bool SelectHandler(Request&) = 0;
-    virtual void CallHandler(Request&) = 0;
+    virtual Response CallHandler(Request&) = 0;
 };
 
 class Router : public iRouter {
-    Router();
-    ~Router() = default;
 private:
-    void AddHandler(std::shared_ptr<iHandler>);
-    void RemoveHandler(std::shared_ptr<iHandler>);
-    void AddMiddle(std::shared_ptr<iMiddle>);
-    Request& UseMiddle(Request&);
-    bool SelectHandler(Request&);
-    void CallHandler(Request&);
+    void AddHandler(std::shared_ptr<iHandler>) override;
+    void RemoveHandler(std::shared_ptr<iHandler>) override;
+    void AddMiddle(std::shared_ptr<iMiddle>) override;
+    Request& UseMiddle(Request&) override;
+    bool SelectHandler(Request&) override;
+    Response CallHandler(Request&) override;
 
 private:
     std::vector<std::shared_ptr<iHandler>> handlers;
     std::vector<std::shared_ptr<iMiddle>> middleware;
-
 };
 
 

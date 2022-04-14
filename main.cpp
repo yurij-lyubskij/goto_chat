@@ -3,9 +3,7 @@
 #include "Server.h"
 
 int main () {
-    size_t n;
-    Router A();
-    Server server();
-
+    Server server;
+    server.Run();
     return 0;
 }

@@ -7,13 +7,16 @@
 
 #include <string>
 #include <vector>
+#include "UserSession.h"
 
 class Response {
-private:
+public:
+    UserSession session;
     std::vector<std::string> headers;
+    std::string cookie;
     std::string method;
     std::string body;
-    std::string URL;
+    int statusCode;
 };
 
 

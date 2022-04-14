@@ -27,3 +27,7 @@ void Server::Send(Response) {
 std::string Server::Serialise(Response) {
     return std::string();
 }
+
+Server::Server() {
+
+}

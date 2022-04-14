@@ -21,7 +21,8 @@ private:
 };
 
 class Server : public iServer {
-   Server() = default;
+public:
+   Server();
    void Run() override;
 private:
     bool Accept() override;

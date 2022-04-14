@@ -19,10 +19,11 @@ private:
 class Socket{};
 
 class UserSession : public iUserSession {
-private:
-    Socket socket;
+public:
     std::string Read() override;
     void Write(std::string) override;
+private:
+    Socket socket;
 };
 
 #endif //GOTO_CHAT_USERSESSION_H
