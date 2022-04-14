@@ -4,9 +4,9 @@
 
 #include "Router.h"
 
-void Router::AddHandler(){};
-void Router::RemoveHandler(){};
-void Router::AddMiddle(){};
+void Router::AddHandler(std::shared_ptr<iHandler>){};
+void Router::RemoveHandler(std::shared_ptr<iHandler>){};
+void Router::AddMiddle(std::shared_ptr<iMiddle>){};
 void Router::UseMiddle(){};
 bool Router::SelectHandler(){
     return false;
