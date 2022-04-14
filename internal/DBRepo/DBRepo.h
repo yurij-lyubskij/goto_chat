@@ -39,8 +39,6 @@ typedef struct{
 	FILE* content;
 } InputDB;
 
-
-
 enum DBObjectType { user, chat, message, input };
 
 typedef struct{

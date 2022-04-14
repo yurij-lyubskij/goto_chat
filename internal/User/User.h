@@ -5,5 +5,4 @@ class User {
 
 };
 
-
 #endif
