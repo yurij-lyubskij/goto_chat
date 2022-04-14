@@ -5,9 +5,9 @@
 #include "AuthDb.h"
 
 std::string AuthDb::GetCookie(std::string Id) {
-    return std::string();
+    return "1";
 }
 
 std::string AuthDb::SetCookie(std::string Id) {
-    return std::string();
+    return "0";
 }
