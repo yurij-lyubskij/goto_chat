@@ -14,7 +14,8 @@ file(GLOB SOURCES ${SOURCES}   ./internal/Router/*.cpp ./internal/User/*.cpp)
 
 file(GLOB SOURCES ${SOURCES}   ./internal/UserRepo/*.cpp ./internal/UserSession/*.cpp)
 
-file(GLOB_RECURSE TEST_SOURCES internal/AuthDb/*.cpp internal/MessageQueue/*.cpp)
+file(GLOB TEST_SOURCES internal/AuthDb/*.cpp internal/AuthDb/tests/*.cpp internal/MessageQueue/*.cpp internal/MessageQueue/tests/*.cpp)
+file(GLOB TEST_SOURCES ${TEST_SOURCES} internal/Handlers/*.cpp internal/Handlers/tests/test_handlers.cpp internal/UserSession/*.cpp )
 
 file(GLOB INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR} internal/MessageQueue internal/AuthDb internal/UserRepo server internal/User internal/UserSession internal/Request internal/Response internal/Handlers internal/Router internal/Middleware )
 

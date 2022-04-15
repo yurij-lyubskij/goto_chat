@@ -4,7 +4,6 @@
 
 #include "Handler.h"
 
-
 bool Login::CanHandle(Request) {
     return false;
 }
