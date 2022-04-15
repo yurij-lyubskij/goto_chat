@@ -5,21 +5,19 @@
 #ifndef GOTO_CHAT_MIDDLEWARE_H
 #define GOTO_CHAT_MIDDLEWARE_H
 
-
+#include "Request.h"
+#include <functional>
+#include <memory>
 class iMiddle {
 public:
     virtual ~iMiddle() = default;
 
-    virtual void CanHandle() = 0;
-
-    virtual void Handle() = 0;
+    virtual Request& operator() (Request& request, std::function<iMiddle> callback()) = 0;
 };
 
 class CheckAuth : public iMiddle {
 public:
-    void CanHandle() override;
-
-    void Handle() override;
+    Request& operator() (Request& request, std::function<iMiddle> callback()) override;
 };
 
 

@@ -4,10 +4,6 @@
 
 #include "MiddleWare.h"
 
-void CheckAuth::CanHandle() {
-
-}
-
-void CheckAuth::Handle() {
-
+Request &CheckAuth::operator()(Request &request, std::function<iMiddle> (*callback)()) {
+    return request;
 }
