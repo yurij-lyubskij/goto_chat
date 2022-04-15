@@ -7,7 +7,7 @@ file(GLOB SOURCES main.cpp)
 file(GLOB SOURCES ${SOURCES} internal/*/*.cpp)
 #find_package(PostgreSQL REQUIRED)
 
-file(GLOB INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR} internal/ChatRoom internal/ChatRoomHandler internal/DBRepo internal/Response internal/Handlers internal/Message internal/Request internal/User internal/WebSocketServer internal/MessageQueue)
+file(GLOB INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR} internal/*)
 
 message("MAIN SOURCES\n ${SOURCES}")
 add_executable(${PROJECT_NAME} ${SOURCES})
