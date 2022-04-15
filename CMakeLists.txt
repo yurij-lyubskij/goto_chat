@@ -16,7 +16,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE PostgreSQL::PostgreSQL pq)
 
 find_package(GTest REQUIRED)
 
-file(GLOB TEST_SOURCES ./internal/*/tests/*.cpp)
+file(GLOB TEST_SOURCES ./internal/*/tests/*.cpp ${SOURCES})
 add_executable(tests ${TEST_SOURCES})
 
 target_include_directories(tests PUBLIC ${INCLUDE_DIRS})

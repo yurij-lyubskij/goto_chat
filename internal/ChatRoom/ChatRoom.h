@@ -13,7 +13,7 @@ class iChatRoom{
 		virtual bool addUser(User user) = 0;
 		virtual bool removeUser(User user) = 0;
 		virtual bool reactOn(Message mes) = 0;
-		virtual std::vector<User> getMembers();
+		virtual std::vector<User> getMembers() = 0;
 };
 
 class ChatRoom: public iChatRoom{
