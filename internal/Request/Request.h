@@ -18,7 +18,6 @@ public:
     std::string URL;
     std::map<std::string, std::string> parameters;
     Response response;
-
 };
 
 

@@ -18,5 +18,4 @@ public:
     int statusCode;
 };
 
-
 #endif //GOTO_CHAT_RESPONSE_H

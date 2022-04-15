@@ -1,14 +1,13 @@
 //
 // Created by yura11011 on 15.04.22.
 //
-
 #ifndef GOTO_CHAT_MESSAGEQUEUE_H
 #define GOTO_CHAT_MESSAGEQUEUE_H
 
 #include <queue>
 #include <memory>
 
-class iMessage{};
+#include "Message.h"
 
 class iMessageQueue {
 public:
@@ -25,6 +24,5 @@ public:
 
     std::shared_ptr<iMessage> Pop() override;
 };
-
 
 #endif //GOTO_CHAT_MESSAGEQUEUE_H
