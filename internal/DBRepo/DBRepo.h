@@ -11,7 +11,7 @@
 #include <memory>
 #include <mutex>
 #include <condition_variable>
-#include <libpq-fe.h>
+//#include <libpq-fe.h>
 
 #include "ChatRoom.h"
 #include "User.h"
@@ -66,6 +66,8 @@ class iConnection{
         
 };
 
+/*
+//PostgreSQL connection
 class PGConnection : public iConnection{
     private:
         void establish_connection();
@@ -74,6 +76,7 @@ class PGConnection : public iConnection{
     	PGConnection();
     	std::shared_ptr<PGconn> connection() const;
 };
+*/
 
 template <class Connection>
 class DBConnection{
@@ -94,7 +97,7 @@ private:
 //Interface Block
 class iUserRepo{
 	private:
-		DBConnection<PGConnection> *connection;
+		DBConnection<iConnection> *connection;
 	public:
 		virtual bool doesExist(int id) = 0;
 		virtual std::vector<User> getByID(std::vector<int> id) = 0;
@@ -106,7 +109,7 @@ class iUserRepo{
 
 class iChatRepo{
 	private:
-		DBConnection<PGConnection> *connection;
+		DBConnection<iConnection> *connection;
 	public:
 		virtual bool doesExist(int id) = 0;
 		virtual std::vector<ChatRoom> getByID(std::vector<int> id) = 0;
@@ -119,7 +122,7 @@ class iChatRepo{
 
 class iMessageRepo{
 	private:
-		DBConnection<PGConnection> *connection;
+		DBConnection<iConnection> *connection;
 	public:
 		virtual bool doesExist(int id) = 0;
 		virtual std::vector<iMessage> getByID(std::vector<int> id) = 0;
