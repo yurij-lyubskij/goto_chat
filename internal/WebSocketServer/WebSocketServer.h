@@ -23,7 +23,7 @@ class iWebSocketServer {
 	public:
 		virtual void addToQueue(std::shared_ptr<iMessage>) = 0;
 		virtual std::shared_ptr<iMessage> extractFromQueue() = 0;
-		virtual void addConnection(User, *WebSocketSession) = 0;
+		virtual void addConnection(User, WebSocketSession*) = 0;
 		virtual void removeConnection(User) = 0;
 		virtual void run() = 0;
 };
@@ -32,7 +32,7 @@ class WebSocketServer: public iWebSocketServer{
 	public:
 		void addToQueue(std::shared_ptr<iMessage>);
 		std::shared_ptr<iMessage> extractFromQueue();
-		void addConnection(User);
+		void addConnection(User, WebSocketSession*);
 		void removeConnection(User);
 		void run();
 };
