@@ -4,7 +4,15 @@ project(goto_chat)
 set(CMAKE_CXX_STANDARD 14)
 
 file(GLOB SOURCES *.cpp server/*.cpp)
-file(GLOB_RECURSE SOURCES ${SOURCES}  ./internal/*.cpp )
+file(GLOB SOURCES ${SOURCES}   ./internal/AuthDb/*.cpp ./internal/Handlers/*.cpp)
+
+file(GLOB SOURCES ${SOURCES}   ./internal/MessageQueue/*.cpp ./internal/Middleware/*.cpp)
+
+file(GLOB SOURCES ${SOURCES}   ./internal/Request/*.cpp ./internal/Response/*.cpp)
+
+file(GLOB SOURCES ${SOURCES}   ./internal/Router/*.cpp ./internal/User/*.cpp)
+
+file(GLOB SOURCES ${SOURCES}   ./internal/UserRepo/*.cpp ./internal/UserSession/*.cpp)
 
 file(GLOB_RECURSE TEST_SOURCES internal/AuthDb/*.cpp internal/MessageQueue/*.cpp)
 

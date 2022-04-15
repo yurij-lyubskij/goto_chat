@@ -4,66 +4,67 @@
 
 #include "Handler.h"
 
-void GetChatHistory::CanHandle() {
 
+bool Login::CanHandle(Request) {
+    return false;
 }
 
-void GetChatHistory::Handle() {
-
+Response Login::Handle(Request) {
+    return Response();
 }
 
-void CreateChatRoom::CanHandle() {
-
+bool Logout::CanHandle(Request) {
+    return false;
 }
 
-void CreateChatRoom::Handle() {
-
+Response Logout::Handle(Request) {
+    return Response();
 }
 
-void FindChatRoom::CanHandle() {
-
+bool SendMessage::CanHandle(Request) {
+    return false;
 }
 
-void FindChatRoom::Handle() {
-
+Response SendMessage::Handle(Request) {
+    return Response();
 }
 
-void JoiChatRoom::CanHandle() {
-
+bool GetChatHistory::CanHandle(Request) {
+    return false;
 }
 
-void JoiChatRoom::Handle() {
-
+Response GetChatHistory::Handle(Request) {
+    return Response();
 }
 
-void CreateNewUser::CanHandle() {
-
+bool CreateChatRoom::CanHandle(Request) {
+    return false;
 }
 
-void CreateNewUser::Handle() {
-
+Response CreateChatRoom::Handle(Request) {
+    return Response();
 }
 
-void Login::CanHandle() {
-
+bool FindChatRoom::CanHandle(Request) {
+    return false;
 }
 
-void Login::Handle() {
-
+Response FindChatRoom::Handle(Request) {
+    return Response();
 }
 
-void Logout::CanHandle() {
-
+bool JoiChatRoom::CanHandle(Request) {
+    return false;
 }
 
-void Logout::Handle() {
-
+Response JoiChatRoom::Handle(Request) {
+    return Response();
 }
 
-void SendMessage::CanHandle() {
-
+bool CreateNewUser::CanHandle(Request) {
+    return false;
 }
 
-void SendMessage::Handle() {
-
+Response CreateNewUser::Handle(Request) {
+    return Response();
 }
