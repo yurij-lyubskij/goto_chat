@@ -11,8 +11,8 @@ TEST(ChatRoomHandlersTests, GetMessage) {
     testResult.body = "testResultBody";
 
     GetMessageFromChat handler;
-    EXPECT_EQ(handler.canHandle(testRequest), true);
-    EXPECT_EQ(handler.handle(testRequest).body, testResult.body);
+    EXPECT_EQ(handler.CanHandle(testRequest), true);
+    EXPECT_EQ(handler.Handle(testRequest).body, testResult.body);
 }
 
 TEST(ChatRoomHandlersTests, CreateChatRoom) {
@@ -23,8 +23,8 @@ TEST(ChatRoomHandlersTests, CreateChatRoom) {
     testResult.body = "testResultBody";
 
     CreateChatRoom handler;
-    EXPECT_EQ(handler.canHandle(testRequest), true);
-    EXPECT_EQ(handler.handle(testRequest).body, testResult.body);
+    EXPECT_EQ(handler.CanHandle(testRequest), true);
+    EXPECT_EQ(handler.Handle(testRequest).body, testResult.body);
 }
 
 TEST(ChatRoomHandlersTests, JoinChatRoom) {
@@ -35,8 +35,8 @@ TEST(ChatRoomHandlersTests, JoinChatRoom) {
     testResult.body = "testResultBody";
 
     JoinChatRoom handler;
-    EXPECT_EQ(handler.canHandle(testRequest), true);
-    EXPECT_EQ(handler.handle(testRequest).body, testResult.body);
+    EXPECT_EQ(handler.CanHandle(testRequest), true);
+    EXPECT_EQ(handler.Handle(testRequest).body, testResult.body);
 }
 
 TEST(ChatRoomHandlersTests, FindChatRoom) {
@@ -47,8 +47,8 @@ TEST(ChatRoomHandlersTests, FindChatRoom) {
     testResult.body = "testResultBody";
 
     FindChatRoom handler;
-    EXPECT_EQ(handler.canHandle(testRequest), true);
-    EXPECT_EQ(handler.handle(testRequest).body, testResult.body);
+    EXPECT_EQ(handler.CanHandle(testRequest), true);
+    EXPECT_EQ(handler.Handle(testRequest).body, testResult.body);
 }
 
 TEST(ChatRoomHandlersTests, NotifyUsers) {
@@ -59,6 +59,6 @@ TEST(ChatRoomHandlersTests, NotifyUsers) {
     testResult.body = "testResultBody";
 
     NotifyUsers handler;
-    EXPECT_EQ(handler.canHandle(testRequest), true);
-    EXPECT_EQ(handler.handle(testRequest).body, testResult.body);
+    EXPECT_EQ(handler.CanHandle(testRequest), true);
+    EXPECT_EQ(handler.Handle(testRequest).body, testResult.body);
 }

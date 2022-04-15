@@ -7,32 +7,22 @@
 
 class GetMessageFromChat: public iHandler{
 	public:
-		bool canHandle(Request);
-		Response handle(Request);
+		bool CanHandle(Request) override;
+		Response Handle(Request);
 };
 
-class CreateChatRoom: public iHandler{
-	public:
-		bool canHandle(Request);
-		Response handle(Request);
-};
 
 class JoinChatRoom: public iHandler{
 	public:
-		bool canHandle(Request);
-		Response handle(Request);
+		bool CanHandle(Request);
+		Response Handle(Request);
 };
 
-class FindChatRoom: public iHandler{
-	public:
-		bool canHandle(Request);
-		Response handle(Request);
-};
 
 class NotifyUsers: public iHandler{
 	public:
-		bool canHandle(Request);
-		Response handle(Request);
+		bool CanHandle(Request);
+		Response Handle(Request);
 };
 
 #endif

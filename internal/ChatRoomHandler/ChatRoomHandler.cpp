@@ -4,51 +4,33 @@
 #include "Request.h"
 #include "Response.h"
 //GetMessageFromChat
-bool GetMessageFromChat::canHandle(Request request){
+bool GetMessageFromChat::CanHandle(Request request){
 	return false;
 };
 
-Response GetMessageFromChat::handle(Request request){
+Response GetMessageFromChat::Handle(Request request){
 	return Response();
 };
 //end of GetMessageFromChat
 
-//CreateChatRoom
-bool CreateChatRoom::canHandle(Request request){
-	return false;
-};
-
-Response CreateChatRoom::handle(Request request){
-	return Response();
-};
-//end of CreateChatRoom
 
 //JoinChatRoom
-bool JoinChatRoom::canHandle(Request request){
+bool JoinChatRoom::CanHandle(Request request){
 	return false;
 };
 
-Response JoinChatRoom::handle(Request request){
+Response JoinChatRoom::Handle(Request request){
 	return Response();
 };
 //end of JoinChatRoom
 
-//FindChatRoom
-bool FindChatRoom::canHandle(Request request){
-	return false;
-};
-
-Response FindChatRoom::handle(Request request){
-	return Response();
-};
 //end of FindChatRoom
 
 //NotifyUsers
-bool NotifyUsers::canHandle(Request request){
+bool NotifyUsers::CanHandle(Request request){
 	return false;
 };
 
-Response NotifyUsers::handle(Request request){
-	return Response();
-};
+Response NotifyUsers::Handle(Request request){
+	return Response();};
 //end of NotifyUsers
