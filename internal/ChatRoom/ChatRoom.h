@@ -10,6 +10,7 @@ class iChatRoom{
 	protected:
 		int id;
 	public:
+		int getId(){ return id;};
 		virtual bool addUser(User user) = 0;
 		virtual bool removeUser(User user) = 0;
 		virtual bool reactOn(Message mes) = 0;
