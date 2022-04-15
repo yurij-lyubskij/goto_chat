@@ -63,7 +63,7 @@ public:
     void Handle() override;
 };
 
-class GetNewMessages : public iHandler {
+class SendMessage : public iHandler {
 public:
     void CanHandle() override;
 

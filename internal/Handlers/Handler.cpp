@@ -60,10 +60,10 @@ void Logout::Handle() {
 
 }
 
-void GetNewMessages::CanHandle() {
+void SendMessage::CanHandle() {
 
 }
 
-void GetNewMessages::Handle() {
+void SendMessage::Handle() {
 
 }

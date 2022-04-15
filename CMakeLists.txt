@@ -8,7 +8,7 @@ file(GLOB_RECURSE SOURCES ${SOURCES}  ./internal/*.cpp )
 
 file(GLOB TEST_SOURCES internal/AuthDb/tests/test_authDb.cpp internal/AuthDb/*.cpp)
 
-file(GLOB INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}  internal/AuthDb internal/UserRepo server internal/User internal/UserSession internal/Request internal/Response internal/Handlers internal/Router internal/Middleware )
+file(GLOB INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR} internal/MessageQueue internal/AuthDb internal/UserRepo server internal/User internal/UserSession internal/Request internal/Response internal/Handlers internal/Router internal/Middleware )
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 target_include_directories(${PROJECT_NAME} PUBLIC ${INCLUDE_DIRS})
