@@ -18,6 +18,7 @@ class iChatRoom{
 
 class ChatRoom: public iChatRoom{
 	public:
+		ChatRoom(){};
 		ChatRoom(int){};
 		bool addUser(User user) override;
 		bool removeUser(User user) override;

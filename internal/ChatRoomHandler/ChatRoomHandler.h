@@ -6,28 +6,33 @@
 #include "Response.h"
 
 class GetMessageFromChat: public iHandler{
-	bool canHandle(Request);
-	Response handle(Request);
+	public:
+		bool canHandle(Request);
+		Response handle(Request);
 };
 
 class CreateChatRoom: public iHandler{
-	bool canHandle(Request);
-	Response handle(Request);
+	public:
+		bool canHandle(Request);
+		Response handle(Request);
 };
 
 class JoinChatRoom: public iHandler{
-	bool canHandle(Request);
-	Response handle(Request);
+	public:
+		bool canHandle(Request);
+		Response handle(Request);
 };
 
 class FindChatRoom: public iHandler{
-	bool canHandle(Request);
-	Response handle(Request);
+	public:
+		bool canHandle(Request);
+		Response handle(Request);
 };
 
 class NotifyUsers: public iHandler{
-	bool canHandle(Request);
-	Response handle(Request);
+	public:
+		bool canHandle(Request);
+		Response handle(Request);
 };
 
 #endif

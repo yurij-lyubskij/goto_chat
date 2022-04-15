@@ -1,6 +1,9 @@
 #include <gtest/gtest.h>
+#include <gmock/gmock.h>
+
 #include "reChatRoom.h"
 #include "ChatRoom.h"
+#include "../WebSocketServer/tests/reWebSocketServer.h"
 
 TEST(ChatTests, adding){
 	ChatRoom chat(1);
@@ -26,4 +29,15 @@ TEST(ChatTests, removing){
 	chat.removeUser(usr);
 	std::vector<User> mems = chat.getMembers();
 	EXPECT_EQ(mems.size(), 0);
+}
+
+TEST(ChatTests, reaction){
+	reWebSocketServer serv;
+	ChatRoom chat(1);
+	User usr;
+	Message mes("abc", usr);
+	
+	EXPECT_CALL(serv, addToQueue(testing::_)).Times(1);
+	
+	EXPECT_EQ(chat.reactOn(mes), true);
 }

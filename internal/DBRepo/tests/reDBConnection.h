@@ -2,6 +2,8 @@
 #define SERVER_REDBCONNECTION
 
 #include <map>
+#include <gmock/gmock.h>
+#include <vector>
 
 #include "DBRepo.h"
 #include "User.h"
@@ -18,6 +20,12 @@ class DullConnection: iConnection{
         DullConnection(){};
         bool exec(Operation, std::vector<DBObject>);
         std::vector<DBObject> get(std::string);
+};
+
+class MockConnection: iConnection{
+    public:
+        MOCK_METHOD(bool, exec, (Operation, std::vector<DBObject>), (override));
+        MOCK_METHOD(std::vector<DBObject>, get, (DBRequest), (override));
 };
 
 #endif

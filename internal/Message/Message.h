@@ -12,8 +12,12 @@ class iMessage{
 
 class Message: public iMessage{
 	public:
-		Message(std::string, User);
+		Message(std::string, User){};
 		std::string content;
+};
+
+class VoiceMessage: public iMessage{
+
 };
 
 #endif

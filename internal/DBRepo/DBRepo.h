@@ -62,7 +62,7 @@ class DBObject{
 class iConnection{
     public:
         virtual bool exec(Operation, std::vector<DBObject>) = 0;
-        virtual std::vector<DBObject> get(DBRequest);
+        virtual std::vector<DBObject> get(DBRequest) = 0;
         
 };
 
@@ -78,8 +78,8 @@ class PGConnection : public iConnection{
 template <class Connection>
 class DBConnection{
 public:
-    DBConnection();
-    DBConnection(int _pool);
+    DBConnection(){};
+    DBConnection(int _pool){};
     std::shared_ptr<Connection> connection();					
     void freeConnection(std::shared_ptr<Connection>);
 private:
@@ -96,43 +96,44 @@ class iUserRepo{
 	private:
 		DBConnection<PGConnection> *connection;
 	public:
-		virtual bool doesEsixt(int id);
-		virtual std::vector<User> getByID(std::vector<int> id);
-		virtual bool update(std::vector<User> users);
-		virtual bool put(std::vector<User> users);
-		virtual std::vector<User> getChatMembers(ChatRoom chat);
-		virtual std::vector<User> getSender(Message mes);
+		virtual bool doesExist(int id) = 0;
+		virtual std::vector<User> getByID(std::vector<int> id) = 0;
+		virtual bool update(std::vector<User> users) = 0;
+		virtual bool put(std::vector<User> users) = 0;
+		virtual std::vector<User> getChatMembers(ChatRoom chat) = 0;
+		virtual std::vector<User> getSender(Message mes) = 0;
 };
 
 class iChatRepo{
 	private:
 		DBConnection<PGConnection> *connection;
 	public:
-		virtual bool doesEsixt(int id);
-		virtual std::vector<ChatRoom> getByID(std::vector<int> id);
-		virtual bool update(std::vector<ChatRoom> chats);
-		virtual bool put(std::vector<ChatRoom> chats);
-		virtual bool addUserToChat(const ChatRoom &chat, const User &user);
-		virtual ChatRoom getMesChat(Message mes);
-		virtual std::vector<ChatRoom> getUserChats(User user);
+		virtual bool doesExist(int id) = 0;
+		virtual std::vector<ChatRoom> getByID(std::vector<int> id) = 0;
+		virtual bool update(std::vector<ChatRoom> chats) = 0;
+		virtual bool put(std::vector<ChatRoom> chats) = 0;
+		virtual bool addUserToChat(const ChatRoom &chat, const User &user) = 0;
+		virtual ChatRoom getMesChat(Message mes) = 0;
+		virtual std::vector<ChatRoom> getUserChats(User user) = 0;
 };
 
 class iMessageRepo{
 	private:
 		DBConnection<PGConnection> *connection;
 	public:
-		virtual bool doesEsixt(int id);
-		virtual std::vector<Message> getByID(std::vector<int> id);
-		virtual bool update(std::vector<Message> mes);
-		virtual bool put(std::vector<Message> mes);
-		virtual std::vector<Message> getFromRange(int start, int end,const ChatRoom &chat);
+		virtual bool doesExist(int id) = 0;
+		virtual std::vector<iMessage> getByID(std::vector<int> id) = 0;
+		virtual bool update(std::vector<iMessage> mes) = 0;
+		virtual bool put(std::vector<iMessage> mes) = 0;
+		virtual std::vector<iMessage> getFromRange(int start, int end,const ChatRoom &chat) = 0;
 };
 
 //Declaration block
 class UserRepo: public iUserRepo{
 	public:
-		UserRepo(*DBConnection);
-		bool doesEsixt(int id);
+		UserRepo(){};
+		UserRepo(*DBConnection){};
+		bool doesExist(int id);
 		std::vector<User> getByID(std::vector<int> id);
 		bool update(std::vector<User> users);
 		bool put(std::vector<User> users);
@@ -142,7 +143,9 @@ class UserRepo: public iUserRepo{
 
 class ChatRepo: public iChatRepo{
 	public:
-		bool doesEsixt(int id);
+		ChatRepo(){};
+		ChatRepo(*DBConnection){};
+		bool doesExist(int id);
 		std::vector<ChatRoom> getByID(std::vector<int> id);
 		bool update(std::vector<ChatRoom> chats);
 		bool put(std::vector<ChatRoom> chats);
@@ -153,11 +156,13 @@ class ChatRepo: public iChatRepo{
 
 class MessageRepo: public iMessageRepo{
 	public:
-		bool doesEsixt(int id);
-		std::vector<Message> getByID(std::vector<int> id);
-		bool update(std::vector<Message> mes);
-		bool put(std::vector<Message> mes);
-		std::vector<Message> getFromRange(int start, int end,const ChatRoom &chat);
+		MessageRepo(){};
+		MessageRepo(*DBConnection){};
+		bool doesExist(int id);
+		std::vector<iMessage> getByID(std::vector<int> id);
+		bool update(std::vector<iMessage> mes);
+		bool put(std::vector<iMessage> mes);
+		std::vector<iMessage> getFromRange(int start, int end,const ChatRoom &chat);
 };
 
 /*
@@ -165,7 +170,7 @@ class InputRepo: public DBRepo{
 	private:
 		DBConnection *connection;
 	public:
-		bool doesEsixt(int id);
+		bool doesExist(int id);
 		Input* getByID(int id[], int len);
 		bool update(Inputs inputs[], int len);
 		bool put(Inputs inputs[], int len);
