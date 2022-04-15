@@ -16,10 +16,12 @@ file(GLOB SOURCES ${SOURCES}   ./internal/UserRepo/*.cpp ./internal/UserSession/
 
 file(GLOB TEST_SOURCES internal/AuthDb/*.cpp internal/AuthDb/tests/*.cpp)
 file(GLOB TEST_SOURCES ${TEST_SOURCES} internal/MessageQueue/*.cpp internal/MessageQueue/tests/*.cpp)
-file(GLOB TEST_SOURCES ${TEST_SOURCES} internal/Handlers/*.cpp internal/Handlers/tests/*.cpp internal/UserSession/*.cpp )
+file(GLOB TEST_SOURCES ${TEST_SOURCES} internal/Handlers/*.cpp internal/Handlers/tests/*.cpp )
 file(GLOB TEST_SOURCES ${TEST_SOURCES} internal/Middleware/*.cpp internal/Middleware/tests/*.cpp)
 file(GLOB TEST_SOURCES ${TEST_SOURCES} internal/Router/*.cpp internal/Router/tests/*.cpp)
 file(GLOB TEST_SOURCES ${TEST_SOURCES} internal/UserRepo/*.cpp internal/UserRepo/tests/*.cpp)
+file(GLOB TEST_SOURCES ${TEST_SOURCES} internal/UserSession/*.cpp internal/UserSession/tests/*.cpp)
+file(GLOB TEST_SOURCES ${TEST_SOURCES} server/*.cpp server/tests/*.cpp)
 
 file(GLOB INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR} internal/MessageQueue internal/AuthDb internal/UserRepo server internal/User internal/UserSession internal/Request internal/Response internal/Handlers internal/Router internal/Middleware )
 

@@ -14,7 +14,6 @@ public:
     UserSession session;
     std::vector<std::string> headers;
     std::string cookie;
-    std::string method;
     std::string body;
     int statusCode;
 };

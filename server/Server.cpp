@@ -12,7 +12,7 @@ bool Server::Accept() {
     return false;
 }
 
-Request Server::ParseRequest() {
+Request Server::ParseRequest(std::string) {
     return Request();
 }
 
