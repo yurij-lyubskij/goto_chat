@@ -18,10 +18,11 @@ class iChatRoom{
 
 class ChatRoom: public iChatRoom{
 	public:
-		bool addUser(User user);
-		bool removeUser(User user);
-		bool reactOn(Message mes);
-		std::vector<User> getMembers();
+		ChatRoom(int){};
+		bool addUser(User user) override;
+		bool removeUser(User user) override;
+		bool reactOn(Message mes) override;
+		std::vector<User> getMembers() override;
 };
 
 #endif

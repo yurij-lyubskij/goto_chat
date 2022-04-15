@@ -25,4 +25,9 @@ class FindChatRoom: public iHandler{
 	Response handle(Request);
 };
 
+class NotifyUsers: public iHandler{
+	bool canHandle(Request);
+	Response handle(Request);
+};
+
 #endif

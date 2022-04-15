@@ -70,9 +70,9 @@ class PGConnection : public iConnection{
     private:
         void establish_connection();
         std::shared_ptr<PGconn>  m_connection;
-   public:
-    PGConnection();
-    std::shared_ptr<PGconn> connection() const;
+   	public:
+    	PGConnection();
+    	std::shared_ptr<PGconn> connection() const;
 };
 
 template <class Connection>

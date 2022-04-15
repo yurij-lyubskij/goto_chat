@@ -12,6 +12,7 @@ class iMessage{
 
 class Message: public iMessage{
 	public:
+		Message(std::string, User);
 		std::string content;
 };
 

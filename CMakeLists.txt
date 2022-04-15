@@ -3,8 +3,8 @@ project(goto_chat)
 
 set(CMAKE_CXX_STANDARD 14)
 
-file(GLOB SOURCES *.cpp server/*.cpp)
-file(GLOB_RECURSE SOURCES ${SOURCES}  ./internal/*.cpp )
+file(GLOB SOURCES main.cpp)
+file(GLOB_RECURSE SOURCES ${SOURCES} internal/ChatRoom/ChatRoom.cpp internal/ChatRoomHandler/ChatRoomHandler.cpp internal/DBRepo/DBRepo.cpp internal/DBRepo/DBRepo.cpp internal/Response/Response.cpp internal/Handlers/Handlers.cpp internal/Message/Message.cpp internal/Request/Request.cpp internal/User/User.cpp internal/WebSocketServer/WebSocketServer.cpp)
 
 find_package(PostgreSQL REQUIRED)
 

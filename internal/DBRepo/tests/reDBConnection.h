@@ -1,13 +1,22 @@
 #ifndef SERVER_REDBCONNECTION
 #define SERVER_REDBCONNECTION
 
-#include "DBRepo.h"
+#include <map>
 
-class DullConnection{
+#include "DBRepo.h"
+#include "User.h"
+#include "ChatRoom.h"
+#include "Message.h"
+
+class DullConnection: iConnection{
     private:
         //no actual connection
     public:
-        bool exec(enum Operation, std::vector<DBObject>);
+        std::map<int, User> users;
+        std::map<int, ChatRoom> chats;
+        std::map<int, Message> messages;
+        DullConnection(){};
+        bool exec(Operation, std::vector<DBObject>);
         std::vector<DBObject> get(std::string);
 };
 
