@@ -12,8 +12,7 @@ file(GLOB INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR} internal/ChatRoom internal/Ch
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 target_include_directories(${PROJECT_NAME} PUBLIC ${INCLUDE_DIRS})
-target_link_libraries(${PROJECT_NAME} PRIVATE PostgreSQL::PostgreSQL)
-
+target_link_libraries(${PROJECT_NAME} PRIVATE PostgreSQL::PostgreSQL pq)
 
 find_package(GTest REQUIRED)
 
@@ -21,4 +20,4 @@ file(GLOB TEST_SOURCES ./internal/*/tests/*.cpp)
 add_executable(tests ${TEST_SOURCES})
 
 target_include_directories(tests PUBLIC ${INCLUDE_DIRS})
-target_link_libraries(tests GTest::GTest gtest_main)
+target_link_libraries(tests GTest::GTest gtest_main PostgreSQL::PostgreSQL pq)

@@ -97,11 +97,11 @@ class iUserRepo{
 		DBConnection<PGConnection> *connection;
 	public:
 		virtual bool doesEsixt(int id);
-		virtual User* getByID(int id[], int len);
-		virtual bool update(User users[], int len);
-		virtual bool put(User usrs[], int len);
-		virtual User* getChatMembers(ChatRoom chat);
-		virtual User* getSender(Message mes);
+		virtual std::vector<User> getByID(std::vector<int> id);
+		virtual bool update(std::vector<User> users);
+		virtual bool put(std::vector<User> users);
+		virtual std::vector<User> getChatMembers(ChatRoom chat);
+		virtual std::vector<User> getSender(Message mes);
 };
 
 class iChatRepo{
@@ -109,12 +109,12 @@ class iChatRepo{
 		DBConnection<PGConnection> *connection;
 	public:
 		virtual bool doesEsixt(int id);
-		virtual ChatRoom* getByID(int id[], int len);
-		virtual bool update(ChatRoom chats[], int len);
-		virtual bool put(ChatRoom chats[], int len);
-		virtual bool addUserToChat(ChatRoom chat, User user);
+		virtual std::vector<ChatRoom> getByID(std::vector<int> id);
+		virtual bool update(std::vector<ChatRoom> chats);
+		virtual bool put(std::vector<ChatRoom> chats);
+		virtual bool addUserToChat(const ChatRoom &chat, const User &user);
 		virtual ChatRoom getMesChat(Message mes);
-		virtual ChatRoom* getUserChats(User user);
+		virtual std::vector<ChatRoom> getUserChats(User user);
 };
 
 class iMessageRepo{
@@ -122,10 +122,10 @@ class iMessageRepo{
 		DBConnection<PGConnection> *connection;
 	public:
 		virtual bool doesEsixt(int id);
-		virtual Message* getByID(int id[], int len);
-		virtual bool update(Message mes[], int len);
-		virtual bool put(Message mes[], int len);
-		virtual Message* getFromRange(int start, int end, ChatRoom chat);
+		virtual std::vector<Message> getByID(std::vector<int> id);
+		virtual bool update(std::vector<Message> mes);
+		virtual bool put(std::vector<Message> mes);
+		virtual std::vector<Message> getFromRange(int start, int end,const ChatRoom &chat);
 };
 
 //Declaration block
@@ -133,31 +133,31 @@ class UserRepo: public iUserRepo{
 	public:
 		UserRepo(*DBConnection);
 		bool doesEsixt(int id);
-		User* getByID(int id[], int len);
-		bool update(User users[], int len);
-		bool put(User usrs[], int len);
-		User* getChatMembers(ChatRoom chat);
-		User* getSender(Message mes);
+		std::vector<User> getByID(std::vector<int> id);
+		bool update(std::vector<User> users);
+		bool put(std::vector<User> users);
+		std::vector<User> getChatMembers(ChatRoom chat);
+		std::vector<User> getSender(Message mes);
 };
 
 class ChatRepo: public iChatRepo{
 	public:
 		bool doesEsixt(int id);
-		ChatRoom* getByID(int id[], int len);
-		bool update(ChatRoom chats[], int len);
-		bool put(ChatRoom chats[], int len);
-		bool addUserToChat(ChatRoom chat, User user);
+		std::vector<ChatRoom> getByID(std::vector<int> id);
+		bool update(std::vector<ChatRoom> chats);
+		bool put(std::vector<ChatRoom> chats);
+		bool addUserToChat(const ChatRoom &chat, const User &user);
 		ChatRoom getMesChat(Message mes);
-		ChatRoom* getUserChats(User user);
+		std::vector<ChatRoom> getUserChats(User user);
 };
 
 class MessageRepo: public iMessageRepo{
 	public:
 		bool doesEsixt(int id);
-		Message* getByID(int id[], int len);
-		bool update(Message mes[], int len);
-		bool put(Message mes[], int len);
-		Message* getFromRange(int start, int end, ChatRoom chat);
+		std::vector<Message> getByID(std::vector<int> id);
+		bool update(std::vector<Message> mes);
+		bool put(std::vector<Message> mes);
+		std::vector<Message> getFromRange(int start, int end,const ChatRoom &chat);
 };
 
 /*

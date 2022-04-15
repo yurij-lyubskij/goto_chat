@@ -1,40 +1,38 @@
 #ifndef SERVER_REDBREPO
 #define SERVER_REDBREPO
 
+#include <vector>
+#include <gmock/gmock.h>
 #include "DBRepo.h"
 
 class reUserRepo: public iUserRepo{
-	MOCK_METHOD(bool, doesExist, (int), override);
-	MOCK_METHOD(User*, getById, (int[], int), override);
-	MOCK_METHOD(bool, update, (User[], len), override);
-	MOCK_METHOD(bool, put, (User[], len), override);
-	MOCK_METHOD(User*, getChatMembers, (ChatRoom), override);
-	MOCK_METHOD(User*, getSender, (Message), override);
+	public:
+		MOCK_METHOD(bool, doesExist, (int), () );
+		MOCK_METHOD(std::vector<User>, getById, (std::vector<int>), ());
+		MOCK_METHOD(bool, update, (std::vector<User>), ());
+		MOCK_METHOD(bool, put, (std::vector<User>), ());
+		MOCK_METHOD(std::vector<User>, getChatMembers, (ChatRoom), ());
+		MOCK_METHOD(std::vector<User>, getSender, (Message), ());
 };
 
-class ChatRepo: public iChatRepo{
-	MOCK_METHOD(bool, doesExist, (int), override);
-	MOCK_METHOD(ChatRoom*, getById, (int[], int), override);
-	MOCK_METHOD(bool, update, (CharRoom[], len), override);
-	MOCK_METHOD(bool, put, (ChatRoom[], len), override);
-	MOCK_METHOD(bool, addUserToChat, (ChatRoom, User), override);
-	MOCK_METHOD(ChatRoom, getMesChat, (Message), override);
-	MOCK_METHOD(ChatRoom*, getUserChats, (User), override);
+class reChatRepo: public iChatRepo{
+	public:
+		MOCK_METHOD(bool, doesExist, (int), ());
+		MOCK_METHOD(std::vector<ChatRoom>, getById, (std::vector<int>), ());
+		MOCK_METHOD(bool, update, (std::vector<ChatRoom>), ());
+		MOCK_METHOD(bool, put, (std::vector<ChatRoom>), ());
+		MOCK_METHOD(bool, addUserToChat, (ChatRoom, User), ());
+		MOCK_METHOD(ChatRoom, getMesChat, (Message), ());
+		MOCK_METHOD(std::vector<ChatRoom>, getUserChats, (User), ());
 };
 
-class MessageRepo: public iMessageRepo{
-	MOCK_METHOD(bool, doesExist, (int), override);
-	MOCK_METHOD(ChatRoom*, getById, (int[], int), override);
-	MOCK_METHOD(bool, update, (CharRoom[], len), override);
-	MOCK_METHOD(bool, put, (ChatRoom[], len), override);
-	MOCK_METHOD(bool, addUserToChat, (ChatRoom, User), override);
-	MOCK_METHOD(ChatRoom, getMesChat, (Message), override);
-	MOCK_METHOD(ChatRoom*, getUserChats, (User), override);
-		bool doesEsixt(int id);
-		Message* getByID(int id[], int len);
-		bool update(Message mes[], int len);
-		bool put(Message mes[], int len);
-		Message* getFromRange(int start, int end, Chat chat);
+class reMessageRepo: public iMessageRepo{
+	public:
+		MOCK_METHOD(bool, doesExist, (int), ());
+		MOCK_METHOD(std::vector<Message>, getById, (int[], int), ());
+		MOCK_METHOD(bool, update, (std::vector<Message>), ());
+		MOCK_METHOD(bool, put, (std::vector<Message>),());
+		MOCK_METHOD(std::vector<Message>, getFromRange, (int, int, ChatRoom), ());
 };
 
 #endif
