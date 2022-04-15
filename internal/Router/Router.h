@@ -15,7 +15,6 @@ class iRouter {
 public:
     virtual ~iRouter() = default;
 
-private:
     virtual void AddHandler(std::shared_ptr<iHandler>) = 0;
 
     virtual void RemoveHandler(std::shared_ptr<iHandler>) = 0;
@@ -30,7 +29,7 @@ private:
 };
 
 class Router : public iRouter {
-private:
+public:
     void AddHandler(std::shared_ptr<iHandler>) override;
 
     void RemoveHandler(std::shared_ptr<iHandler>) override;

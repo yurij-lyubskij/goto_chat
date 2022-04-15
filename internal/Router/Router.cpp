@@ -24,4 +24,6 @@ bool Router::SelectHandler(Request &) {
     return false;
 };
 
-Response Router::CallHandler(Request &) {};
+Response Router::CallHandler(Request &) {
+    return Response();
+};

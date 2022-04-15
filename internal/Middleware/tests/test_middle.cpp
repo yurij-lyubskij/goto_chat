@@ -9,7 +9,7 @@ TEST(Middleware, CheckAuth) {
     req.URL = "server/create/user?name=123";
     req.cookie = "SFDA^S(:IAJ09msmdc";
     req.response.statusCode = 200;
-    Request test_result;
+    Request test_result = req;
     test_result.response.body = "TEST_RESULT";
     test_result.response.statusCode = 401;
     CheckAuth middle;
