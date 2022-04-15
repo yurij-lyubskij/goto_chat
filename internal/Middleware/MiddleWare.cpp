@@ -4,6 +4,6 @@
 
 #include "MiddleWare.h"
 
-Request &CheckAuth::operator()(Request &request, std::function<iMiddle> (*callback)()) {
+Request &CheckAuth::operator()(Request &request, std::function<iMiddle> callback()) {
     return request;
 }
