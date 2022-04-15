@@ -4,11 +4,11 @@ project(goto_chat)
 set(CMAKE_CXX_STANDARD 14)
 
 file(GLOB SOURCES main.cpp)
-file(GLOB_RECURSE SOURCES ${SOURCES} internal/ChatRoom/ChatRoom.cpp internal/ChatRoomHandler/ChatRoomHandler.cpp internal/DBRepo/DBRepo.cpp internal/DBRepo/DBRepo.cpp internal/Response/Response.cpp internal/Handlers/Handlers.cpp internal/Message/Message.cpp internal/Request/Request.cpp internal/User/User.cpp internal/WebSocketServer/WebSocketServer.cpp)
+file(GLOB_RECURSE SOURCES ${SOURCES} internal/ChatRoom/ChatRoom.cpp internal/ChatRoomHandler/ChatRoomHandler.cpp internal/DBRepo/DBRepo.cpp internal/DBRepo/DBRepo.cpp internal/Response/Response.cpp internal/Handlers/Handlers.cpp internal/Message/Message.cpp internal/Request/Request.cpp internal/User/User.cpp internal/WebSocketServer/WebSocketServer.cpp  internal/MessageQueue/ internal/MessageQueue.cpp)
 
 find_package(PostgreSQL REQUIRED)
 
-file(GLOB INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR} internal/ChatRoom internal/ChatRoomHandler internal/DBRepo internal/Response internal/Handlers internal/Message internal/Request internal/User internal/WebSocketServer)
+file(GLOB INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR} internal/ChatRoom internal/ChatRoomHandler internal/DBRepo internal/Response internal/Handlers internal/Message internal/Request internal/User internal/WebSocketServer internal/MessageQueue)
 
 message("MAIN SOURCES\n ${SOURCES}")
 add_executable(${PROJECT_NAME} ${SOURCES})

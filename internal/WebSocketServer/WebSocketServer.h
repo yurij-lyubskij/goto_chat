@@ -8,6 +8,7 @@
 
 #include "User.h"
 #include "Message.h"
+#include "MessageQueue.h"
 
 class WebSocketSession{
 	public:
@@ -18,7 +19,7 @@ class WebSocketSession{
 class iWebSocketServer {
 	private:
 		std::map<int, WebSocketSession*> connections;
-		std::queue<std::shared_ptr<iMessage>> que;
+		MessageQueue *queue;
 	public:
 		virtual void addToQueue(std::shared_ptr<iMessage>) = 0;
 		virtual std::shared_ptr<iMessage> extractFromQueue() = 0;
