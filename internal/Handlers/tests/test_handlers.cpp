@@ -5,8 +5,11 @@
 TEST(handlers, GetChatHistory) {
     Request req;
     req.body = "TEST_DATA";
+    req.method = "GET";
+    req.URL = "server/chat/1/message?id=123";
     Response test_result;
     test_result.body = "TEST_RESULT";
+    test_result.statusCode = 200;
     GetChatHistory handler;
     bool can = handler.CanHandle(req);
     EXPECT_EQ(true, can);
@@ -17,8 +20,11 @@ TEST(handlers, GetChatHistory) {
 TEST(handlers, CreateChatRoom) {
     Request req;
     req.body = "TEST_DATA";
+    req.method = "POST";
+    req.URL = "server/create/chat/?name=123";
     Response test_result;
     test_result.body = "TEST_RESULT";
+    test_result.statusCode = 200;
     CreateChatRoom handler;
     bool can = handler.CanHandle(req);
     EXPECT_EQ(true, can);
@@ -29,8 +35,11 @@ TEST(handlers, CreateChatRoom) {
 TEST(handlers, FindChatRoom) {
     Request req;
     req.body = "TEST_DATA";
+    req.method = "GET";
+    req.URL = "server/chat?name=123";
     Response test_result;
     test_result.body = "TEST_RESULT";
+    test_result.statusCode = 200;
     FindChatRoom handler;
     bool can = handler.CanHandle(req);
     EXPECT_EQ(true, can);
@@ -41,8 +50,11 @@ TEST(handlers, FindChatRoom) {
 TEST(handlers, JoiChatRoom) {
     Request req;
     req.body = "TEST_DATA";
+    req.method = "POST";
+    req.URL = "server/join/chat?name=123";
     Response test_result;
     test_result.body = "TEST_RESULT";
+    test_result.statusCode = 200;
     JoiChatRoom handler;
     bool can = handler.CanHandle(req);
     EXPECT_EQ(true, can);
@@ -53,8 +65,11 @@ TEST(handlers, JoiChatRoom) {
 TEST(handlers, CreateNewUser) {
     Request req;
     req.body = "TEST_DATA";
+    req.method = "POST";
+    req.URL = "server/create/user?name=123";
     Response test_result;
     test_result.body = "TEST_RESULT";
+    test_result.statusCode = 200;
     CreateNewUser handler;
     bool can = handler.CanHandle(req);
     EXPECT_EQ(true, can);
@@ -65,8 +80,11 @@ TEST(handlers, CreateNewUser) {
 TEST(handlers, Login) {
     Request req;
     req.body = "TEST_DATA";
+    req.method = "POST";
+    req.URL = "server/create/session?user=123";
     Response test_result;
     test_result.body = "TEST_RESULT";
+    test_result.statusCode = 200;
     Login handler;
     bool can = handler.CanHandle(req);
     EXPECT_EQ(true, can);
@@ -77,8 +95,11 @@ TEST(handlers, Login) {
 TEST(handlers, Logout) {
     Request req;
     req.body = "TEST_DATA";
+    req.method = "POST";
+    req.URL = "server/delete/session?user=123";
     Response test_result;
     test_result.body = "TEST_RESULT";
+    test_result.statusCode = 200;
     Logout handler;
     bool can = handler.CanHandle(req);
     EXPECT_EQ(true, can);
@@ -89,8 +110,11 @@ TEST(handlers, Logout) {
 TEST(handlers, SendMessage) {
     Request req;
     req.body = "TEST_DATA";
+    req.method = "POST";
+    req.URL = "server/create/message";
     Response test_result;
     test_result.body = "TEST_RESULT";
+    test_result.statusCode = 200;
     SendMessage handler;
     bool can = handler.CanHandle(req);
     EXPECT_EQ(true, can);
