@@ -17,6 +17,9 @@ find_package(Qt6 REQUIRED COMPONENTS Widgets)
 
 message("INCLUDES = "${GTest_INCLUDE_DIRS})
 add_executable(${PROJECT_NAME} tests.cpp)
-target_include_directories(${PROJECT_NAME} PUBLIC ${GTest_INCLUDE_DIRS} ${CLIENT_LIB_INCLUDE_DIRS})
-target_link_libraries(client_lib PRIVATE Qt6::Widgets)
-target_link_libraries(${PROJECT_NAME} ${CLIENT_LIB_LIBRARIES} ${GTest_LINK_LIBRARIES})
+#target_link_libraries(client_lib PRIVATE Qt6::Widgets)
+target_include_directories(${PROJECT_NAME} PUBLIC ${CLIENT_LIB_INCLUDE_DIRS} ${CHECKER_LIB_INCLUDE_DIRS} ${GTest_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} ${CLIENT_LIB_LIBRARIES} ${CHECKER_LIB_LIBRARIES} ${GTest_LINK_LIBRARIES})
+
+
+
