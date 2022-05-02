@@ -135,13 +135,13 @@ TEST(MessageRepoTests, putAndgetById){
 	repo.put(messages);
 	messages = repo.getByID(ids);
 
-	EXPECT_EQ(messages[0].id, message1.id);
-	EXPECT_EQ(messages[0].content, message1.content);
-	EXPECT_EQ(messages[0].sender.Id, message1.sender.Id);
+	EXPECT_EQ(messages[0].getId(), message1.getId());
+	EXPECT_EQ(messages[0].getContent(), message1.getContent());
+	EXPECT_EQ(messages[0].getSender().Id, message1.getSender().Id);
 	
-	EXPECT_EQ(messages[1].id, message2.id);
-	EXPECT_EQ(messages[1].content, message2.content);
-	EXPECT_EQ(messages[1].sender.Id, message2.sender.Id);
+	EXPECT_EQ(messages[1].getId(), message2.getId());
+	EXPECT_EQ(messages[1].getContent(), message2.getContent());
+	EXPECT_EQ(messages[1].getSender().Id, message2.getSender().Id);
 }
 
 //

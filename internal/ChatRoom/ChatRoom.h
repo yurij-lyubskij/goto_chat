@@ -9,8 +9,10 @@
 class iChatRoom{
 	protected:
 		int id;
+		std::string name;
 	public:
 		int getId(){ return id;};
+		std::string getName(){ return name; };
 		virtual bool addUser(User user) = 0;
 		virtual bool removeUser(User user) = 0;
 		virtual bool reactOn(Message mes) = 0;

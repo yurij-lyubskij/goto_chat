@@ -32,6 +32,7 @@ typedef struct{
 	int id;
 	int senderID;
 	time_t time;
+	std::string content;
 } MessageDB;
 
 typedef struct{
@@ -53,9 +54,12 @@ class DBObject{
         DBObjectType type;
         std::vector<std::string> attr;
         DBObject();
-        DBObject(&UserDB);
-        DBObject(&ChatDB);
-        DBObject(&MessageDB);
+		DBObject(const DBObject&);
+		~DBObject();
+        DBObject(const UserDB&);
+        DBObject(const ChatDB&);
+        DBObject(const MessageDB&);
+		DBObject& operator=(const DBObject&);
         //DBObject(InputDB);        
 };
 
@@ -96,7 +100,7 @@ private:
 
 //Interface Block
 class iUserRepo{
-	private:
+	protected:
 		DBConnection<iConnection> *connection;
 	public:
 		virtual bool doesExist(int id) = 0;
@@ -108,7 +112,7 @@ class iUserRepo{
 };
 
 class iChatRepo{
-	private:
+	protected:
 		DBConnection<iConnection> *connection;
 	public:
 		virtual bool doesExist(int id) = 0;
@@ -121,7 +125,7 @@ class iChatRepo{
 };
 
 class iMessageRepo{
-	private:
+	protected:
 		DBConnection<iConnection> *connection;
 	public:
 		virtual bool doesExist(int id) = 0;
