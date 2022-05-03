@@ -34,7 +34,7 @@
 //
 //UserRepo Section
 //
-
+/*
 bool UserRepo::doesExist(int id){
 	return false;
 };
@@ -73,6 +73,7 @@ std::vector<User> UserRepo::getSender(Message mes){
 	std::vector<User> usrs;
 	return usrs;
 };
+*/
 //
 //end of UserRepo Section
 //

@@ -21,8 +21,8 @@ class iMessage{
 
 class Message: public iMessage{
 	public:
-		Message(std::string, User){};
-		Message(int, std::string, User){};
+		Message(std::string, time_t, User){};
+		Message(int, std::string, time_t, User){};
 
 };
 

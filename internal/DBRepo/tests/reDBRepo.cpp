@@ -94,7 +94,7 @@ TEST(ChatRepoTests, putAndgetById){
 //
 
 //
-//UserRepo Section
+//MessageRepo Section
 //
 TEST(MessageRepoTests, DoesExist){
 	MockConnection conn;
@@ -107,7 +107,7 @@ TEST(MessageRepoTests, DoesExist){
 	usr.Id = 1;
 	usr.Name = "abc";
 	usr.PhoneNumber = "1234567890";
-	Message message(1, "text", usr);
+	Message message(1, "text", 50, usr);
 	std::vector<iMessage> messages;
 	messages.push_back(message);
 
@@ -125,7 +125,7 @@ TEST(MessageRepoTests, putAndgetById){
 	usr1.Name = "abc";					usr1.Name = "abc";								
 	usr2.PhoneNumber = "1234567890";	usr1.PhoneNumber = "1023456789";
 
-	Message message1(1, "text1", usr1), message2(1, "text2", usr2);
+	Message message1(1, "text1", 12, usr1), message2(1, "text2", 50, usr2);
 	std::vector<iMessage> messages;
 	messages.push_back(message1);
 	messages.push_back(message2);
@@ -137,13 +137,15 @@ TEST(MessageRepoTests, putAndgetById){
 
 	EXPECT_EQ(messages[0].getId(), message1.getId());
 	EXPECT_EQ(messages[0].getContent(), message1.getContent());
+	EXPECT_EQ(messages[0].getTime(), message1.getTime());
 	EXPECT_EQ(messages[0].getSender().Id, message1.getSender().Id);
 	
 	EXPECT_EQ(messages[1].getId(), message2.getId());
 	EXPECT_EQ(messages[1].getContent(), message2.getContent());
+	EXPECT_EQ(messages[1].getTime(), message2.getTime());
 	EXPECT_EQ(messages[1].getSender().Id, message2.getSender().Id);
 }
 
 //
-//end of UserRepo Section
+//end of MessageRepo Section
 //
