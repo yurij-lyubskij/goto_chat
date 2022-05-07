@@ -23,42 +23,45 @@ DBObject::~DBObject(){};
 
 DBObject::DBObject(const User& usr){
 	type = user;
+	attr = std::vector<std::string>(3);
 
 	std::string tempAttr;
 	tempAttr = std::to_string(usr.Id);
-	attr.push_back(tempAttr);
+	attr[0] = tempAttr;
 	tempAttr = usr.Name;
-	attr.push_back(tempAttr);
+	attr[1] = tempAttr;
 	tempAttr = usr.PhoneNumber;
-	attr.push_back(tempAttr);
+	attr[2] = tempAttr;
 };
 
 DBObject::DBObject(const ChatRoom& cht){
 	type = chat;
+	attr = std::vector<std::string>(2);
 
 	std::string tempAttr;
 	tempAttr = std::to_string(cht.getId());
-	attr.push_back(tempAttr);
+	attr[0] = tempAttr;
 	tempAttr = cht.getName();
-	attr.push_back(tempAttr);
+	attr[1] = tempAttr;
 };
 
 DBObject::DBObject(const iMessage& mes){
 	type = message;
+	attr = std::vector<std::string>(4);
 
 	std::string tempAttr;
 	//id
 	tempAttr = std::to_string(mes.getId());
-	attr.push_back(tempAttr);
+	attr[0] = tempAttr;
 	//content
 	tempAttr = mes.getContent();
-	attr.push_back(tempAttr);
+	attr[1] = tempAttr;
 	//sendTime
 	tempAttr = std::to_string(mes.getTime());
-	attr.push_back(tempAttr);
+	attr[2] = tempAttr;
 	//sender
 	tempAttr = std::to_string(mes.getSender().Id);
-	attr.push_back(tempAttr);
+	attr[3] = tempAttr;
 };
 
 DBObject::operator User(){
