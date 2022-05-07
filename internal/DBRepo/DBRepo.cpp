@@ -15,13 +15,53 @@
 //DBObject Section
 //
 
-        DBObject::DBObject(){};
-		DBObject::DBObject(const DBObject& obj): type(obj.type), attr(obj.attr){};
-		DBObject::~DBObject(){};
-        DBObject::DBObject(const User& usr){};
-        DBObject::DBObject(const ChatRoom& chat){};
-        DBObject::DBObject(const iMessage& mes){};
-User DBObject::toUser(){
+DBObject::DBObject(){};
+
+DBObject::DBObject(const DBObject& obj): type(obj.type), attr(obj.attr){};
+
+DBObject::~DBObject(){};
+
+DBObject::DBObject(const User& usr){
+	type = user;
+
+	std::string tempAttr;
+	tempAttr = std::to_string(usr.Id);
+	attr.push_back(tempAttr);
+	tempAttr = usr.Name;
+	attr.push_back(tempAttr);
+	tempAttr = usr.PhoneNumber;
+	attr.push_back(tempAttr);
+};
+
+DBObject::DBObject(const ChatRoom& cht){
+	type = chat;
+
+	std::string tempAttr;
+	tempAttr = std::to_string(cht.getId());
+	attr.push_back(tempAttr);
+	tempAttr = cht.getName();
+	attr.push_back(tempAttr);
+};
+
+DBObject::DBObject(const iMessage& mes){
+	type = message;
+
+	std::string tempAttr;
+	//id
+	tempAttr = std::to_string(mes.getId());
+	attr.push_back(tempAttr);
+	//content
+	tempAttr = mes.getContent();
+	attr.push_back(tempAttr);
+	//sendTime
+	tempAttr = std::to_string(mes.getTime());
+	attr.push_back(tempAttr);
+	//sender
+	tempAttr = std::to_string(mes.getSender().Id);
+	attr.push_back(tempAttr);
+};
+
+DBObject::operator User(){
 	User usr;
 	if( type != user ) return usr;
 
@@ -30,16 +70,19 @@ User DBObject::toUser(){
 	usr.PhoneNumber = attr[2];
 	return usr;
 };
-ChatRoom DBObject::toChat(){
+
+DBObject::operator ChatRoom(){
 	if( type != chat ) return ChatRoom();
 
 	return ChatRoom(std::stoi(attr[0]), attr[1]);
 };
-Message DBObject::toMessage(){
+
+DBObject::operator iMessage(){
 	if( type != message ) return Message();
 
 	return Message(std::stoi(attr[0]), attr[1], std::stoi(attr[2]), User(std::stoi(attr[3])));
 };
+
 DBObject DBObject::operator=(const DBObject& obj){
 	type = obj.type;
 	attr = obj.attr;

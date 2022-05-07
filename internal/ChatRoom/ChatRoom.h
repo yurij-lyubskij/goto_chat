@@ -11,8 +11,8 @@ class iChatRoom{
 		int id;
 		std::string name;
 	public:
-		int getId(){ return id;};
-		std::string getName(){ return name; };
+		int getId() const { return id; };
+		std::string getName() const { return name; };
 		virtual bool addUser(User user) = 0;
 		virtual bool removeUser(User user) = 0;
 		virtual bool reactOn(Message mes) = 0;

@@ -59,9 +59,9 @@ class DBObject{
         DBObject(const User&);
         DBObject(const ChatRoom&);
         DBObject(const iMessage&);
-		User toUser();
-		ChatRoom toChat();
-		Message toMessage();
+		operator User();
+		operator ChatRoom();
+		operator iMessage();
 		DBObject operator=(const DBObject&);
         //DBObject(InputDB);        
 };

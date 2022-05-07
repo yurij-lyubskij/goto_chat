@@ -9,14 +9,14 @@
 class iMessage{
 	protected:
 		int id;
-		User sender;
 		time_t sendTime;
 		std::string content;
+		User sender;
 	public:
-		int getId(){ return id; };
-		User getSender(){ return sender; };
-		time_t getTime(){ return sendTime; };
-		std::string getContent(){ return content; };
+		int getId() const { return id; };
+		User getSender() const { return sender; };
+		time_t getTime() const { return sendTime; };
+		std::string getContent() const { return content; };
 };
 
 class Message: public iMessage{
