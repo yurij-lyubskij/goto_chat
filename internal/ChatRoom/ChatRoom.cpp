@@ -3,7 +3,9 @@
 
 
 ChatRoom::ChatRoom(){ id = 0; };
-ChatRoom::ChatRoom(int _id){id = _id; };
+
+ChatRoom::ChatRoom(int _id){ id = _id; };
+
 ChatRoom::ChatRoom(int _id, std::string _name){
 	id = _id;
 	name = _name;
@@ -15,11 +17,6 @@ ChatRoom::ChatRoom(const ChatRoom& cht){
 
 bool ChatRoom::reactOn(Message mes){
 	return true;
-}
-
-std::vector<User> ChatRoom::getMembers(){
-	std::vector<User> usrs;
-	return usrs;
 }
 
 ChatRoom ChatRoom::operator=(const ChatRoom& cht){

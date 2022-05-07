@@ -96,10 +96,10 @@ DBObject DBObject::operator=(const DBObject& obj){
 //end of DBObject Section
 //
 
+/*
 //
 //UserRepo Section
 //
-/*
 bool UserRepo::doesExist(int id){
 	return false;
 };
@@ -151,7 +151,7 @@ bool ChatRepo::doesExist(int id){
 	if ( id == 0 ) return false;
 	std::shared_ptr<iConnection> conn = connection->connection();			//getting connection to DB
 
-	ChatRoom cht(id, "");													//empty object just to check
+	ChatRoom cht(id);														//empty object just to check
 	DBObject obj(cht);
 	std::vector<DBObject> objects(1);
 
@@ -165,11 +165,20 @@ std::vector<ChatRoom> ChatRepo::getByID(std::vector<int> id){
 };
 
 bool ChatRepo::update(std::vector<ChatRoom> chats){
-	return false;
+	if ( chats.empty() ) return true;
+	
+	std::shared_ptr<iConnection> conn = connection->connection();			//getting connection to DB
+
+	int len = chats.size();
+	std::vector<DBObject> objects(len);
+	ChatRoom tempChat;
+
+	for(int i = 0; i < len; ++i) objects[i] = DBObject(chats[i]);
+	return conn->exec(updateIt, objects);
 };
 
 bool ChatRepo::put(std::vector<ChatRoom> chats){
-	if ( chats.empty() ) return false;
+	if ( chats.empty() ) return true;
 
 	std::shared_ptr<iConnection> conn = connection->connection();			//getting connection to DB
 
@@ -205,10 +214,10 @@ std::vector<ChatRoom> ChatRepo::getUserChats(const User& user){
 //MessageRepo Section
 //
 bool MessageRepo::doesExist(int id){
-	if ( id == 0 ) return false;
+	if ( id == 0 ) return true;
 	std::shared_ptr<iConnection> conn = connection->connection();			//getting connection to DB
 
-	Message mes(id, "", 0, 0);												//empty object just to check
+	Message mes(id);												//empty object just to check
 	DBObject obj(mes);
 	std::vector<DBObject> objects(1);
 
@@ -222,11 +231,7 @@ std::vector<iMessage> MessageRepo::getByID(std::vector<int> id){
 };
 
 bool MessageRepo::update(std::vector<iMessage> mes){
-	return false;
-};
-
-bool MessageRepo::put(std::vector<iMessage> mes){
-	if ( mes.empty() ) return false;
+	if ( mes.empty() ) return true;
 
 	std::shared_ptr<iConnection> conn = connection->connection();			//getting connection to DB
 
@@ -236,6 +241,22 @@ bool MessageRepo::put(std::vector<iMessage> mes){
 	for(int i = 0; i < len; ++i) {
 		objects[i] = DBObject(mes[i]);
 	};
+
+	return conn->exec(updateIt, objects);
+};
+
+bool MessageRepo::put(std::vector<iMessage> mes){
+	if ( mes.empty() ) return true;
+
+	std::shared_ptr<iConnection> conn = connection->connection();			//getting connection to DB
+
+	int len = mes.size();
+	std::vector<DBObject> objects(len);
+
+	for(int i = 0; i < len; ++i) {
+		objects[i] = DBObject(mes[i]);
+	};
+	
 	return conn->exec(putIt, objects);
 };
 

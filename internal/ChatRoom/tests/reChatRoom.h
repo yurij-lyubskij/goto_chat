@@ -10,7 +10,7 @@ class reChatRoom : public iChatRoom{
 		//MOCK_METHOD(bool, addUser, (User), (override));
 		//MOCK_METHOD(bool, removeUser, (User), (override));
 		MOCK_METHOD(bool, reactOn, (Message), (override));
-		MOCK_METHOD(std::vector<User>, getMembers, (), (override));
+		//MOCK_METHOD(std::vector<User>, getMembers, (), (override));
 };
 
 #endif
