@@ -21,9 +21,9 @@ class iChatRoom{
 
 class ChatRoom: public iChatRoom{
 	public:
-		ChatRoom();
-		ChatRoom(int);
-		ChatRoom(int, std::string);
+		ChatRoom();					//Creates empty(false) object
+		ChatRoom(int);				//Takes out chat from data base by id
+		ChatRoom(int, std::string);	//Doesn't refer to data base, just create new object
 		ChatRoom(const ChatRoom&);
 		bool addUser(User user) override;
 		bool removeUser(User user) override;
