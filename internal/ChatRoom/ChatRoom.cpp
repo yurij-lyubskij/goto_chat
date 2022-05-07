@@ -13,15 +13,15 @@ ChatRoom::ChatRoom(const ChatRoom& cht){
 	name = cht.name;
 };
 
-bool ChatRoom::addUser(User user){
+bool ChatRoom::addUser(std::vector<User> users, ChatRepo* repo){
 	return true;
 }
 
-bool ChatRoom::removeUser(User user){
+bool ChatRoom::removeUser(std::vector<User> users, ChatRepo* repo){
 	return true;
 }
 
-bool ChatRoom::reactOn(Message mes){
+bool ChatRoom::reactOn(Message mes, ChatRepo* repo){
 	return true;
 }
 
