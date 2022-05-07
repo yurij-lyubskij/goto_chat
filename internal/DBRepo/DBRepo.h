@@ -122,9 +122,10 @@ class iChatRepo{
 		virtual std::vector<ChatRoom> getByID(std::vector<int> id) = 0;
 		virtual bool update(std::vector<ChatRoom> chats) = 0;
 		virtual bool put(std::vector<ChatRoom> chats) = 0;
-		virtual bool addUserToChat(const ChatRoom &chat, const User &user) = 0;
+		virtual bool addUsersToChat(const ChatRoom &chat, std::vector<User> users) = 0;
+		virtual bool removeUsersFromChat(const ChatRoom &chat, std::vector<User> users) = 0;
 		virtual ChatRoom getMesChat(Message mes) = 0;
-		virtual std::vector<ChatRoom> getUserChats(User user) = 0;
+		virtual std::vector<ChatRoom> getUserChats(const User& user) = 0;
 };
 
 class iMessageRepo{
@@ -159,9 +160,10 @@ class ChatRepo: public iChatRepo{
 		std::vector<ChatRoom> getByID(std::vector<int> id);
 		bool update(std::vector<ChatRoom> chats);
 		bool put(std::vector<ChatRoom> chats);
-		bool addUserToChat(const ChatRoom &chat, const User &user);
+		bool addUsersToChat(const ChatRoom &chat, std::vector<User> users) override;
+		bool removeUsersFromChat(const ChatRoom &chat, std::vector<User> users) override;
 		ChatRoom getMesChat(Message mes);
-		std::vector<ChatRoom> getUserChats(User user);
+		std::vector<ChatRoom> getUserChats(const User& user) override;
 };
 
 class MessageRepo: public iMessageRepo{

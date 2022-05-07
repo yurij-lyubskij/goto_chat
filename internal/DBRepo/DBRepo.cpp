@@ -173,7 +173,11 @@ bool ChatRepo::put(std::vector<ChatRoom> chats){
 	return conn->exec(putIt, objects);
 };
 
-bool ChatRepo::addUserToChat(const ChatRoom &chat, const User &user){
+bool ChatRepo::addUsersToChat(const ChatRoom &chat, std::vector<User> users){
+	return false;
+};
+
+bool ChatRepo::removeUsersFromChat(const ChatRoom &chat, std::vector<User> users){
 	return false;
 };
 
@@ -181,7 +185,7 @@ ChatRoom ChatRepo::getMesChat(Message mes){
 	return ChatRoom();
 };
 
-std::vector<ChatRoom> ChatRepo::getUserChats(User user){
+std::vector<ChatRoom> ChatRepo::getUserChats(const User& user){
 	std::vector<ChatRoom> chats;
 	return chats;
 };

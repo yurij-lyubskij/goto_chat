@@ -13,9 +13,9 @@ class iChatRoom{
 	public:
 		int getId() const { return id; };
 		std::string getName() const { return name; };
-		virtual bool addUser(std::vector<User> users, ChatRepo*) = 0;
-		virtual bool removeUser(std::vector<User> users, ChatRepo*) = 0;
-		virtual bool reactOn(Message mes, ChatRepo*) = 0;
+		//virtual bool addUsers(std::vector<User> users, ChatRepo*) = 0;			//moved to chatRepo
+		//virtual bool removeUsers(std::vector<User> users, ChatRepo*) = 0;
+		virtual bool reactOn(Message mes) = 0;
 		virtual std::vector<User> getMembers() = 0;
 };
 
@@ -25,9 +25,9 @@ class ChatRoom: public iChatRoom{
 		ChatRoom(int);				//Takes out chat from data base by id
 		ChatRoom(int, std::string);	//Doesn't refer to data base, just create new object
 		ChatRoom(const ChatRoom&);
-		bool addUsers(std::vector<User> users, ChatRepo*) override;
-		bool removeUsers(std::vector<User> users, ChatRepo*) override;
-		bool reactOn(Message mes, ChatRepo*) override;
+		//bool addUsers(std::vector<User> users, ChatRepo*) override;
+		//bool removeUsers(std::vector<User> users, ChatRepo*) override;
+		bool reactOn(Message mes) override;
 		std::vector<User> getMembers() override;
 		ChatRoom operator=(const ChatRoom&);
 };
