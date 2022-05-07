@@ -2,7 +2,7 @@
 
 Message::Message(const Message& mes){
 	id = mes.id;
-	sender = mes.sender;
+	senderId = mes.senderId;
 	sendTime = mes.sendTime;
 	content = mes.content;
 };

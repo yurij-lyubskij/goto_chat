@@ -60,7 +60,7 @@ DBObject::DBObject(const iMessage& mes){
 	tempAttr = std::to_string(mes.getTime());
 	attr[2] = tempAttr;
 	//sender
-	tempAttr = std::to_string(mes.getSender().Id);
+	tempAttr = std::to_string(mes.getSender());
 	attr[3] = tempAttr;
 };
 
@@ -83,7 +83,7 @@ DBObject::operator ChatRoom(){
 DBObject::operator iMessage(){
 	if( type != message ) return Message();
 
-	return Message(std::stoi(attr[0]), attr[1], std::stoi(attr[2]), User(std::stoi(attr[3])));
+	return Message(std::stoi(attr[0]), attr[1], std::stoi(attr[2]), std::stoi(attr[3]));
 };
 
 DBObject DBObject::operator=(const DBObject& obj){
@@ -148,7 +148,15 @@ std::vector<User> UserRepo::getSender(Message mes){
 //
 
 bool ChatRepo::doesExist(int id){
-	return false;
+	if ( id == 0 ) return false;
+	std::shared_ptr<iConnection> conn = connection->connection();			//getting connection to DB
+
+	ChatRoom cht(id, "");													//empty object just to check
+	DBObject obj(cht);
+	std::vector<DBObject> objects(1);
+
+	objects[1] = obj;
+	return conn->exec(checkIt, objects);									//exec with "chekIt" doesn't need proper object and will use only id
 };
 
 std::vector<ChatRoom> ChatRepo::getByID(std::vector<int> id){
@@ -163,7 +171,7 @@ bool ChatRepo::update(std::vector<ChatRoom> chats){
 bool ChatRepo::put(std::vector<ChatRoom> chats){
 	if ( chats.empty() ) return false;
 
-	std::shared_ptr<iConnection> conn = connection->connection();
+	std::shared_ptr<iConnection> conn = connection->connection();			//getting connection to DB
 
 	int len = chats.size();
 	std::vector<DBObject> objects(len);
@@ -197,8 +205,17 @@ std::vector<ChatRoom> ChatRepo::getUserChats(const User& user){
 //MessageRepo Section
 //
 bool MessageRepo::doesExist(int id){
-	return false;
+	if ( id == 0 ) return false;
+	std::shared_ptr<iConnection> conn = connection->connection();			//getting connection to DB
+
+	Message mes(id, "", 0, 0);												//empty object just to check
+	DBObject obj(mes);
+	std::vector<DBObject> objects(1);
+
+	objects[1] = obj;
+	return conn->exec(checkIt, objects);									//exec with "chekIt" doesn't need proper object and will use only id
 };
+
 std::vector<iMessage> MessageRepo::getByID(std::vector<int> id){
 	std::vector<iMessage> messages;
 	return messages;
@@ -211,7 +228,7 @@ bool MessageRepo::update(std::vector<iMessage> mes){
 bool MessageRepo::put(std::vector<iMessage> mes){
 	if ( mes.empty() ) return false;
 
-	std::shared_ptr<iConnection> conn = connection->connection();
+	std::shared_ptr<iConnection> conn = connection->connection();			//getting connection to DB
 
 	int len = mes.size();
 	std::vector<DBObject> objects(len);

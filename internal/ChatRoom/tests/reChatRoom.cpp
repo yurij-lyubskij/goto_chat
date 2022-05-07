@@ -33,9 +33,8 @@ TEST(ChatTests, removing){
 */
 TEST(ChatTests, reaction){
 	reWebSocketServer serv;
-	ChatRoom chat(1);
-	User usr;
-	Message mes("abc", 50, usr);
+	ChatRoom chat(1, "");
+	Message mes("abc", 50, 12);
 	
 	EXPECT_CALL(serv, addToQueue(testing::_)).Times(1);
 	

@@ -11,10 +11,10 @@ class iMessage{
 		int id;
 		time_t sendTime;
 		std::string content;
-		User sender;
+		int senderId;
 	public:
 		int getId() const { return id; };
-		User getSender() const { return sender; };
+		int getSender() const { return senderId; };
 		time_t getTime() const { return sendTime; };
 		std::string getContent() const { return content; };
 };
@@ -22,8 +22,8 @@ class iMessage{
 class Message: public iMessage{
 	public:
 		Message(){ id = 0; };					//Creates empty(false) object
-		Message(std::string, time_t, User){};	//Creates object that is not in database
-		Message(int, std::string, time_t, User){};
+		Message(std::string, time_t, int){};	//Creates object that is not in database
+		Message(int, std::string, time_t, int){};
 		Message(const Message&);
 		Message operator=(const Message&);
 

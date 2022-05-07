@@ -104,11 +104,7 @@ TEST(MessageRepoTests, DoesExist){
 	MessageRepo repo;
 	EXPECT_FALSE(repo.doesExist(1));
 
-	User usr;
-	usr.Id = 1;
-	usr.Name = "abc";
-	usr.PhoneNumber = "1234567890";
-	Message message(1, "text", 50, usr);
+	Message message(1, "text", 50, 1);
 	std::vector<iMessage> messages;
 	messages.push_back(message);
 
@@ -121,12 +117,9 @@ TEST(MessageRepoTests, putAndgetById){
 	EXPECT_CALL(conn, get(::testing::_)).Times(2);
 
 	MessageRepo repo;
-	User usr1, usr2;
-	usr1.Id = 1;						usr1.Id = 2;
-	usr1.Name = "abc";					usr1.Name = "abc";								
-	usr2.PhoneNumber = "1234567890";	usr1.PhoneNumber = "1023456789";
 
-	Message message1(1, "text1", 12, usr1), message2(1, "text2", 50, usr2);
+
+	Message message1(1, "text1", 12, 1), message2(1, "text2", 50, 2);
 	std::vector<iMessage> messages;
 	messages.push_back(message1);
 	messages.push_back(message2);
@@ -139,12 +132,12 @@ TEST(MessageRepoTests, putAndgetById){
 	EXPECT_EQ(messages[0].getId(), message1.getId());
 	EXPECT_EQ(messages[0].getContent(), message1.getContent());
 	EXPECT_EQ(messages[0].getTime(), message1.getTime());
-	EXPECT_EQ(messages[0].getSender().Id, message1.getSender().Id);
+	EXPECT_EQ(messages[0].getSender(), message1.getSender());
 	
 	EXPECT_EQ(messages[1].getId(), message2.getId());
 	EXPECT_EQ(messages[1].getContent(), message2.getContent());
 	EXPECT_EQ(messages[1].getTime(), message2.getTime());
-	EXPECT_EQ(messages[1].getSender().Id, message2.getSender().Id);
+	EXPECT_EQ(messages[1].getSender(), message2.getSender());
 }
 
 //

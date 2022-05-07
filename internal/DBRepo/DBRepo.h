@@ -47,7 +47,7 @@ typedef struct{
     std::string request;
 } DBRequest;
 
-enum Operation { putIt, deleteIt, updateIt };
+enum Operation { checkIt, putIt, deleteIt, updateIt };
 
 class DBObject{
     public:
