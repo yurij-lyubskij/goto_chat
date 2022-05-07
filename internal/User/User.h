@@ -8,6 +8,8 @@ class User {
 		std::string Name;
     	size_t Id;
     	std::string PhoneNumber;
+		User();
+		User(int);
 };
 
 #endif

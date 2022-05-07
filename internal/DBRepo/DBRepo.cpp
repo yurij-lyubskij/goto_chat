@@ -18,14 +18,33 @@
         DBObject::DBObject(){};
 		DBObject::DBObject(const DBObject& obj): type(obj.type), attr(obj.attr){};
 		DBObject::~DBObject(){};
-        DBObject::DBObject(const UserDB& usr){};
-        DBObject::DBObject(const ChatDB& chat){};
-        DBObject::DBObject(const MessageDB& mes){};
-		DBObject& DBObject::operator=(const DBObject& obj){
-			type = obj.type;
-			attr = obj.attr;
-			return *this;
-		};
+        DBObject::DBObject(const User& usr){};
+        DBObject::DBObject(const ChatRoom& chat){};
+        DBObject::DBObject(const iMessage& mes){};
+User DBObject::toUser(){
+	User usr;
+	if( type != user ) return usr;
+
+	usr.Id = std::stoi(attr[0]);
+	usr.Name = attr[1];
+	usr.PhoneNumber = attr[2];
+	return usr;
+};
+ChatRoom DBObject::toChat(){
+	if( type != chat ) return ChatRoom();
+
+	return ChatRoom(std::stoi(attr[0]), attr[1]);
+};
+Message DBObject::toMessage(){
+	if( type != message ) return Message();
+
+	return Message(std::stoi(attr[0]), attr[1], std::stoi(attr[2]), User(std::stoi(attr[3])));
+};
+DBObject DBObject::operator=(const DBObject& obj){
+	type = obj.type;
+	attr = obj.attr;
+	return *this;
+};
 
 //
 //end of DBObject Section
@@ -102,12 +121,9 @@ bool ChatRepo::put(std::vector<ChatRoom> chats){
 
 	int len = chats.size();
 	std::vector<DBObject> objects(len);
-	ChatDB tempChat;
+	ChatRoom tempChat;
 
-	for(int i = 0; i < len; ++i) {
-		tempChat = { chats[i].getId(), chats[i].getName() };
-		objects[i] = DBObject(tempChat);
-	};
+	for(int i = 0; i < len; ++i) objects[i] = DBObject(chats[i]);
 	return conn->exec(putIt, objects);
 };
 
@@ -149,11 +165,9 @@ bool MessageRepo::put(std::vector<iMessage> mes){
 
 	int len = mes.size();
 	std::vector<DBObject> objects(len);
-	MessageDB tempMes;
 
 	for(int i = 0; i < len; ++i) {
-		tempMes = { mes[i].getId(), (int) mes[i].getSender().Id, mes[i].getTime(), mes[i].getContent() };
-		objects[i] = DBObject(tempMes);
+		objects[i] = DBObject(mes[i]);
 	};
 	return conn->exec(putIt, objects);
 };

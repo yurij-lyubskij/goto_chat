@@ -21,8 +21,11 @@ class iMessage{
 
 class Message: public iMessage{
 	public:
+		Message(){ id = 0; };
 		Message(std::string, time_t, User){};
 		Message(int, std::string, time_t, User){};
+		Message(const Message&);
+		Message operator=(const Message&);
 
 };
 

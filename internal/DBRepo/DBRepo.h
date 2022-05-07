@@ -16,7 +16,7 @@
 #include "ChatRoom.h"
 #include "User.h"
 #include "Message.h"
-
+/*
 typedef struct{
 	int id;
 	std::string phone;
@@ -39,7 +39,7 @@ typedef struct{
 	int id;
 	FILE* content;
 } InputDB;
-
+*/
 enum DBObjectType { user, chat, message, input };
 
 typedef struct{
@@ -56,10 +56,13 @@ class DBObject{
         DBObject();
 		DBObject(const DBObject&);
 		~DBObject();
-        DBObject(const UserDB&);
-        DBObject(const ChatDB&);
-        DBObject(const MessageDB&);
-		DBObject& operator=(const DBObject&);
+        DBObject(const User&);
+        DBObject(const ChatRoom&);
+        DBObject(const iMessage&);
+		User toUser();
+		ChatRoom toChat();
+		Message toMessage();
+		DBObject operator=(const DBObject&);
         //DBObject(InputDB);        
 };
 
@@ -134,7 +137,7 @@ class iMessageRepo{
 		virtual bool put(std::vector<iMessage> mes) = 0;
 		virtual std::vector<iMessage> getFromRange(int start, int end,const ChatRoom &chat) = 0;
 };
-
+/*
 //Declaration block
 class UserRepo: public iUserRepo{
 	public:
@@ -147,7 +150,7 @@ class UserRepo: public iUserRepo{
 		std::vector<User> getChatMembers(ChatRoom chat);
 		std::vector<User> getSender(Message mes);
 };
-
+*/
 class ChatRepo: public iChatRepo{
 	public:
 		ChatRepo(){};

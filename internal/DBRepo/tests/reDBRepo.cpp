@@ -4,7 +4,7 @@
 #include "User.h"
 #include "reDBRepo.h"
 #include "reDBConnection.h"
-
+/*
 //
 //UserRepo Section
 //
@@ -51,6 +51,7 @@ TEST(UserRepoTests, putAndgetById){
 //
 //end of UserRepo Section
 //
+*/
 
 //
 //ChatRepo Section

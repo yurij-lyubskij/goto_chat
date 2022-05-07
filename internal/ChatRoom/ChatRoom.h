@@ -21,12 +21,15 @@ class iChatRoom{
 
 class ChatRoom: public iChatRoom{
 	public:
-		ChatRoom(){};
-		ChatRoom(int){};
+		ChatRoom();
+		ChatRoom(int);
+		ChatRoom(int, std::string);
+		ChatRoom(const ChatRoom&);
 		bool addUser(User user) override;
 		bool removeUser(User user) override;
 		bool reactOn(Message mes) override;
 		std::vector<User> getMembers() override;
+		ChatRoom operator=(const ChatRoom&);
 };
 
 #endif
