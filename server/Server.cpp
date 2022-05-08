@@ -5,7 +5,7 @@
 #include "Server.h"
 
 void Server::Run() {
-
+    _ioc->run();
 }
 
 bool Server::Accept() {
@@ -26,8 +26,4 @@ void Server::Send(Response) {
 
 std::string Server::Serialise(Response) {
     return std::string();
-}
-
-Server::Server() {
-
 }

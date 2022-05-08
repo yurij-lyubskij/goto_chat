@@ -328,10 +328,19 @@ private:
     }
 };
 
+class Context: public iContext {
+public:
+    Context(net::io_context& ioc): ioc(ioc){};
+    void run() {
+        ioc.run();
+    };
+private:
+    net::io_context& ioc;
+};
+
 int main() {
     auto const address = net::ip::make_address("127.0.0.1");
     auto const port = static_cast<unsigned short>(8080);
-    auto const threads = 1;
 
     // The io_context is required for all I/O
     net::io_context ioc;
@@ -340,18 +349,10 @@ int main() {
     std::make_shared<listener>(ioc,
                                tcp::endpoint{address, port})->run();
 
-    // Run the I/O service on 1 thread
-    std::vector<std::thread> v;
-
-        v.emplace_back(
-                [&ioc]
-                {
-                    ioc.run();
-                });
-
-    ioc.run();
-
-//    Server server;
-//    server.Run();
+    // Run the I/O service in Server
+//    ioc.run();
+    std::shared_ptr<iContext> cont (new Context(ioc));
+    Server server = Server(cont);
+    server.Run();
     return 0;
 }

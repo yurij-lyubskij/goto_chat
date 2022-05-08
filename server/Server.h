@@ -5,6 +5,8 @@
 #ifndef GOTO_CHAT_SERVER_H
 #define GOTO_CHAT_SERVER_H
 
+#include <utility>
+
 #include "Router.h"
 #include "Request.h"
 
@@ -26,9 +28,16 @@ private:
     virtual std::string Serialise(Response) = 0;
 };
 
+class iContext {
+public:
+    virtual void run() = 0;
+};
+
+typedef std::shared_ptr<iContext> context;
+
 class Server : public iServer {
 public:
-    Server();
+    explicit Server(context ioc): _ioc(std::move(ioc)) {};
 
     void Run() override;
 
@@ -41,6 +50,7 @@ public:
     void Send(Response) override;
 
 private:
+    context _ioc;
     bool Accept() override;
 };
 
