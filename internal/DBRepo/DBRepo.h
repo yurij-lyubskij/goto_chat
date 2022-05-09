@@ -46,7 +46,7 @@ enum DBOperation { checkIt, putIt, deleteIt, updateIt, getFew,
 					//user spec operations
 					addMembers, removeMembers, getMessageOrigin, getChatsofUser,		//chat spec operations
 					getRange//message spec operations
-					};
+};
 
 typedef struct{
 	DBOperation operation;
