@@ -271,7 +271,7 @@ std::vector<ChatRoom> ChatRepo::getUserChats(const User& user){
 
 	std::vector<ChatRoom> chats(len);
 	for(int i = 0; i < len; ++i) chats[i] = (ChatRoom) objects[i];
-	
+
 	return chats;
 };
 //
@@ -302,7 +302,8 @@ std::vector<iMessage> MessageRepo::getByID(std::vector<int> ids){
 	std::shared_ptr<iConnection> conn = connection->connection();			//getting connection to DB
 
 	DBRequest request;
-	request.objectType = chat;
+	request.operation = getFew;
+	request.objectType = message;
 	request.request = "id";
 	for( int i = 0; i < len; ++i) request.request += " " + std::to_string(ids[i]);
 	std::vector<DBObject> result = conn->get(request);
@@ -347,8 +348,22 @@ bool MessageRepo::put(std::vector<iMessage> mes){
 };
 
 std::vector<iMessage> MessageRepo::getFromRange(int start, int end,const ChatRoom &chat){
-	std::vector<iMessage> messages;
-	return messages;
+
+	std::shared_ptr<iConnection> conn = connection->connection();			//getting connection to DB
+
+	DBRequest request;
+	request.operation = getRange;
+	request.objectType = message;
+	request.request = std::to_string(start) + " " + std::to_string(end);
+
+	std::vector<DBObject> result = conn->get(request);
+
+	int len = result.size();													//objects with some ids might don't exist so check size
+	std::vector<iMessage> mesages = std::vector<iMessage>(len);
+
+	for( int i = 0; i < len; ++i ) mesages[i] = (iMessage) result[i];
+
+	return mesages;
 };
 
 //
