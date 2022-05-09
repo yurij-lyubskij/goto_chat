@@ -42,12 +42,17 @@ typedef struct{
 */
 enum DBObjectType { user, chat, message, input };
 
+enum DBOperation { checkIt, putIt, deleteIt, updateIt, getFew,
+					//user spec operations
+					addMembers, removeMembers, getMessageOrigin, getUserChats		//chat spec operations
+					//message spec operations
+					};
+
 typedef struct{
+	DBOperation operation;
     DBObjectType objectType;
     std::string request;
 } DBRequest;
-
-enum Operation { checkIt, putIt, deleteIt, updateIt };
 
 class DBObject{
     public:
@@ -68,7 +73,7 @@ class DBObject{
 
 class iConnection{
     public:
-        virtual bool exec(Operation, std::vector<DBObject>) = 0;
+        virtual bool exec(DBRequest, std::vector<DBObject>) = 0;
         virtual std::vector<DBObject> get(DBRequest) = 0;
         
 };

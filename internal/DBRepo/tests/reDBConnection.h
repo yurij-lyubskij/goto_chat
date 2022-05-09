@@ -18,13 +18,13 @@ class DullConnection: iConnection{
         std::map<int, ChatRoom> chats;
         std::map<int, Message> messages;
         DullConnection(){};
-        bool exec(Operation, std::vector<DBObject>);
+        bool exec(DBRequest, std::vector<DBObject>);
         std::vector<DBObject> get(std::string);
 };
 
 class MockConnection: iConnection{
     public:
-        MOCK_METHOD(bool, exec, (Operation, std::vector<DBObject>), (override));
+        MOCK_METHOD(bool, exec, (DBRequest, std::vector<DBObject>), (override));
         MOCK_METHOD(std::vector<DBObject>, get, (DBRequest), (override));
 };
 
