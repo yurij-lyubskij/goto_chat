@@ -20,7 +20,9 @@ DBObject::DBObject(){};
 DBObject::DBObject(const DBObject& obj): type(obj.type), attr(obj.attr){};
 
 DBObject::~DBObject(){};
-
+//
+//object to DBObject section
+//
 DBObject::DBObject(const User& usr){
 	type = user;
 	attr = std::vector<std::string>(3);
@@ -63,7 +65,13 @@ DBObject::DBObject(const iMessage& mes){
 	tempAttr = std::to_string(mes.getSender());
 	attr[3] = tempAttr;
 };
+//
+//enod of object to DBObject section
+//
 
+//
+//DBObject to object section
+//
 DBObject::operator User(){
 	User usr;
 	if( type != user ) return usr;
@@ -85,6 +93,10 @@ DBObject::operator iMessage(){
 
 	return Message(std::stoi(attr[0]), attr[1], std::stoi(attr[2]), std::stoi(attr[3]));
 };
+
+//
+//end of DBObject to object section
+//
 
 DBObject DBObject::operator=(const DBObject& obj){
 	type = obj.type;
