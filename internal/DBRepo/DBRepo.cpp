@@ -170,17 +170,20 @@ ChatRepo::ChatRepo(DBConnection<iConnection> *conn){
 
 bool ChatRepo::doesExist(int id){
 	if ( id == 0 ) return false;
+
 	std::shared_ptr<iConnection> conn = connection->connection();			//getting connection to DB
-	std::cout << "P\n";
+
 	ChatRoom cht(id);														//empty object just to check
 	DBObject obj(cht);
 	std::vector<DBObject> objects(1);
-std::cout << "P\n";
 	objects[0] = obj;
-	std::cout << "P\n";
+
 	DBRequest request = { checkIt, chat, "" };
-	std::cout << "P\n";
-	return conn->exec(request, objects);									//exec with "chekIt" doesn't need proper object and will use only id
+
+	bool res = conn->exec(request, objects);								//exec with "chekIt" doesn't need proper object and will use only id
+	connection->freeConnection(conn);										//return connection to the queue
+
+	return res;
 };
 
 std::vector<ChatRoom> ChatRepo::getByID(std::vector<int> ids){
@@ -201,6 +204,8 @@ std::vector<ChatRoom> ChatRepo::getByID(std::vector<int> ids){
 	chats = std::vector<ChatRoom>(len);
 	for( int i = 0; i < len; ++i) chats[i] = (ChatRoom) result[i];
 
+	connection->freeConnection(conn);										//return connection to the queue
+
 	return chats;
 };
 
@@ -216,7 +221,11 @@ bool ChatRepo::update(std::vector<ChatRoom> chats){
 	for(int i = 0; i < len; ++i) objects[i] = DBObject(chats[i]);
 
 	DBRequest request = { updateIt, chat, "" };
-	return conn->exec( request , objects);
+
+	bool res = conn->exec( request , objects);
+	connection->freeConnection(conn);										//return connection to the queue
+
+	return res;
 };
 
 bool ChatRepo::put(std::vector<ChatRoom> chats){
@@ -227,11 +236,15 @@ bool ChatRepo::put(std::vector<ChatRoom> chats){
 	int len = chats.size();
 	std::vector<DBObject> objects(len);
 	ChatRoom tempChat;
-
+	
 	for(int i = 0; i < len; ++i) objects[i] = DBObject(chats[i]);
 
 	DBRequest request = { putIt, chat, "" };
-	return conn->exec( request , objects);
+
+	bool res = conn->exec( request , objects);
+	connection->freeConnection(conn);										//return connection to the queue
+
+	return res;
 };
 
 bool ChatRepo::addUsersToChat(const ChatRoom &updatedChat, std::vector<User> users){
@@ -244,9 +257,12 @@ bool ChatRepo::addUsersToChat(const ChatRoom &updatedChat, std::vector<User> use
 
 	for(int i = 1; i < len; ++i) objects[i] = DBObject(users[i]);
 
-
 	DBRequest request = { addMembers, chat, "" };
-	return conn->exec( request , objects);
+
+	bool res = conn->exec( request , objects);
+	connection->freeConnection(conn);										//return connection to the queue
+
+	return res;
 };
 
 
@@ -275,6 +291,8 @@ ChatRoom ChatRepo::getMesChat(Message mes){
 	
 	std::vector<DBObject> objects = conn->get(request);
 
+	connection->freeConnection(conn);										//return connection to the queue
+
 	return (ChatRoom) objects[0];
 };
 
@@ -292,6 +310,8 @@ std::vector<ChatRoom> ChatRepo::getUserChats(const User& user){
 
 	std::vector<ChatRoom> chats(len);
 	for(int i = 0; i < len; ++i) chats[i] = (ChatRoom) objects[i];
+
+	connection->freeConnection(conn);										//return connection to the queue
 
 	return chats;
 };
@@ -318,8 +338,12 @@ bool MessageRepo::doesExist(int id){
 	std::vector<DBObject> objects(1);
 
 	objects[0] = obj;
-	DBRequest request = { checkIt, message, "" };
-	return conn->exec(request, objects);									//exec with "chekIt" doesn't need proper object and will use only id
+	DBRequest request = { checkIt, message, "" };							//exec with "chekIt" doesn't need proper object and will use only id
+
+	bool res = conn->exec( request , objects);
+	connection->freeConnection(conn);										//return connection to the queue
+
+	return res;
 };
 
 std::vector<iMessage> MessageRepo::getByID(std::vector<int> ids){
@@ -340,6 +364,8 @@ std::vector<iMessage> MessageRepo::getByID(std::vector<int> ids){
 	mesages = std::vector<iMessage>(len);
 	for( int i = 0; i < len; ++i) mesages[i] = (iMessage) result[i];
 
+	connection->freeConnection(conn);										//return connection to the queue
+
 	return mesages;
 };
 
@@ -356,7 +382,11 @@ bool MessageRepo::update(std::vector<iMessage> mes){
 	};
 
 	DBRequest request = { updateIt, message, "" };
-	return conn->exec( request , objects);
+
+	bool res = conn->exec( request , objects);
+	connection->freeConnection(conn);										//return connection to the queue
+
+	return res;return conn->exec( request , objects);
 };
 
 bool MessageRepo::put(std::vector<iMessage> mes){
@@ -372,7 +402,11 @@ bool MessageRepo::put(std::vector<iMessage> mes){
 	};
 	
 	DBRequest request = { putIt, message, "" };
-	return conn->exec( request , objects);
+
+	bool res = conn->exec( request , objects);
+	connection->freeConnection(conn);										//return connection to the queue
+
+	return res;
 };
 
 std::vector<iMessage> MessageRepo::getFromRange(int start, int end,const ChatRoom &chat){
@@ -390,6 +424,8 @@ std::vector<iMessage> MessageRepo::getFromRange(int start, int end,const ChatRoo
 	std::vector<iMessage> mesages = std::vector<iMessage>(len);
 
 	for( int i = 0; i < len; ++i ) mesages[i] = (iMessage) result[i];
+
+	connection->freeConnection(conn);										//return connection to the queue
 
 	return mesages;
 };

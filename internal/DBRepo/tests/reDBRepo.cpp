@@ -59,13 +59,15 @@ TEST(UserRepoTests, putAndgetById){
 TEST(ChatRepoTests, DoesExist){
 	MockConnection conn;
 	EXPECT_CALL(conn, exec(::testing::_, ::testing::_)).Times(3);
+
 	DBConnection<MockConnection> connections(1);
 	ChatRepo repo((DBConnection<iConnection>*) &connections);
+
 	EXPECT_FALSE(repo.doesExist(1));
+
 	ChatRoom chat(1);
 	std::vector<ChatRoom> chats;
 	chats.push_back(chat);
-
 	repo.put(chats);
 	EXPECT_TRUE(repo.doesExist(1));
 }
@@ -74,17 +76,21 @@ TEST(ChatRepoTests, putAndgetById){
 	MockConnection conn;
 	EXPECT_CALL(conn, get(::testing::_)).Times(2);
 
-	ChatRepo repo;
-	ChatRoom chat1(1), chat2(2);
+	DBConnection<MockConnection> connections(1);
+	ChatRepo repo((DBConnection<iConnection>*) &connections);
 
-	std::vector<ChatRoom> chats;
-	chats.push_back(chat1);
-	chats.push_back(chat2);
+	ChatRoom chat1(1), chat2(2);
+	std::vector<ChatRoom> chats(2);
+
+	chats[0] = chat1;
+	chats[1] = chat2;
 
 	std::vector<int> ids = { 1 , 2 };
 
 	repo.put(chats);
 	chats = repo.getByID(ids);
+	
+	ASSERT_EQ(chats.size(), 2);
 	EXPECT_EQ(chats[0].getId(), chat1.getId());
 	EXPECT_EQ(chats[1].getId(), chat2.getId());
 }
@@ -100,7 +106,9 @@ TEST(MessageRepoTests, DoesExist){
 	MockConnection conn;
 	EXPECT_CALL(conn, exec(::testing::_, ::testing::_)).Times(3);
 
-	MessageRepo repo;
+	DBConnection<MockConnection> connections(1);
+	MessageRepo repo((DBConnection<iConnection>*) &connections);
+
 	EXPECT_FALSE(repo.doesExist(1));
 
 	Message message(1, "text", 50, 1);
@@ -115,8 +123,8 @@ TEST(MessageRepoTests, putAndgetById){
 	MockConnection conn;
 	EXPECT_CALL(conn, get(::testing::_)).Times(2);
 
-	MessageRepo repo;
-
+	DBConnection<MockConnection> connections(1);
+	MessageRepo repo((DBConnection<iConnection>*) &connections);
 
 	Message message1(1, "text1", 12, 1), message2(1, "text2", 50, 2);
 	std::vector<iMessage> messages;
@@ -127,6 +135,8 @@ TEST(MessageRepoTests, putAndgetById){
 
 	repo.put(messages);
 	messages = repo.getByID(ids);
+
+	ASSERT_EQ(messages.size(), 2);
 
 	EXPECT_EQ(messages[0].getId(), message1.getId());
 	EXPECT_EQ(messages[0].getContent(), message1.getContent());
