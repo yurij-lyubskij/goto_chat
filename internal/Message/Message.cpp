@@ -1,10 +1,16 @@
 #include "Message.h"
 
-Message::Message(){ id = 0; };
+Message::Message(){ id = -1; };
 
-Message::Message(int _id) { id = _id; };
+Message::Message(int _id) { 
+	id = _id;
+	content = "";
+	sendTime = 0;
+	senderId = 0;
+};
 
 Message::Message(std::string _content, time_t time, int sender){
+	id = 0;
 	content = _content;
 	sendTime = time;
 	senderId = sender;

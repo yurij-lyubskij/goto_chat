@@ -38,5 +38,5 @@ TEST(ChatTests, reaction){
 	
 	EXPECT_CALL(serv, addToQueue(testing::_)).Times(1);
 	
-	EXPECT_EQ(chat.reactOn(mes), true);
+	EXPECT_TRUE(chat.reactOn(mes));
 }

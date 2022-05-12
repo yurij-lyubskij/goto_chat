@@ -2,6 +2,7 @@
 #include <string>
 #include <time.h>
 #include <vector>
+#include <sstream>
 #include <queue>
 #include <memory>
 #include <mutex>
@@ -85,13 +86,12 @@ DBObject::operator User(){
 };
 
 DBObject::operator ChatRoom(){
-	if( type != chat ) return ChatRoom();
-
+	if( type != chat ) return ChatRoom(-1);
 	return ChatRoom(std::stoi(attr[0]), attr[1]);
 };
 
 DBObject::operator iMessage(){
-	if( type != message ) return Message();
+	if( type != message ) return Message(-1);
 
 	return Message(std::stoi(attr[0]), attr[1], std::stoi(attr[2]), std::stoi(attr[3]));
 };
@@ -106,6 +106,16 @@ DBObject DBObject::operator=(const DBObject& obj){
 	return *this;
 };
 
+
+std::vector<std::string> iConnection::split(const std::string &s) {
+    std::vector<std::string> elems;
+    std::stringstream ss(s);
+    std::string item;
+    while (std::getline(ss, item, ' ')) {
+            elems.push_back(item);
+    }
+    return elems;
+}
 //
 //end of DBObject Section
 //
@@ -198,11 +208,12 @@ std::vector<ChatRoom> ChatRepo::getByID(std::vector<int> ids){
 	request.objectType = chat;
 	request.request = "id";
 	for( int i = 0; i < len; ++i) request.request += " " + std::to_string(ids[i]);
+
 	std::vector<DBObject> result = conn->get(request);
 
 	len = result.size();													//objects with some ids might don't exist so check size
-	chats = std::vector<ChatRoom>(len);
-	for( int i = 0; i < len; ++i) chats[i] = (ChatRoom) result[i];
+	chats = std::vector<ChatRoom>();
+	for( int i = 0; i < len; ++i) chats.push_back(result[i]);
 
 	connection->freeConnection(conn);										//return connection to the queue
 

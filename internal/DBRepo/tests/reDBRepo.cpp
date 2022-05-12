@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
+#include <iostream>
 
 #include "User.h"
 #include "reDBRepo.h"
@@ -57,10 +58,12 @@ TEST(UserRepoTests, putAndgetById){
 //ChatRepo Section
 //
 TEST(ChatRepoTests, DoesExist){
-	MockConnection conn;
-	EXPECT_CALL(conn, exec(::testing::_, ::testing::_)).Times(3);
-
 	DBConnection<MockConnection> connections(1);
+
+	std::shared_ptr<MockConnection> conn = connections.connection();
+	connections.freeConnection(conn);
+	
+	EXPECT_CALL(*conn, reExec(::testing::_, ::testing::_)).Times(3);
 	ChatRepo repo((DBConnection<iConnection>*) &connections);
 
 	EXPECT_FALSE(repo.doesExist(1));
@@ -68,26 +71,30 @@ TEST(ChatRepoTests, DoesExist){
 	ChatRoom chat(1);
 	std::vector<ChatRoom> chats;
 	chats.push_back(chat);
-	repo.put(chats);
+
+	EXPECT_TRUE(repo.put(chats));
 	EXPECT_TRUE(repo.doesExist(1));
 }
 
 TEST(ChatRepoTests, putAndgetById){
-	MockConnection conn;
-	EXPECT_CALL(conn, get(::testing::_)).Times(2);
-
 	DBConnection<MockConnection> connections(1);
+
+	std::shared_ptr<MockConnection> conn = connections.connection();
+	connections.freeConnection(conn);
+	
+	EXPECT_CALL(*conn, reExec(::testing::_, ::testing::_)).Times(1);
+	EXPECT_CALL(*conn, reGet(::testing::_)).Times(1);
 	ChatRepo repo((DBConnection<iConnection>*) &connections);
 
-	ChatRoom chat1(1), chat2(2);
-	std::vector<ChatRoom> chats(2);
+	ChatRoom chat1(1, "test"), chat2(2, "test");
+	std::vector<ChatRoom> chats;
 
-	chats[0] = chat1;
-	chats[1] = chat2;
+	chats.push_back(chat1);
+	chats.push_back(chat2);
 
 	std::vector<int> ids = { 1 , 2 };
 
-	repo.put(chats);
+	EXPECT_TRUE(repo.put(chats));
 	chats = repo.getByID(ids);
 	
 	ASSERT_EQ(chats.size(), 2);
@@ -103,10 +110,12 @@ TEST(ChatRepoTests, putAndgetById){
 //MessageRepo Section
 //
 TEST(MessageRepoTests, DoesExist){
-	MockConnection conn;
-	EXPECT_CALL(conn, exec(::testing::_, ::testing::_)).Times(3);
-
 	DBConnection<MockConnection> connections(1);
+
+	std::shared_ptr<MockConnection> conn = connections.connection();
+	connections.freeConnection(conn);
+	
+	EXPECT_CALL(*conn, reExec(::testing::_, ::testing::_)).Times(3);
 	MessageRepo repo((DBConnection<iConnection>*) &connections);
 
 	EXPECT_FALSE(repo.doesExist(1));
@@ -115,25 +124,28 @@ TEST(MessageRepoTests, DoesExist){
 	std::vector<iMessage> messages;
 	messages.push_back(message);
 
-	repo.put(messages);
+	EXPECT_TRUE(repo.put(messages));
 	EXPECT_TRUE(repo.doesExist(1));
 }
 
 TEST(MessageRepoTests, putAndgetById){
-	MockConnection conn;
-	EXPECT_CALL(conn, get(::testing::_)).Times(2);
-
 	DBConnection<MockConnection> connections(1);
+
+	std::shared_ptr<MockConnection> conn = connections.connection();
+	connections.freeConnection(conn);
+	
+	EXPECT_CALL(*conn, reExec(::testing::_, ::testing::_)).Times(1);
+	EXPECT_CALL(*conn, reGet(::testing::_)).Times(1);
 	MessageRepo repo((DBConnection<iConnection>*) &connections);
 
-	Message message1(1, "text1", 12, 1), message2(1, "text2", 50, 2);
+	Message message1(1, "text1", 12, 1), message2(2, "text2", 50, 2);
 	std::vector<iMessage> messages;
 	messages.push_back(message1);
 	messages.push_back(message2);
 
-	std::vector<int> ids = { 1 , 2};
+	std::vector<int> ids = { 1 , 2 };
 
-	repo.put(messages);
+	EXPECT_TRUE(repo.put(messages));
 	messages = repo.getByID(ids);
 
 	ASSERT_EQ(messages.size(), 2);

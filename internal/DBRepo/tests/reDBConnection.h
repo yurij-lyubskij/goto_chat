@@ -24,8 +24,14 @@ class DullConnection: iConnection{
 */
 class MockConnection: public iConnection{
     public:
-        MOCK_METHOD(bool, exec, (DBRequest, std::vector<DBObject>), (override));
-        MOCK_METHOD(std::vector<DBObject>, get, (DBRequest), (override));
+        std::map<int, User> users;
+        std::map<int, ChatRoom> chats;
+        std::map<int, iMessage> messages;
+        MOCK_METHOD(bool, reExec, (DBRequest, std::vector<DBObject>), ());
+        MOCK_METHOD(std::vector<DBObject>, reGet, (DBRequest), ());
+    private:
+        bool exec(DBRequest, std::vector<DBObject>) override;
+        std::vector<DBObject> get(DBRequest) override;
 };
 
 #endif

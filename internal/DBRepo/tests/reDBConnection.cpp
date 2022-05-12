@@ -1,7 +1,157 @@
 #include <gtest/gtest.h>
+#include <map>
+#include <utility>
 #include "reDBConnection.h"
 
+//
+//MockConnection section
+//
+bool MockConnection::exec(DBRequest request, std::vector<DBObject> objects){
+    reExec(request, objects);
+    std::vector<std::string> attrs = split(request.request);
+    int len = objects.size();
+    switch(request.operation){
+        case putIt:
+            switch(request.objectType){
+                case user:
+                    {
+                    std::vector<User> usrs(len);
+                    for( int i = 0; i < len; ++i ) {
+                        usrs[i] = objects[i];
+                        if (usrs[i].Id == -1 || users.contains(usrs[i].Id)) return false;
+                    }
+                    for( int i = 0; i < len; ++i ) {
+                        users.insert(std::make_pair(usrs[i].Id, usrs[i]));
+                    }
+                    }
+                    break;
+                case chat:
+                    {
+                    std::vector<ChatRoom> chts;
+                    for( int i = 0; i < len; ++i ) {
+                        chts.push_back(objects[i]);
+                        if (chts[i].getId() == -1 || messages.contains(chts[i].getId())) return false;
+                    }
+                    for( int i = 0; i < len; ++i ) {
+                        chats.insert(std::make_pair(chts[i].getId(), chts[i]));                       
+                    }
+                    }  
+                    break;
+                case message:
+                    {
+                    std::vector<iMessage> mess;
+                    for( int i = 0; i < len; ++i ) {
+                        mess.push_back(objects[i]);
+                        if (mess[i].getId() == -1 || messages.contains(mess[i].getId())) return false;
+                    }
+                    for( int i = 0; i < len; ++i ) {
+                        messages.insert(std::make_pair(mess[i].getId(), mess[i]));                       
+                    }
+                    }
+                    break;
+            }
+            break;
+        case checkIt:
+            switch(request.objectType){
+                case user:
+                    {
+                    User usr;
+                    for( int i = 0; i < len; ++i ) {
+                        usr = objects[i];
+                        if ( usr.Id == -1 || ! users.contains(usr.Id)) return false;
+                    }
+                    }
+                    break;
+                case chat:
+                    {
+                    for( int i = 0; i < len; ++i ) {
+                        ChatRoom cht = objects[i].operator ChatRoom();
+                        if (cht.getId() == -1 || ! chats.contains(cht.getId())) return false;
+                    }
+                    }  
+                    break;
+                case message:
+                    {
+                    iMessage mes;
+                    for( int i = 0; i < len; ++i ) {
+                        mes = objects[i];
+                        if (mes.getId() == -1 || ! messages.contains(mes.getId())) return false;
+                    }
+                    }
+                    break;
+            }
+            break;
+        
+    }
+    return true;
+};
 
+std::vector<DBObject> MockConnection::get(DBRequest request){
+    reGet(request);
+    std::vector<DBObject> result;
+    std::vector<std::string> attrs = split(request.request);
+    switch(request.operation){
+        case getFew:
+            int len = attrs.size();
+            std::vector<int> ids(len);
+
+            for( int i = 1; i < len; ++i ) ids[i-1] = std::stoi(attrs[i]);
+            --len;
+
+            switch(request.objectType){
+                case user:
+                    for( int i = 0; i < len; ++i ) {
+                        if( users.contains(ids[i])) result.push_back(users.at(ids[i]));
+                    }
+                    break;
+                case chat:
+                    for( int i = 0; i < len; ++i ) {
+                        if( chats.contains(ids[i])) result.push_back(chats.at(ids[i]));
+                    }
+                    break;
+                case message:
+                    for( int i = 0; i < len; ++i ) {
+                        if( messages.contains(ids[i]) ) result.push_back(messages.at(ids[i]));
+                    }
+                    break;
+            }
+            break;
+    }
+
+    return result;
+};
+
+//
+//end of MockConnection section
+//
+
+//
+//DBConnection section
+//
+
+template<>
+std::shared_ptr<MockConnection> DBConnection<MockConnection>::connection(){
+	
+    std::unique_lock<std::mutex> lock( m_mutex );
+
+    while ( m_pool.empty() ){
+            m_condition.wait( lock );
+    }
+
+    std::shared_ptr<MockConnection> conn = m_pool.front();
+    m_pool.pop();
+
+    return  conn;
+};	
+
+template<>
+void DBConnection<MockConnection>::freeConnection(std::shared_ptr<MockConnection> conn)
+{
+    std::unique_lock<std::mutex> lock( m_mutex );
+    m_pool.push( conn );
+    lock.unlock();
+    m_condition.notify_one();
+}
 
 template <>
 void DBConnection<MockConnection>::createPool()
@@ -22,3 +172,7 @@ template<>
 DBConnection<MockConnection>::DBConnection(int _pool): POOL(_pool){ 
 	createPool();
 };
+
+//
+//end of DBConnection section
+//

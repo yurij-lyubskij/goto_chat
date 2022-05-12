@@ -75,7 +75,8 @@ class iConnection{
     public:
         virtual bool exec(DBRequest, std::vector<DBObject>) = 0;
         virtual std::vector<DBObject> get(DBRequest) = 0;
-        
+	protected:
+		std::vector<std::string> split(const std::string&);
 };
 
 /*
