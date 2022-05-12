@@ -159,8 +159,8 @@ class UserRepo: public iUserRepo{
 */
 class ChatRepo: public iChatRepo{
 	public:
-		ChatRepo(){};
-		ChatRepo(*DBConnection){};
+		ChatRepo();
+		ChatRepo(DBConnection<iConnection>*);
 		bool doesExist(int id);
 		std::vector<ChatRoom> getByID(std::vector<int> id);
 		bool update(std::vector<ChatRoom> chats);
@@ -173,8 +173,8 @@ class ChatRepo: public iChatRepo{
 
 class MessageRepo: public iMessageRepo{
 	public:
-		MessageRepo(){};
-		MessageRepo(*DBConnection){};
+		MessageRepo();
+		MessageRepo(DBConnection<iConnection>*);
 		bool doesExist(int id);
 		std::vector<iMessage> getByID(std::vector<int> id);
 		bool update(std::vector<iMessage> mes);

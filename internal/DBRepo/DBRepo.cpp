@@ -160,6 +160,12 @@ std::vector<User> UserRepo::getSender(Message mes){
 //ChatRepo Section
 //
 
+ChatRepo::ChatRepo(){};
+
+ChatRepo::ChatRepo(DBConnection<iConnection> *conn){
+	connection = conn;
+};
+
 bool ChatRepo::doesExist(int id){
 	if ( id == 0 ) return false;
 	std::shared_ptr<iConnection> conn = connection->connection();			//getting connection to DB
@@ -293,6 +299,13 @@ std::vector<ChatRoom> ChatRepo::getUserChats(const User& user){
 //
 //MessageRepo Section
 //
+
+MessageRepo::MessageRepo(){};
+
+MessageRepo::MessageRepo(DBConnection<iConnection>* conn){
+	connection = conn;
+};
+
 bool MessageRepo::doesExist(int id){
 	if ( id == 0 ) return true;
 	std::shared_ptr<iConnection> conn = connection->connection();			//getting connection to DB

@@ -59,6 +59,7 @@ TEST(UserRepoTests, putAndgetById){
 TEST(ChatRepoTests, DoesExist){
 	MockConnection conn;
 	EXPECT_CALL(conn, exec(::testing::_, ::testing::_)).Times(3);
+	//DBConnection<MockConnection> connections(1);
 
 	ChatRepo repo;
 	EXPECT_FALSE(repo.doesExist(1));
