@@ -167,43 +167,44 @@ private:
 
 class Listener : public std::enable_shared_from_this<Listener>, public iListener {
     net::io_context &ioc_;
-    Acceptor &acceptor_;
-public:
-
+    std::shared_ptr<iAcceptor> acceptor_;
     static void fail(beast::error_code ec, char const *what) {
         std::cerr << what << ": " << ec.message() << "\n";
     }
+public:
+
+
 
     Listener(
             net::io_context &ioc,
-            Acceptor &acceptor
+            std::shared_ptr<iAcceptor> &acceptor
     )
             : ioc_(ioc), acceptor_(acceptor){
         beast::error_code ec;
 
         // Open the acceptor
-        acceptor_.open(ec);
+        acceptor_->open(ec);
         if (ec) {
             fail(ec, "open");
             return;
         }
 
         // Allow address reuse
-        acceptor_.set_option(true, ec);
+        acceptor_->set_option(true, ec);
         if (ec) {
             fail(ec, "set_option");
             return;
         }
 
         // Bind to the server address
-        acceptor_.bind(ec);
+        acceptor_->bind(ec);
         if (ec) {
             fail(ec, "bind");
             return;
         }
 
         // Start listening for connections
-        acceptor_.listen(ec);
+        acceptor_->listen(ec);
         if (ec) {
             fail(ec, "listen");
             return;
@@ -225,7 +226,7 @@ private:
             if(!ec)
                 on_accept(ec, std::move(socket));
         };
-        acceptor_.async_accept(socket, lamda);
+        acceptor_->async_accept(socket, lamda);
     }
 
     void on_accept(beast::error_code ec, tcp::socket socket) override {
