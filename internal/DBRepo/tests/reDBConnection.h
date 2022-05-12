@@ -22,7 +22,7 @@ class DullConnection: iConnection{
         std::vector<DBObject> get(std::string) override;
 };
 */
-class MockConnection: iConnection{
+class MockConnection: public iConnection{
     public:
         MOCK_METHOD(bool, exec, (DBRequest, std::vector<DBObject>), (override));
         MOCK_METHOD(std::vector<DBObject>, get, (DBRequest), (override));

@@ -59,11 +59,9 @@ TEST(UserRepoTests, putAndgetById){
 TEST(ChatRepoTests, DoesExist){
 	MockConnection conn;
 	EXPECT_CALL(conn, exec(::testing::_, ::testing::_)).Times(3);
-	//DBConnection<MockConnection> connections(1);
-
-	ChatRepo repo;
+	DBConnection<MockConnection> connections(1);
+	ChatRepo repo((DBConnection<iConnection>*) &connections);
 	EXPECT_FALSE(repo.doesExist(1));
-
 	ChatRoom chat(1);
 	std::vector<ChatRoom> chats;
 	chats.push_back(chat);
@@ -83,7 +81,7 @@ TEST(ChatRepoTests, putAndgetById){
 	chats.push_back(chat1);
 	chats.push_back(chat2);
 
-	std::vector<int> ids = { 1 , 2};
+	std::vector<int> ids = { 1 , 2 };
 
 	repo.put(chats);
 	chats = repo.getByID(ids);
