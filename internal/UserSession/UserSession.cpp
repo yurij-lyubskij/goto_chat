@@ -4,10 +4,3 @@
 
 #include "UserSession.h"
 
-std::string UserSession::Read() {
-    return std::string();
-}
-
-void UserSession::Write(std::string) {
-
-}

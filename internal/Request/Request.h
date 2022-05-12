@@ -10,7 +10,7 @@
 
 class Request {
 public:
-    UserSession session;
+//    UserSession session;
     std::vector<std::string> headers;
     std::string method;
     std::string cookie;
