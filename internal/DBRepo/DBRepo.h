@@ -43,9 +43,9 @@ typedef struct{
 enum DBObjectType { user, chat, message, input };
 
 enum DBOperation { checkIt, putIt, deleteIt, updateIt, getFew,
-					//user spec operations
+																						//user spec operations
 					addMembers, removeMembers, getMessageOrigin, getChatsofUser,		//chat spec operations
-					getRange//message spec operations
+					getRange															//message spec operations
 };
 
 typedef struct{
@@ -93,8 +93,8 @@ class PGConnection : public iConnection{
 template <class Connection>
 class DBConnection{
 public:
-    DBConnection(){};
-    DBConnection(int _pool){};
+    DBConnection();
+    DBConnection(int _pool);
     std::shared_ptr<Connection> connection();					
     void freeConnection(std::shared_ptr<Connection>);
 private:
