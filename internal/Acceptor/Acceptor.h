@@ -25,7 +25,6 @@ namespace http = beast::http;           // from <boost/beast/http.hpp>
 namespace net = boost::asio;            // from <boost/asio.hpp>
 using tcp = boost::asio::ip::tcp;       // from <boost/asio/ip/tcp.hpp>
 
-class Listener;
 
 class Acceptor {
     tcp::acceptor acceptor_;
@@ -47,14 +46,8 @@ public:
                 net::socket_base::max_listen_connections, ec);
     };
 
-
-    void async_accept(beast::detail::bind_front_wrapper<std::decay<void (Listener::*)(beast::error_code,
-                                                                                      tcp::socket)>::type, std::shared_ptr<Listener>> wrapper) {
-                acceptor_.async_accept(
-                net::make_strand(ioc),
-                 wrapper
-               )
-
+    void async_accept(tcp::socket& socket, std::function<void(beast::error_code ec)> lamda) {
+        acceptor_.async_accept(socket, lamda);
     }
 };
 
