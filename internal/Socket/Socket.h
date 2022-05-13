@@ -4,16 +4,16 @@
 
 #ifndef GOTO_CHAT_SOCKET_H
 #define GOTO_CHAT_SOCKET_H
-#include "RequestBuffer.h"
+#include "httpBuffer.h"
 
 
 class iSocket {
 public:
 
-    virtual void async_read(RequestBuffer buffer, http::request<http::string_body> request,
+    virtual void async_read(httpBuffer buffer,
                             std::function<void(std::error_code, unsigned long)> lamda) = 0;
 
-    virtual void async_write(const http::response<http::string_body> &response,
+    virtual void async_write(httpBuffer buffer,
                              std::function<void(std::error_code, unsigned long)> lamda) = 0;
 
     virtual void shutdown(std::error_code ec) = 0;
@@ -27,20 +27,20 @@ public:
 
     explicit Socket(tcp::socket &sock) : sock(sock) {};
 
-    void async_read(RequestBuffer buffer, http::request<http::string_body> request,
+    void async_read(httpBuffer buffer,
                     std::function<void(std::error_code, unsigned long)> lamda) override {
         http::async_read(
                 sock,
                 buffer.buff,
-                request,
+                buffer.request_,
                 lamda);
     }
 
-    void async_write(const http::response<http::string_body> &response,
+    void async_write(httpBuffer buffer,
                      std::function<void(std::error_code, unsigned long)> lamda) override {
         http::async_write(
                 sock,
-                response,
+                buffer.response_,
                 lamda);
     }
 

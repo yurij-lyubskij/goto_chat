@@ -10,7 +10,7 @@
 #include "Acceptor.h"
 #include "Request.h"
 #include "Router.h"
-#include "RequestBuffer.h"
+#include "httpBuffer.h"
 
 const int16_t Unauthorized = 401;
 
@@ -24,9 +24,6 @@ public:
 
     virtual void processRequest() = 0;
 
-    virtual Request createRequest() = 0;
-
-    virtual void createResponse(Response response) = 0;
 };
 
 
@@ -47,13 +44,7 @@ private:
     // The socket for the currently connected client.
     std::shared_ptr<iSocket> socket;
     std::shared_ptr<iRouter> router;
-    RequestBuffer buff;
-    // The request message.
-    http::request<http::string_body> request_;
-
-    // The response message.
-    http::response<http::string_body> response_;
-
+    httpBuffer buff;
     // Asynchronously receive a complete request message.
     void readRequest() {
         auto self = shared_from_this();
@@ -65,20 +56,19 @@ private:
         };
         socket->async_read(
                 buff,
-                request_,
                 lamda);
     }
 
     // Determine what needs to be done with the request message.
     void processRequest() {
-        Request request = createRequest();
+        Request request = buff.createRequest();
         request = router->UseMiddle(request);
         Response res;
         res.statusCode = request.responseStatus;
         if (request.responseStatus != Unauthorized) {
             res = router->Route(request);
         }
-        createResponse(res);
+        buff.createResponse(res);
         writeResponse();
     }
 
@@ -86,35 +76,17 @@ private:
     void writeResponse() {
         auto self = shared_from_this();
 
-        response_.content_length(response_.body().size());
+        buff.response_.content_length(buff.response_.body().size());
 
         std::function lamda = [self](std::error_code ec, std::size_t) {
             self->socket->shutdown(ec);
         };
 
         socket->async_write(
-                response_,
+                buff,
                 lamda);
     }
 
-    Request createRequest() {
-        Request req;
-        req.parameters["<field_name>"] = static_cast<std::string> (request_["<field_name>"]);
-        req.method = static_cast<std::string>(request_.method_string());
-        req.cookie = static_cast<std::string>(http::param_list(request_[http::field::cookie]).begin()->second);
-        req.target = static_cast<std::string>(request_.target());
-        req.body = static_cast<std::string>(request_.body());
-        return req;
-    }
-
-    void createResponse(Response response) {
-        response_.set(http::field::server, BOOST_BEAST_VERSION_STRING);
-        response_.set(http::field::content_type, "text/plain");
-        response_.set(http::field::cookie, response.cookie);
-        response_.keep_alive(false);
-        response_.body() = response_.body();
-        response_.result(response.statusCode);
-    }
 };
 
 #endif //GOTO_CHAT_USERSESSION_H
