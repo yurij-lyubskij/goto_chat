@@ -26,31 +26,44 @@ namespace http = beast::http;           // from <boost/beast/http.hpp>
 namespace net = boost::asio;            // from <boost/asio.hpp>
 using tcp = boost::asio::ip::tcp;       // from <boost/asio/ip/tcp.hpp>
 
-//typedef tcp::socket Socket;
+class iSocket {
+public:
 
-class Socket {
+    virtual void async_read(beast::flat_buffer buffer, http::request<http::dynamic_body> request,
+                            std::function<void(boost::system::error_code, unsigned long)> lamda) = 0;
+
+    virtual void async_write(const http::response<http::dynamic_body> &response,
+                             std::function<void(boost::system::error_code, unsigned long)> lamda) = 0;
+
+    virtual void shutdown(beast::error_code ec) = 0;
+
+    virtual ~iSocket() = default;
+};
+
+class Socket : public iSocket {
 public:
     tcp::socket &sock;
 
     explicit Socket(tcp::socket &sock) : sock(sock) {};
 
     void async_read(beast::flat_buffer buffer, http::request<http::dynamic_body> request,
-                    std::function<void(boost::system::error_code, unsigned long)> lamda) {
+                    std::function<void(boost::system::error_code, unsigned long)> lamda) override {
         http::async_read(
                 sock,
                 buffer,
                 request,
                 lamda);
     }
-    void async_write(const http::response<http::dynamic_body>& response,
-                    std::function<void(boost::system::error_code, unsigned long)> lamda) {
+
+    void async_write(const http::response<http::dynamic_body> &response,
+                     std::function<void(boost::system::error_code, unsigned long)> lamda) override {
         http::async_write(
                 sock,
                 response,
                 lamda);
     }
 
-    void shutdown(beast::error_code ec) {
+    void shutdown(beast::error_code ec) override {
         sock.shutdown(tcp::socket::shutdown_send, ec);
     }
 

@@ -20,7 +20,7 @@ int main() {
     // The io_context is required for all I/O
     net::io_context ioc{1};
     tcp::socket mysock {ioc};
-    std::shared_ptr<Socket> sock (new Socket(mysock));
+    std::shared_ptr<iSocket> sock (new Socket(mysock));
     std::shared_ptr<iAcceptor> acceptor(new Acceptor(ioc, tcp::endpoint{address, port}));
     std::make_shared<Listener>(
             sock,

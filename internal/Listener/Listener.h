@@ -27,7 +27,7 @@ private:
 
 class Listener : public std::enable_shared_from_this<Listener>, public iListener {
     std::shared_ptr<iAcceptor> acceptor_;
-    std::shared_ptr<Socket> sock;
+    std::shared_ptr<iSocket> sock;
     static void fail(beast::error_code ec, char const *what) {
         std::cerr << what << ": " << ec.message() << "\n";
     }
@@ -36,7 +36,7 @@ public:
 
 
     Listener(
-            std::shared_ptr<Socket> sock,
+            std::shared_ptr<iSocket> sock,
             std::shared_ptr<iAcceptor> acceptor
     )
             : acceptor_(std::move(acceptor)), sock(std::move(sock)){

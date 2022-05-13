@@ -20,7 +20,7 @@ public:
 
 class UserSession : public std::enable_shared_from_this<UserSession>, iUserSession {
 public:
-    UserSession(std::shared_ptr<Socket> socket)
+    UserSession(std::shared_ptr<iSocket> socket)
             : socket(std::move(socket)) {
     }
     // Initiate the asynchronous operations associated with the connection.
@@ -31,7 +31,7 @@ public:
 
 private:
     // The socket for the currently connected client.
-    std::shared_ptr<Socket> socket;
+    std::shared_ptr<iSocket> socket;
 
     // The buffer for performing reads.
     beast::flat_buffer buffer_{8192};
