@@ -5,6 +5,7 @@
 #define GOTO_CHAT_HANDLER_H
 
 #include "Request.h"
+#include "Response.h"
 
 class iHandler {
 public:
