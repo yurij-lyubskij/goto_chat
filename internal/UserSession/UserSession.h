@@ -10,6 +10,7 @@
 #include "Acceptor.h"
 #include "Request.h"
 #include "Router.h"
+#include "RequestBuffer.h"
 
 const int16_t Unauthorized = 401;
 
@@ -34,6 +35,7 @@ public:
     UserSession(std::shared_ptr<iSocket> socket,
                 std::shared_ptr<iRouter> router)
             : socket(std::move(socket)), router(std::move(router)) {
+        buff;
     }
 
     // Initiate the asynchronous operations associated with the connection.
@@ -45,8 +47,7 @@ private:
     // The socket for the currently connected client.
     std::shared_ptr<iSocket> socket;
     std::shared_ptr<iRouter> router;
-    // The buffer for performing reads.
-    beast::flat_buffer buffer_{8192};
+    RequestBuffer buff;
     // The request message.
     http::request<http::string_body> request_;
 
@@ -63,7 +64,7 @@ private:
                 self->processRequest();
         };
         socket->async_read(
-                buffer_,
+                buff,
                 request_,
                 lamda);
     }

@@ -4,32 +4,13 @@
 
 #ifndef GOTO_CHAT_SOCKET_H
 #define GOTO_CHAT_SOCKET_H
+#include "RequestBuffer.h"
 
-#include <boost/beast/core.hpp>
-#include <boost/beast/http.hpp>
-#include <utility>
-#include <boost/beast/version.hpp>
-#include <boost/asio/dispatch.hpp>
-#include <boost/asio/strand.hpp>
-#include <boost/config.hpp>
-#include <algorithm>
-#include <cstdlib>
-#include <functional>
-#include <iostream>
-#include <memory>
-#include <string>
-#include <thread>
-#include <vector>
-
-namespace beast = boost::beast;         // from <boost/beast.hpp>
-namespace http = beast::http;           // from <boost/beast/http.hpp>
-namespace net = boost::asio;            // from <boost/asio.hpp>
-using tcp = boost::asio::ip::tcp;       // from <boost/asio/ip/tcp.hpp>
 
 class iSocket {
 public:
 
-    virtual void async_read(beast::flat_buffer buffer, http::request<http::string_body> request,
+    virtual void async_read(RequestBuffer buffer, http::request<http::string_body> request,
                             std::function<void(std::error_code, unsigned long)> lamda) = 0;
 
     virtual void async_write(const http::response<http::string_body> &response,
@@ -46,11 +27,11 @@ public:
 
     explicit Socket(tcp::socket &sock) : sock(sock) {};
 
-    void async_read(beast::flat_buffer buffer, http::request<http::string_body> request,
+    void async_read(RequestBuffer buffer, http::request<http::string_body> request,
                     std::function<void(std::error_code, unsigned long)> lamda) override {
         http::async_read(
                 sock,
-                buffer,
+                buffer.buff,
                 request,
                 lamda);
     }
