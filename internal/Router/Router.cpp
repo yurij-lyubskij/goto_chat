@@ -22,7 +22,6 @@ Request &Router::UseMiddle(Request &request) {
             break;
         }
     }
-    
     return request;
 }
 

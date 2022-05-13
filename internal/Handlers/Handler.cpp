@@ -6,16 +6,16 @@
 
 #include "Handler.h"
 
-bool Login::CanHandle(Request) {
-    return false;
+bool Login::CanHandle(Request req) {
+    return req.target == "/session/create";
 }
 
 Response Login::Handle(Request) {
     return Response();
 }
 
-bool Logout::CanHandle(Request) {
-    return false;
+bool Logout::CanHandle(Request req) {
+    return req.target == "/session/delete";
 }
 
 Response Logout::Handle(Request) {
@@ -62,8 +62,8 @@ Response JoiChatRoom::Handle(Request) {
     return Response();
 }
 
-bool CreateNewUser::CanHandle(Request) {
-    return false;
+bool CreateNewUser::CanHandle(Request req) {
+    return req.target == "/user/create";
 }
 
 Response CreateNewUser::Handle(Request) {
