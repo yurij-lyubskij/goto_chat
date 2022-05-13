@@ -4,15 +4,21 @@
 #include "Response.h"
 
 TEST(ChatRoomHandlersTests, GetMessage) {
-
+    GetMessageFromChat handler;
     Request testRequest;
+    testRequest.method = "POST";
+    testRequest.target = "/chat/create";
+    EXPECT_FALSE(handler.canHandle(testRequest));
+
     testRequest.method = "GET";
-    testRequest.URL = "/chat/message/list";
+    testRequest.target = "/chat/message/list";
     testRequest.body = "testRequestBody";
+    EXPECT_TRUE(handler.canHandle(testRequest));
+
     Response testResult;
     testResult.body = "testResultBody";
 
-    GetMessageFromChat handler;
+
     EXPECT_EQ(handler.canHandle(testRequest), true);
     EXPECT_EQ(handler.handle(testRequest).body, testResult.body);
 }
@@ -22,11 +28,11 @@ TEST(ChatRoomHandlersTests, CreateChatRoom) {
 
     Request testRequest;
     testRequest.method = "GET";
-    testRequest.URL = "/chat/message/list";
+    testRequest.target = "/chat/message/list";
     EXPECT_FALSE(handler.canHandle(testRequest));
 
     testRequest.method = "POST";
-    testRequest.URL = "/chat/create";
+    testRequest.target = "/chat/create";
     EXPECT_TRUE(handler.canHandle(testRequest));
 
     testRequest.body = "testRequestBody";
@@ -41,11 +47,11 @@ TEST(ChatRoomHandlersTests, JoinChatRoom) {
 
     Request testRequest;
     testRequest.method = "GET";
-    testRequest.URL = "/chat/message/list";
+    testRequest.target = "/chat/message/list";
     EXPECT_FALSE(handler.canHandle(testRequest));
 
     testRequest.method = "POST";
-    testRequest.URL = "/chat/join";
+    testRequest.target = "/chat/join";
     EXPECT_TRUE(handler.canHandle(testRequest));
 
     testRequest.body = "testRequestBody";
@@ -60,12 +66,12 @@ TEST(ChatRoomHandlersTests, FindChatRoom) {
 
     Request testRequest;
     testRequest.method = "GET";
-    testRequest.URL = "/chat/message/list";
+    testRequest.target = "/chat/message/list";
     EXPECT_FALSE(handler.canHandle(testRequest));
 
 
     testRequest.method = "GET";
-    testRequest.URL = "/chat/find";
+    testRequest.target = "/chat/find";
     EXPECT_TRUE(handler.canHandle(testRequest));
 
     testRequest.body = "testRequestBody";

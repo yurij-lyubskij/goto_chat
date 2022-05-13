@@ -5,7 +5,7 @@
 #include "Response.h"
 //GetMessageFromChat
 bool GetMessageFromChat::canHandle(Request request){
-	return request.method == REQUESTED_METHOD && request.URL == REQUESTED_URL;
+	return request.method == REQUESTED_METHOD && request.target == REQUESTED_TARGET;
 };
 
 Response GetMessageFromChat::handle(Request request){
@@ -15,7 +15,7 @@ Response GetMessageFromChat::handle(Request request){
 
 //CreateChatRoom
 bool CreateChatRoom::canHandle(Request request){
-	return request.method == REQUESTED_METHOD && request.URL == REQUESTED_URL;
+	return request.method == REQUESTED_METHOD && request.target == REQUESTED_TARGET;
 };
 
 Response CreateChatRoom::handle(Request request){
@@ -25,7 +25,7 @@ Response CreateChatRoom::handle(Request request){
 
 //JoinChatRoom
 bool JoinChatRoom::canHandle(Request request){
-	return request.method == REQUESTED_METHOD && request.URL == REQUESTED_URL;
+	return request.method == REQUESTED_METHOD && request.target == REQUESTED_TARGET;
 };
 
 Response JoinChatRoom::handle(Request request){
@@ -35,7 +35,7 @@ Response JoinChatRoom::handle(Request request){
 
 //FindChatRoom
 bool FindChatRoom::canHandle(Request request){
-	return request.method == REQUESTED_METHOD && request.URL == REQUESTED_URL;
+	return request.method == REQUESTED_METHOD && request.target == REQUESTED_TARGET;
 };
 
 Response FindChatRoom::handle(Request request){

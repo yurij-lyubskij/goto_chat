@@ -30,6 +30,7 @@ class MockConnection: public iConnection{
         std::map<int, ChatRoom> chats;
         int mesCount = 0;
         std::map<int, iMessage> messages;
+        std::map<int, int> chats_users;
         MOCK_METHOD(bool, reExec, (DBRequest, std::vector<DBObject>), ());
         MOCK_METHOD(std::vector<DBObject>, reGet, (DBRequest), ());
     private:
