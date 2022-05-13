@@ -68,10 +68,10 @@ TEST(ChatRepoTests, DoesExist){
 
 	EXPECT_FALSE(repo.doesExist(1));
 
-	ChatRoom chat(1);
+	ChatRoom chat("name");
 	std::vector<ChatRoom> chats;
 	chats.push_back(chat);
-
+	std::cout << chats[0].getId() << std::endl;
 	EXPECT_TRUE(repo.put(chats));
 	EXPECT_TRUE(repo.doesExist(1));
 }
@@ -86,7 +86,7 @@ TEST(ChatRepoTests, putAndgetById){
 	EXPECT_CALL(*conn, reGet(::testing::_)).Times(1);
 	ChatRepo repo((DBConnection<iConnection>*) &connections);
 
-	ChatRoom chat1(1, "test"), chat2(2, "test");
+	ChatRoom chat1("test"), chat2("test");
 	std::vector<ChatRoom> chats;
 
 	chats.push_back(chat1);
@@ -120,7 +120,7 @@ TEST(MessageRepoTests, DoesExist){
 
 	EXPECT_FALSE(repo.doesExist(1));
 
-	Message message(1, "text", 50, 1);
+	Message message("text", 50, 1);
 	std::vector<iMessage> messages;
 	messages.push_back(message);
 
@@ -138,7 +138,7 @@ TEST(MessageRepoTests, putAndgetById){
 	EXPECT_CALL(*conn, reGet(::testing::_)).Times(1);
 	MessageRepo repo((DBConnection<iConnection>*) &connections);
 
-	Message message1(1, "text1", 12, 1), message2(2, "text2", 50, 2);
+	Message message1("text1", 12, 1), message2("text2", 50, 2);
 	std::vector<iMessage> messages;
 	messages.push_back(message1);
 	messages.push_back(message2);

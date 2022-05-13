@@ -1,6 +1,11 @@
 #include "Message.h"
 
-Message::Message(){ id = -1; };
+Message::Message(){ 
+	id = -1;
+	content = "";
+	sendTime = 0;
+	senderId = 0;
+};
 
 Message::Message(int _id) { 
 	id = _id;

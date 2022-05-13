@@ -23,6 +23,7 @@ class ChatRoom: public iChatRoom{
 	public:
 		ChatRoom();					//Creates empty(false) object
 		ChatRoom(int);
+		ChatRoom(std::string);
 		ChatRoom(int, std::string);
 		ChatRoom(const ChatRoom&);
 		//bool addUsers(std::vector<User> users, ChatRepo*) override;

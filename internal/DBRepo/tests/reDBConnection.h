@@ -24,8 +24,11 @@ class DullConnection: iConnection{
 */
 class MockConnection: public iConnection{
     public:
+        int usersCount = 0;
         std::map<int, User> users;
+        int chatsCount = 0;
         std::map<int, ChatRoom> chats;
+        int mesCount = 0;
         std::map<int, iMessage> messages;
         MOCK_METHOD(bool, reExec, (DBRequest, std::vector<DBObject>), ());
         MOCK_METHOD(std::vector<DBObject>, reGet, (DBRequest), ());

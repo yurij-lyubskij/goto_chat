@@ -9,6 +9,7 @@
 #include <condition_variable>
 
 #include <iostream>
+#include <algorithm>
 
 #include "DBRepo.h"
 #include "User.h"
@@ -179,42 +180,41 @@ ChatRepo::ChatRepo(DBConnection<iConnection> *conn){
 };
 
 bool ChatRepo::doesExist(int id){
-	if ( id == 0 ) return false;
+	if ( id < 1 ) return false;
 
 	std::shared_ptr<iConnection> conn = connection->connection();			//getting connection to DB
-
+std::cout << "mes.getId()" << std::endl;
 	ChatRoom cht(id);														//empty object just to check
 	DBObject obj(cht);
 	std::vector<DBObject> objects(1);
 	objects[0] = obj;
-
+std::cout << "mes.getId()" << std::endl;
 	DBRequest request = { checkIt, chat, "" };
-
+std::cout << "mes.getId()" << std::endl;
 	bool res = conn->exec(request, objects);								//exec with "chekIt" doesn't need proper object and will use only id
 	connection->freeConnection(conn);										//return connection to the queue
-
+std::cout << "mes.getId()" << std::endl;
 	return res;
 };
 
 std::vector<ChatRoom> ChatRepo::getByID(std::vector<int> ids){
-	std::vector<ChatRoom> chats(0);
+	std::vector<ChatRoom> chats(1);
 	if ( ids.empty() ) return chats;
+	if(std::find(ids.begin(), ids.end(), -1) != ids.end()) return chats;
+	
 	int len = ids.size();
 	
 	std::shared_ptr<iConnection> conn = connection->connection();			//getting connection to DB
-
 	DBRequest request;
 	request.operation = getFew;
 	request.objectType = chat;
 	request.request = "id";
 	for( int i = 0; i < len; ++i) request.request += " " + std::to_string(ids[i]);
-
 	std::vector<DBObject> result = conn->get(request);
 
 	len = result.size();													//objects with some ids might don't exist so check size
 	chats = std::vector<ChatRoom>();
 	for( int i = 0; i < len; ++i) chats.push_back(result[i]);
-
 	connection->freeConnection(conn);										//return connection to the queue
 
 	return chats;
@@ -229,7 +229,13 @@ bool ChatRepo::update(std::vector<ChatRoom> chats){
 	std::vector<DBObject> objects(len);
 	ChatRoom tempChat;
 
-	for(int i = 0; i < len; ++i) objects[i] = DBObject(chats[i]);
+	for(int i = 0; i < len; ++i) {
+		objects[i] = DBObject(chats[i]);
+		if ( chats[i].getId() < 1 ) {
+			connection->freeConnection(conn);										//return connection to the queue
+			return false;
+		}
+	}
 
 	DBRequest request = { updateIt, chat, "" };
 
@@ -248,7 +254,13 @@ bool ChatRepo::put(std::vector<ChatRoom> chats){
 	std::vector<DBObject> objects(len);
 	ChatRoom tempChat;
 	
-	for(int i = 0; i < len; ++i) objects[i] = DBObject(chats[i]);
+	for(int i = 0; i < len; ++i) {
+		objects[i] = DBObject(chats[i]);
+		if ( chats[i].getId() != 0 ) {
+			connection->freeConnection(conn);										//return connection to the queue
+			return false;
+		}
+	}
 
 	DBRequest request = { putIt, chat, "" };
 
@@ -266,7 +278,13 @@ bool ChatRepo::addUsersToChat(const ChatRoom &updatedChat, std::vector<User> use
 	std::vector<DBObject> objects(len);
 	objects[0] = DBObject(updatedChat);
 
-	for(int i = 1; i < len; ++i) objects[i] = DBObject(users[i]);
+	for(int i = 1; i < len; ++i) {
+		objects[i] = DBObject(users[i]);
+		if ( users[i].Id < 1 ) {
+			connection->freeConnection(conn);										//return connection to the queue
+			return false;
+		}
+	}
 
 	DBRequest request = { addMembers, chat, "" };
 
@@ -285,7 +303,13 @@ bool ChatRepo::removeUsersFromChat(const ChatRoom &updatedChat, std::vector<User
 	std::vector<DBObject> objects(len);
 	objects[0] = DBObject(updatedChat);
 
-	for(int i = 1; i < len; ++i) objects[i] = DBObject(users[i]);
+	for(int i = 1; i < len; ++i) {
+		objects[i] = DBObject(users[i]);
+		if ( users[i].Id < 1 ) {
+			connection->freeConnection(conn);										//return connection to the queue
+			return false;
+		}
+	}
 
 
 	DBRequest request = { removeMembers, chat, "remove" };
@@ -320,7 +344,7 @@ std::vector<ChatRoom> ChatRepo::getUserChats(const User& user){
 	int len = objects.size();
 
 	std::vector<ChatRoom> chats(len);
-	for(int i = 0; i < len; ++i) chats[i] = (ChatRoom) objects[i];
+	for(int i = 0; i < len; ++i) chats[i] = ChatRoom(objects[i]);
 
 	connection->freeConnection(conn);										//return connection to the queue
 
@@ -341,7 +365,7 @@ MessageRepo::MessageRepo(DBConnection<iConnection>* conn){
 };
 
 bool MessageRepo::doesExist(int id){
-	if ( id == 0 ) return true;
+	if ( id < 1 ) return true;
 	std::shared_ptr<iConnection> conn = connection->connection();			//getting connection to DB
 
 	Message mes(id);														//empty object just to check
@@ -358,8 +382,10 @@ bool MessageRepo::doesExist(int id){
 };
 
 std::vector<iMessage> MessageRepo::getByID(std::vector<int> ids){
-	std::vector<iMessage> mesages(0);
+	std::vector<iMessage> mesages(1);
 	if ( ids.empty() ) return mesages;
+	if ( std::find(ids.begin(), ids.end(), -1) != ids.end() ||
+		std::find(ids.begin(), ids.end(), -1) != ids.end() ) return mesages;
 	int len = ids.size();
 
 	std::shared_ptr<iConnection> conn = connection->connection();			//getting connection to DB
@@ -390,6 +416,10 @@ bool MessageRepo::update(std::vector<iMessage> mes){
 
 	for(int i = 0; i < len; ++i) {
 		objects[i] = DBObject(mes[i]);
+		if ( mes[i].getId() < 1 ) {
+			connection->freeConnection(conn);										//return connection to the queue
+			return false;
+		}
 	};
 
 	DBRequest request = { updateIt, message, "" };
@@ -410,6 +440,10 @@ bool MessageRepo::put(std::vector<iMessage> mes){
 
 	for(int i = 0; i < len; ++i) {
 		objects[i] = DBObject(mes[i]);
+		if ( mes[i].getId() != 0 ) {
+			connection->freeConnection(conn);										//return connection to the queue
+			return false;
+		}
 	};
 	
 	DBRequest request = { putIt, message, "" };

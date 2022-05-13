@@ -3,9 +3,20 @@
 #include "DBRepo.h"
 
 
-ChatRoom::ChatRoom(){ id = -1; };
+ChatRoom::ChatRoom(){ 
+	id = -1; 
+	name = "";
+};
 
-ChatRoom::ChatRoom(int _id){ id = _id; };
+ChatRoom::ChatRoom(int _id){ 
+	id = _id; 
+	name = "";
+};
+
+ChatRoom::ChatRoom(std::string _name){
+	id = 0;
+	name = _name;
+};
 
 ChatRoom::ChatRoom(int _id, std::string _name){
 	id = _id;
