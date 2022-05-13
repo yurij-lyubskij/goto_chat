@@ -4,6 +4,8 @@
 
 #include "Router.h"
 
+const int16_t notFound = 404;
+
 void Router::AddHandler(std::shared_ptr<iHandler> handler) {
     handlers.emplace_back(handler);
 };
@@ -16,6 +18,13 @@ Request &Router::UseMiddle(Request &request) {
     return request;
 }
 
-Response Router::Route(Request &) {
-    return Response();
+Response Router::Route(Request & req) {
+    for (const auto& handler : handlers) {
+        if (handler->CanHandle(req)) {
+            return handler->Handle(req);
+        }
+    }
+    Response res;
+    res.statusCode = notFound;
+    return res;
 };
