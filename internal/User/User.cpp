@@ -1,4 +1,4 @@
 #include "User.h"
 
 User::User(){};
-User::User(int id){};
+User::User(int id){ Id = id; };
