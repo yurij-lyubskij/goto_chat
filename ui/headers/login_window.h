@@ -16,20 +16,24 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class Login_window; }
 QT_END_NAMESPACE
 
-class Login_window : public QMainWindow
-{
+class Login_window : public QMainWindow {
     Q_OBJECT
 
 public:
 
     Login_window(QWidget *parent = nullptr);
-    ~Login_window();
-    void set_db_name(const QString& name);
-    bool local_check_person(const QString& login, const QString& password);
-    bool check_person(const QString& login, const QString& password);
 
-signals:
-    void send_person(const QString& login);
+    ~Login_window();
+
+    void set_db_name(const QString &name);
+
+    bool local_check_person(const QString &login, const QString &password);
+
+    bool check_person(const QString &login, const QString &password);
+
+    signals:
+    void send_person(const QString &login);
+
     void window_location();
 
 private slots:
@@ -41,10 +45,12 @@ private slots:
 
 private:
     void centrialize();
+
     void clear_lines();
+
     QString local_db_name;
     Ui::Login_window *ui;
-    Reg_window* reg_window;
-    App_window* app_window;
+    Reg_window *reg_window;
+    App_window *app_window;
 };
 #endif // LOGIN_WINDOW_H

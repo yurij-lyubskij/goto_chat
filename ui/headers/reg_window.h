@@ -7,15 +7,15 @@
 #include "client.h"
 
 namespace Ui {
-class Reg_window;
+    class Reg_window;
 }
 
-class Reg_window : public QMainWindow
-{
+class Reg_window : public QMainWindow {
     Q_OBJECT
 
 public:
     explicit Reg_window(QWidget *parent = nullptr);
+
     ~Reg_window();
 
     void registrate();
@@ -24,7 +24,7 @@ public:
 
     void centrialize();
 
-signals:
+    signals:
     void login_window();
 
 private slots:
@@ -38,6 +38,7 @@ private slots:
 
 private:
     void clear_lines();
+
     Ui::Reg_window *ui;
 };
 
