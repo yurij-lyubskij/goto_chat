@@ -54,9 +54,8 @@ TEST(ChatRoomHandlersTests, CreateChatRoom) {
     testRequest.cookie = "1";
     testRequest.body = "testName 1 1";
 
-    Response result;
-
     EXPECT_TRUE(handler.canHandle(testRequest));
+    Response result;
 
     result = handler.handle(testRequest);
     	std::cout << "P" << std::endl;
@@ -65,10 +64,10 @@ TEST(ChatRoomHandlersTests, CreateChatRoom) {
     EXPECT_EQ(result.body, "");
     EXPECT_EQ(result.statusCode, 200);
 
-/*
+
     result = handler.handle(testRequest);
     EXPECT_EQ(result.statusCode, 400);
-    */
+    
 }
 
 TEST(ChatRoomHandlersTests, JoinChatRoom) {
@@ -82,11 +81,10 @@ TEST(ChatRoomHandlersTests, JoinChatRoom) {
 
     testRequest.method = "POST";
     testRequest.target = "/chat/join";
+    testRequest.cookie = "1";
+    testRequest.body = "testName 1 1";
     EXPECT_TRUE(handler.canHandle(testRequest));
-
-    testRequest.body = "testRequestBody";
-    Response testResult;
-    testResult.body = "testResultBody";
+    Response result;
       
     //EXPECT_EQ(handler.handle(testRequest).body, testResult.body);
 }
