@@ -28,6 +28,7 @@ private:
 class Listener : public std::enable_shared_from_this<Listener>, public iListener {
     std::shared_ptr<iAcceptor> acceptor_;
     std::shared_ptr<iSocket> sock;
+    std::shared_ptr<iRouter> router;
     static void fail(beast::error_code ec, char const *what) {
         std::cerr << what << ": " << ec.message() << "\n";
     }
@@ -37,9 +38,10 @@ public:
 
     Listener(
             std::shared_ptr<iSocket> sock,
-            std::shared_ptr<iAcceptor> acceptor
+            std::shared_ptr<iAcceptor> acceptor,
+            std::shared_ptr<iRouter> router
     )
-            : acceptor_(std::move(acceptor)), sock(std::move(sock)){
+            : acceptor_(std::move(acceptor)), sock(std::move(sock)), router(std::move(router)){
         beast::error_code ec;
 
         // Open the acceptor
@@ -94,7 +96,7 @@ private:
             return; // To avoid infinite loop
         } else {
             // Create the session and run it
-            std::make_shared<UserSession>(sock)->start();
+            std::make_shared<UserSession>(sock, router)->start();
         }
 
         // Accept another connection

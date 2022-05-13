@@ -9,6 +9,7 @@
 #include "Response.h"
 #include "Acceptor.h"
 #include "Request.h"
+#include "Router.h"
 
 
 class iUserSession {
@@ -29,24 +30,22 @@ public:
 
 class UserSession : public std::enable_shared_from_this<UserSession>, iUserSession {
 public:
-    UserSession(std::shared_ptr<iSocket> socket)
-            : socket(std::move(socket)) {
+    UserSession(std::shared_ptr<iSocket> socket,
+                std::shared_ptr<iRouter> router)
+            : socket(std::move(socket)), router(std::move(router)) {
     }
 
     // Initiate the asynchronous operations associated with the connection.
-    void
-    start() {
+    void start() {
         readRequest();
     }
 
 private:
     // The socket for the currently connected client.
     std::shared_ptr<iSocket> socket;
-
+    std::shared_ptr<iRouter> router;
     // The buffer for performing reads.
     beast::flat_buffer buffer_{8192};
-
-public:
     // The request message.
     http::request<http::string_body> request_;
 
@@ -71,8 +70,6 @@ public:
     // Determine what needs to be done with the request message.
     void routeRequest() {
         Request request = createRequest();
-        response_.version(request_.version());
-        response_.keep_alive(false);
         Response res;
         createResponse(res);
         writeResponse();
@@ -105,12 +102,11 @@ public:
 
     void createResponse(Response response) {
         response_.set(http::field::server, BOOST_BEAST_VERSION_STRING);
-        response_.set(http::field::content_type, "text/html");
+        response_.set(http::field::content_type, "text/plain");
         response_.set(http::field::cookie, response.cookie);
         response_.keep_alive(false);
         response_.body() = response_.body();
         response_.result(response.statusCode);
-
     }
 };
 

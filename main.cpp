@@ -9,11 +9,12 @@ int main() {
     // The io_context is required for all I/O
     net::io_context ioc{1};
     tcp::socket mysock {ioc};
+    std::shared_ptr<iRouter> router (new Router);
     std::shared_ptr<iSocket> sock (new Socket(mysock));
     std::shared_ptr<iAcceptor> acceptor(new Acceptor(ioc, tcp::endpoint{address, port}));
     std::make_shared<Listener>(
             sock,
-            acceptor)->run();
+            acceptor, router)->run();
     // Run the I/O service in Server
 //    ioc.run();
     std::shared_ptr<iContext> cont(new Context(ioc));
