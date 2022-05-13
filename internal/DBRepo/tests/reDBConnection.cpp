@@ -67,10 +67,8 @@ bool MockConnection::exec(DBRequest request, std::vector<DBObject> objects){
                 case message:
                     {
                     iMessage mes;
-                    std::cout << mes.getId() << std::endl;
                     for( int i = 0; i < len; ++i ) {
                         mes = objects[i];
-                        std::cout << mes.getId() << std::endl;
                         if ( ! messages.contains(mes.getId())) return false;
                     }
                     }

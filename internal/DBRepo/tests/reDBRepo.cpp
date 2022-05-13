@@ -1,6 +1,5 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include <iostream>
 
 #include "User.h"
 #include "reDBRepo.h"
@@ -71,7 +70,6 @@ TEST(ChatRepoTests, DoesExist){
 	ChatRoom chat("name");
 	std::vector<ChatRoom> chats;
 	chats.push_back(chat);
-	std::cout << chats[0].getId() << std::endl;
 	EXPECT_TRUE(repo.put(chats));
 	EXPECT_TRUE(repo.doesExist(1));
 }

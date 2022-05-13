@@ -8,7 +8,6 @@
 #include <mutex>
 #include <condition_variable>
 
-#include <iostream>
 #include <algorithm>
 
 #include "DBRepo.h"
@@ -183,17 +182,13 @@ bool ChatRepo::doesExist(int id){
 	if ( id < 1 ) return false;
 
 	std::shared_ptr<iConnection> conn = connection->connection();			//getting connection to DB
-std::cout << "mes.getId()" << std::endl;
 	ChatRoom cht(id);														//empty object just to check
 	DBObject obj(cht);
 	std::vector<DBObject> objects(1);
 	objects[0] = obj;
-std::cout << "mes.getId()" << std::endl;
 	DBRequest request = { checkIt, chat, "" };
-std::cout << "mes.getId()" << std::endl;
 	bool res = conn->exec(request, objects);								//exec with "chekIt" doesn't need proper object and will use only id
 	connection->freeConnection(conn);										//return connection to the queue
-std::cout << "mes.getId()" << std::endl;
 	return res;
 };
 
