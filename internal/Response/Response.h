@@ -14,5 +14,4 @@ public:
     int statusCode;
 };
 
-
 #endif 
