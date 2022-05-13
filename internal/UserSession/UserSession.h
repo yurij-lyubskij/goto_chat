@@ -27,7 +27,7 @@ typedef beast::flat_buffer buffer;
 
 class UserSession : public std::enable_shared_from_this<UserSession>, iUserSession {
 public:
-    UserSession(Socket socket)
+    UserSession(std::shared_ptr<Socket> socket)
             : socket_(std::move(socket)) {
     }
     // Initiate the asynchronous operations associated with the connection.
@@ -38,7 +38,7 @@ public:
 
 private:
     // The socket for the currently connected client.
-    Socket socket_;
+    std::shared_ptr<Socket> socket_;
 
     // The buffer for performing reads.
     beast::flat_buffer buffer_{8192};
@@ -54,7 +54,7 @@ private:
         auto self = shared_from_this();
 
         http::async_read(
-                socket_,
+                *socket_,
                 buffer_,
                 request_,
                 [self](beast::error_code ec,
@@ -99,10 +99,10 @@ private:
         response_.content_length(response_.body().size());
 
         http::async_write(
-                socket_,
+                *socket_,
                 response_,
                 [self](beast::error_code ec, std::size_t) {
-                    self->socket_.shutdown(tcp::socket::shutdown_send, ec);
+                    self->socket_->shutdown(tcp::socket::shutdown_send, ec);
                 });
     }
 

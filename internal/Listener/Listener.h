@@ -5,6 +5,8 @@
 #ifndef GOTO_CHAT_LISTENER_H
 #define GOTO_CHAT_LISTENER_H
 
+#include <utility>
+
 #include "Acceptor.h"
 #include "UserSession.h"
 
@@ -25,6 +27,7 @@ private:
 
 class Listener : public std::enable_shared_from_this<Listener>, public iListener {
     std::shared_ptr<iAcceptor> acceptor_;
+    std::shared_ptr<Socket> sock;
     static void fail(beast::error_code ec, char const *what) {
         std::cerr << what << ": " << ec.message() << "\n";
     }
@@ -33,10 +36,10 @@ public:
 
 
     Listener(
-            net::io_context &ioc,
-            std::shared_ptr<iAcceptor> &acceptor
+            std::shared_ptr<Socket> sock,
+            std::shared_ptr<iAcceptor> acceptor
     )
-            : acceptor_(acceptor){
+            : acceptor_(std::move(acceptor)){
         beast::error_code ec;
 
         // Open the acceptor
@@ -91,7 +94,7 @@ private:
             return; // To avoid infinite loop
         } else {
             // Create the session and run it
-//            std::make_shared<UserSession>(std::move(socket))->start();
+            std::make_shared<UserSession>(sock)->start();
         }
 
         // Accept another connection
