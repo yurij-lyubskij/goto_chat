@@ -70,7 +70,7 @@ TEST(ChatRepoTests, DoesExist){
 	ChatRoom chat("name");
 	std::vector<ChatRoom> chats;
 	chats.push_back(chat);
-	EXPECT_TRUE(repo.put(chats));
+	EXPECT_THAT(repo.put(chats),  testing::ElementsAre(1));
 	EXPECT_TRUE(repo.doesExist(1));
 }
 
@@ -93,7 +93,7 @@ TEST(ChatRepoTests, putAndgetById){
 
 	std::vector<int> ids = { 1 , 2 };
 
-	EXPECT_TRUE(repo.put(chats));
+	ASSERT_THAT(repo.put(chats),  testing::ElementsAre(1, 2));
 	chats = repo.getByID(ids);
 	
 	ASSERT_EQ(chats.size(), 2);
@@ -151,7 +151,7 @@ TEST(MessageRepoTests, DoesExist){
 	std::vector<iMessage> messages;
 	messages.push_back(message);
 
-	EXPECT_TRUE(repo.put(messages));
+	EXPECT_THAT(repo.put(messages),  testing::ElementsAre(1));
 	EXPECT_TRUE(repo.doesExist(1));
 }
 
@@ -172,7 +172,7 @@ TEST(MessageRepoTests, putAndgetById){
 
 	std::vector<int> ids = { 1 , 2 };
 
-	EXPECT_TRUE(repo.put(messages));
+	EXPECT_THAT(repo.put(messages),  testing::ElementsAre(1, 2));
 	messages = repo.getByID(ids);
 
 	ASSERT_EQ(messages.size(), 2);

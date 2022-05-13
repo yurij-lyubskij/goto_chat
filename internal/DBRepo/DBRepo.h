@@ -73,7 +73,7 @@ class DBObject{
 
 class iConnection{
     public:
-        virtual bool exec(DBRequest, std::vector<DBObject>) = 0;
+        virtual std::vector<DBObject> exec(DBRequest, std::vector<DBObject>) = 0;
         virtual std::vector<DBObject> get(DBRequest) = 0;
 	protected:
 		std::vector<std::string> split(const std::string&);
@@ -127,7 +127,7 @@ class iChatRepo{
 		virtual bool doesExist(int id) = 0;
 		virtual std::vector<ChatRoom> getByID(std::vector<int> id) = 0;
 		virtual bool update(std::vector<ChatRoom> chats) = 0;
-		virtual bool put(std::vector<ChatRoom> chats) = 0;
+		virtual std::vector<int> put(std::vector<ChatRoom> chats) = 0;
 		virtual bool addUsersToChat(const ChatRoom &chat, std::vector<User> users) = 0;
 		virtual bool removeUsersFromChat(const ChatRoom &chat, std::vector<User> users) = 0;
 		virtual ChatRoom getMesChat(Message mes) = 0;
@@ -141,7 +141,7 @@ class iMessageRepo{
 		virtual bool doesExist(int id) = 0;
 		virtual std::vector<iMessage> getByID(std::vector<int> id) = 0;
 		virtual bool update(std::vector<iMessage> mes) = 0;
-		virtual bool put(std::vector<iMessage> mes) = 0;
+		virtual std::vector<int> put(std::vector<iMessage> mes) = 0;
 		virtual std::vector<iMessage> getFromRange(int start, int end,const ChatRoom &chat) = 0;
 };
 /*
@@ -162,10 +162,10 @@ class ChatRepo: public iChatRepo{
 	public:
 		ChatRepo();
 		ChatRepo(DBConnection<iConnection>*);
-		bool doesExist(int id);
-		std::vector<ChatRoom> getByID(std::vector<int> id);
-		bool update(std::vector<ChatRoom> chats);
-		bool put(std::vector<ChatRoom> chats);
+		bool doesExist(int id) override;
+		std::vector<ChatRoom> getByID(std::vector<int> id) override;
+		bool update(std::vector<ChatRoom> chats) override;
+		std::vector<int> put(std::vector<ChatRoom> chats) override;
 		bool addUsersToChat(const ChatRoom &chat, std::vector<User> users) override;
 		bool removeUsersFromChat(const ChatRoom &chat, std::vector<User> users) override;
 		ChatRoom getMesChat(Message mes);
@@ -176,11 +176,11 @@ class MessageRepo: public iMessageRepo{
 	public:
 		MessageRepo();
 		MessageRepo(DBConnection<iConnection>*);
-		bool doesExist(int id);
-		std::vector<iMessage> getByID(std::vector<int> id);
-		bool update(std::vector<iMessage> mes);
-		bool put(std::vector<iMessage> mes);
-		std::vector<iMessage> getFromRange(int start, int end,const ChatRoom &chat);
+		bool doesExist(int id) override;
+		std::vector<iMessage> getByID(std::vector<int> id) override;
+		bool update(std::vector<iMessage> mes) override;
+		std::vector<int> put(std::vector<iMessage> mes) override;
+		std::vector<iMessage> getFromRange(int start, int end,const ChatRoom &chat) override;
 };
 
 /*
