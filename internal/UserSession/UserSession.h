@@ -17,12 +17,11 @@ public:
 };
 
 
-typedef beast::flat_buffer buffer;
 
 class UserSession : public std::enable_shared_from_this<UserSession>, iUserSession {
 public:
     UserSession(std::shared_ptr<Socket> socket)
-            : socket_(std::move(socket)) {
+            : socket(std::move(socket)) {
     }
     // Initiate the asynchronous operations associated with the connection.
     void
@@ -32,7 +31,7 @@ public:
 
 private:
     // The socket for the currently connected client.
-    std::shared_ptr<Socket> socket_;
+    std::shared_ptr<Socket> socket;
 
     // The buffer for performing reads.
     beast::flat_buffer buffer_{8192};
@@ -46,17 +45,16 @@ private:
     // Asynchronously receive a complete request message.
     void read_request() {
         auto self = shared_from_this();
-
-        http::async_read(
-                *socket_,
+        std::function lamda = [self](beast::error_code ec,
+                            std::size_t bytes_transferred) {
+            boost::ignore_unused(bytes_transferred);
+            if (!ec)
+                self->route_request();
+        };
+        socket->async_read(
                 buffer_,
                 request_,
-                [self](beast::error_code ec,
-                       std::size_t bytes_transferred) {
-                    boost::ignore_unused(bytes_transferred);
-                    if (!ec)
-                        self->route_request();
-                });
+                lamda);
     }
 
     // Determine what needs to be done with the request message.
