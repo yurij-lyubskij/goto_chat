@@ -10,10 +10,10 @@
 class iSocket {
 public:
 
-    virtual void async_read(httpBuffer buffer,
+    virtual void async_read(std::shared_ptr<IhttpBuffer> buffer,
                             std::function<void(std::error_code, unsigned long)> lamda) = 0;
 
-    virtual void async_write(httpBuffer buffer,
+    virtual void async_write(std::shared_ptr<IhttpBuffer> buffer,
                              std::function<void(std::error_code, unsigned long)> lamda) = 0;
 
     virtual void shutdown(std::error_code ec) = 0;
@@ -27,20 +27,20 @@ public:
 
     explicit Socket(tcp::socket &sock) : sock(sock) {};
 
-    void async_read(httpBuffer buffer,
+    void async_read(std::shared_ptr<IhttpBuffer> buffer,
                     std::function<void(std::error_code, unsigned long)> lamda) override {
         http::async_read(
                 sock,
-                buffer.buff,
-                buffer.request_,
+                std::static_pointer_cast<httpBuffer>(buffer)->buff,
+                std::static_pointer_cast<httpBuffer>(buffer)->request_,
                 lamda);
     }
 
-    void async_write(httpBuffer buffer,
+    void async_write(std::shared_ptr<IhttpBuffer> buffer,
                      std::function<void(std::error_code, unsigned long)> lamda) override {
         http::async_write(
                 sock,
-                buffer.response_,
+                std::static_pointer_cast<httpBuffer>(buffer)->response_,
                 lamda);
     }
 

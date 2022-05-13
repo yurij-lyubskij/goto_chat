@@ -30,9 +30,9 @@ public:
 class UserSession : public std::enable_shared_from_this<UserSession>, iUserSession {
 public:
     UserSession(std::shared_ptr<iSocket> socket,
-                std::shared_ptr<iRouter> router)
-            : socket(std::move(socket)), router(std::move(router)) {
-        buff;
+                std::shared_ptr<iRouter> router,
+                std::shared_ptr<IhttpBuffer> buff)
+            : socket(std::move(socket)), router(std::move(router)), buff(std::move(buff)) {
     }
 
     // Initiate the asynchronous operations associated with the connection.
@@ -44,7 +44,8 @@ private:
     // The socket for the currently connected client.
     std::shared_ptr<iSocket> socket;
     std::shared_ptr<iRouter> router;
-    httpBuffer buff;
+    std::shared_ptr<IhttpBuffer> buff;
+
     // Asynchronously receive a complete request message.
     void readRequest() {
         auto self = shared_from_this();
@@ -61,14 +62,14 @@ private:
 
     // Determine what needs to be done with the request message.
     void processRequest() {
-        Request request = buff.createRequest();
+        Request request = buff->createRequest();
         request = router->UseMiddle(request);
         Response res;
         res.statusCode = request.responseStatus;
         if (request.responseStatus != Unauthorized) {
             res = router->Route(request);
         }
-        buff.createResponse(res);
+        buff->createResponse(res);
         writeResponse();
     }
 
@@ -76,7 +77,7 @@ private:
     void writeResponse() {
         auto self = shared_from_this();
 
-        buff.response_.content_length(buff.response_.body().size());
+        buff->contentLength();
 
         std::function lamda = [self](std::error_code ec, std::size_t) {
             self->socket->shutdown(ec);

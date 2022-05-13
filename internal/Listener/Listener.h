@@ -12,7 +12,6 @@
 
 class iListener {
 public:
-    iListener() = default;
 
     // Start accepting incoming connections
     virtual void run() = 0;
@@ -29,7 +28,7 @@ class Listener : public std::enable_shared_from_this<Listener>, public iListener
     std::shared_ptr<iAcceptor> acceptor_;
     std::shared_ptr<iSocket> sock;
     std::shared_ptr<iRouter> router;
-
+    std::shared_ptr<iBufferFabric> fabric;
     static void fail(std::error_code ec, char const *what) {
         std::cerr << what << ": " << ec.message() << "\n";
     }
@@ -40,9 +39,10 @@ public:
     Listener(
             std::shared_ptr<iSocket> sock,
             std::shared_ptr<iAcceptor> acceptor,
-            std::shared_ptr<iRouter> router
+            std::shared_ptr<iRouter> router,
+            std::shared_ptr<iBufferFabric> fabric
     )
-            : acceptor_(std::move(acceptor)), sock(std::move(sock)), router(std::move(router)) {
+            : acceptor_(std::move(acceptor)), sock(std::move(sock)), router(std::move(router)), fabric(std::move(fabric)) {
          std::error_code ec;
         // Open the acceptor
         acceptor_->open(ec);
@@ -94,7 +94,7 @@ private:
             return; // To avoid infinite loop
         } else {
             // Create the session and run it
-            std::make_shared<UserSession>(sock, router)->start();
+            std::make_shared<UserSession>(sock, router, fabric->make())->start();
         }
 
         // Accept another connection
