@@ -12,6 +12,7 @@ Login_window::Login_window(QWidget *parent)
     connect(reg_window, &Reg_window::login_window, this, &Login_window::centrialize);
     connect(this, &Login_window::window_location, reg_window, &Reg_window::centrialize);
     connect(this, &Login_window::send_person, app_window, &App_window::set_person);
+    connect(app_window, &App_window::login_window, this, &Login_window::show);
 }
 
 Login_window::~Login_window() {
