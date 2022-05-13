@@ -30,12 +30,12 @@ class iSocket {
 public:
 
     virtual void async_read(beast::flat_buffer buffer, http::request<http::string_body> request,
-                            std::function<void(boost::system::error_code, unsigned long)> lamda) = 0;
+                            std::function<void(std::error_code, unsigned long)> lamda) = 0;
 
     virtual void async_write(const http::response<http::string_body> &response,
-                             std::function<void(boost::system::error_code, unsigned long)> lamda) = 0;
+                             std::function<void(std::error_code, unsigned long)> lamda) = 0;
 
-    virtual void shutdown(beast::error_code ec) = 0;
+    virtual void shutdown(std::error_code ec) = 0;
 
     virtual ~iSocket() = default;
 };
@@ -47,7 +47,7 @@ public:
     explicit Socket(tcp::socket &sock) : sock(sock) {};
 
     void async_read(beast::flat_buffer buffer, http::request<http::string_body> request,
-                    std::function<void(boost::system::error_code, unsigned long)> lamda) override {
+                    std::function<void(std::error_code, unsigned long)> lamda) override {
         http::async_read(
                 sock,
                 buffer,
@@ -56,15 +56,17 @@ public:
     }
 
     void async_write(const http::response<http::string_body> &response,
-                     std::function<void(boost::system::error_code, unsigned long)> lamda) override {
+                     std::function<void(std::error_code, unsigned long)> lamda) override {
         http::async_write(
                 sock,
                 response,
                 lamda);
     }
 
-    void shutdown(beast::error_code ec) override {
-        sock.shutdown(tcp::socket::shutdown_send, ec);
+    void shutdown(std::error_code ec) override {
+        boost::system::error_code err;
+        sock.shutdown(tcp::socket::shutdown_send, err);
+        ec = std::make_error_code(static_cast<std::errc>(err.value()));
     }
 
 };

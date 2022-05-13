@@ -56,7 +56,7 @@ private:
     // Asynchronously receive a complete request message.
     void readRequest() {
         auto self = shared_from_this();
-        std::function lamda = [self](beast::error_code ec,
+        std::function lamda = [self](std::error_code ec,
                                      std::size_t bytes_transferred) {
             boost::ignore_unused(bytes_transferred);
             if (!ec)
@@ -87,7 +87,7 @@ private:
 
         response_.content_length(response_.body().size());
 
-        std::function lamda = [self](beast::error_code ec, std::size_t) {
+        std::function lamda = [self](std::error_code ec, std::size_t) {
             self->socket->shutdown(ec);
         };
 
