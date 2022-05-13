@@ -39,7 +39,7 @@ public:
             std::shared_ptr<Socket> sock,
             std::shared_ptr<iAcceptor> acceptor
     )
-            : acceptor_(std::move(acceptor)){
+            : acceptor_(std::move(acceptor)), sock(std::move(sock)){
         beast::error_code ec;
 
         // Open the acceptor
@@ -85,7 +85,7 @@ private:
             if(!ec)
                 on_accept(ec);
         };
-        acceptor_->async_accept(lamda);
+        acceptor_->async_accept(sock, lamda);
     }
 
     void on_accept(beast::error_code ec) override {

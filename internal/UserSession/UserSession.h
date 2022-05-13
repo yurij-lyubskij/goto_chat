@@ -16,12 +16,6 @@ public:
     virtual void route_request() = 0;
 };
 
-typedef tcp::socket Socket;
-
-//class Socket{
-//public:
-//    tcp::socket sock;
-//};
 
 typedef beast::flat_buffer buffer;
 
