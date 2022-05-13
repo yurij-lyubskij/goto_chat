@@ -9,32 +9,6 @@
 //UserRepo Section
 //
 
-bool UserRepo::doesExist(int id){
-	return false;
-};
-
-std::vector<User> UserRepo::getByID(std::vector<int> id){
-	std::vector<User> usrs;
-	return usrs;
-};
-
-bool UserRepo::update(std::vector<User> users){
-	return false;
-};
-
-bool UserRepo::put(std::vector<User> users){
-	return false;
-};
-
-std::vector<User> UserRepo::getChatMembers(ChatRoom chat){
-	std::vector<User> usrs;
-	return usrs;
-};
-
-std::vector<User> UserRepo::getSender(Message mes){
-	std::vector<User> usrs;
-	return usrs;
-};
 //
 //end of UserRepo Section
 //

@@ -94,18 +94,7 @@ private:
     const int POOL = 4;
 };
 
-//Interface Block
-class iUserRepo{
-	private:
-		DBConnection<iConnection> *connection;
-	public:
-		virtual bool doesExist(int id) = 0;
-		virtual std::vector<User> getByID(std::vector<int> id) = 0;
-		virtual bool update(std::vector<User> users) = 0;
-		virtual bool put(std::vector<User> users) = 0;
-		virtual std::vector<User> getChatMembers(ChatRoom chat) = 0;
-		virtual std::vector<User> getSender(Message mes) = 0;
-};
+
 
 class iChatRepo{
 	private:
@@ -132,17 +121,6 @@ class iMessageRepo{
 };
 
 //Declaration block
-class UserRepo: public iUserRepo{
-	public:
-		UserRepo(){};
-		UserRepo(*DBConnection){};
-		bool doesExist(int id);
-		std::vector<User> getByID(std::vector<int> id);
-		bool update(std::vector<User> users);
-		bool put(std::vector<User> users);
-		std::vector<User> getChatMembers(ChatRoom chat);
-		std::vector<User> getSender(Message mes);
-};
 
 class ChatRepo: public iChatRepo{
 	public:

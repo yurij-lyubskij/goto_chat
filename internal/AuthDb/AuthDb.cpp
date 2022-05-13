@@ -4,7 +4,6 @@
 
 #include "AuthDb.h"
 #include <ctime>
-#include <iostream>
 #include <unistd.h>
 
 std::string gen_random(const int len) {
