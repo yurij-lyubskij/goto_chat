@@ -11,6 +11,7 @@
 #include "Request.h"
 #include "Router.h"
 
+const int16_t Unauthorized = 401;
 
 class iUserSession {
 public:
@@ -20,7 +21,7 @@ public:
 
     virtual void readRequest() = 0;
 
-    virtual void routeRequest() = 0;
+    virtual void processRequest() = 0;
 
     virtual Request createRequest() = 0;
 
@@ -59,7 +60,7 @@ private:
                                      std::size_t bytes_transferred) {
             boost::ignore_unused(bytes_transferred);
             if (!ec)
-                self->routeRequest();
+                self->processRequest();
         };
         socket->async_read(
                 buffer_,
@@ -68,9 +69,14 @@ private:
     }
 
     // Determine what needs to be done with the request message.
-    void routeRequest() {
+    void processRequest() {
         Request request = createRequest();
-        Response res = iRouter->;
+        request = router->UseMiddle(request);
+        Response res;
+        res.statusCode = request.responseStatus;
+        if (request.responseStatus != Unauthorized) {
+            res = router->Route(request);
+        }
         createResponse(res);
         writeResponse();
     }

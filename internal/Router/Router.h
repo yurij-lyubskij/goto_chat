@@ -21,9 +21,7 @@ public:
 
     virtual Request &UseMiddle(Request &) = 0;
 
-    virtual bool SelectHandler(Request &) = 0;
-
-    virtual Response CallHandler(Request &) = 0;
+    virtual Response Route(Request &) = 0;
 };
 
 class Router : public iRouter {
@@ -34,9 +32,7 @@ public:
 
     Request &UseMiddle(Request &) override;
 
-    bool SelectHandler(Request &) override;
-
-    Response CallHandler(Request &) override;
+    Response Route(Request &) override;
 
 private:
     std::vector<std::shared_ptr<iHandler>> handlers;

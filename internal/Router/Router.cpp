@@ -14,12 +14,8 @@ void Router::AddMiddle(std::shared_ptr<iMiddle> middle) {
 
 Request &Router::UseMiddle(Request &request) {
     return request;
-};
+}
 
-bool Router::SelectHandler(Request &) {
-    return false;
-};
-
-Response Router::CallHandler(Request &) {
+Response Router::Route(Request &) {
     return Response();
 };
