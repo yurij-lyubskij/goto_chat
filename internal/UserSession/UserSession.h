@@ -48,10 +48,10 @@ private:
 
 public:
     // The request message.
-    http::request<http::dynamic_body> request_;
+    http::request<http::string_body> request_;
 
     // The response message.
-    http::response<http::dynamic_body> response_;
+    http::response<http::string_body> response_;
 
     // Asynchronously receive a complete request message.
     void readRequest() {
@@ -73,25 +73,6 @@ public:
         Request request = createRequest();
         response_.version(request_.version());
         response_.keep_alive(false);
-
-//        switch (request_.method()) {
-//            case http::verb::get:
-//                response_.result(http::status::ok);
-//                response_.set(http::field::server, "Beast");
-//
-//                break;
-//
-//            default:
-//                // We return responses indicating an error if
-//                // we do not recognize the request method.
-//                response_.result(http::status::bad_request);
-//                response_.set(http::field::content_type, "text/plain");
-//                beast::ostream(response_.body())
-//                        << "Invalid request-method '"
-//                        << std::string(request_.method_string())
-//                        << "'";
-//                break;
-//        }
         Response res;
         createResponse(res);
         writeResponse();
@@ -118,11 +99,17 @@ public:
         req.method = static_cast<std::string>(request_.method_string());
         req.cookie = static_cast<std::string>(http::param_list(request_[http::field::cookie]).begin()->second);
         req.target = static_cast<std::string>(request_.target());
-        req.body = boost::beast::buffers_to_string(request_.body().data());
+        req.body = static_cast<std::string>(request_.body());
         return req;
     }
 
     void createResponse(Response response) {
+        response_.set(http::field::server, BOOST_BEAST_VERSION_STRING);
+        response_.set(http::field::content_type, "text/html");
+        response_.set(http::field::cookie, response.cookie);
+        response_.keep_alive(false);
+        response_.body() = response_.body();
+        response_.result(response.statusCode);
 
     }
 };
