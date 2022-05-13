@@ -20,11 +20,10 @@ public:
 private:
     virtual void do_accept() = 0;
 
-    virtual void on_accept(beast::error_code ec, tcp::socket socket) = 0;
+    virtual void on_accept(beast::error_code ec) = 0;
 };
 
 class Listener : public std::enable_shared_from_this<Listener>, public iListener {
-    net::io_context &ioc_;
     std::shared_ptr<iAcceptor> acceptor_;
     static void fail(beast::error_code ec, char const *what) {
         std::cerr << what << ": " << ec.message() << "\n";
@@ -37,7 +36,7 @@ public:
             net::io_context &ioc,
             std::shared_ptr<iAcceptor> &acceptor
     )
-            : ioc_(ioc), acceptor_(acceptor){
+            : acceptor_(acceptor){
         beast::error_code ec;
 
         // Open the acceptor
@@ -78,22 +77,21 @@ public:
 private:
     void
     do_accept() override {
-        tcp::socket socket{ioc_};
         std::function lamda  = [&](beast::error_code ec)
         {
             if(!ec)
-                on_accept(ec, std::move(socket));
+                on_accept(ec);
         };
-        acceptor_->async_accept(socket, lamda);
+        acceptor_->async_accept(lamda);
     }
 
-    void on_accept(beast::error_code ec, tcp::socket socket) override {
+    void on_accept(beast::error_code ec) override {
         if (ec) {
             fail(ec, "accept");
             return; // To avoid infinite loop
         } else {
             // Create the session and run it
-            std::make_shared<UserSession>(std::move(socket))->start();
+//            std::make_shared<UserSession>(std::move(socket))->start();
         }
 
         // Accept another connection
