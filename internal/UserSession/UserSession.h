@@ -90,14 +90,14 @@ private:
 
         response_.content_length(response_.body().size());
 
-        http::async_write(
-                *socket_,
-                response_,
-                [self](beast::error_code ec, std::size_t) {
-                    self->socket_->shutdown(tcp::socket::shutdown_send, ec);
-                });
-    }
+        std::function lamda = [self](beast::error_code ec, std::size_t) {
+                    self->socket->shutdown(ec);
+        };
 
+        socket->async_write(
+                response_,
+                lamda);
+    }
 };
 
 #endif //GOTO_CHAT_USERSESSION_H

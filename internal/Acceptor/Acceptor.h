@@ -51,7 +51,7 @@ public:
     };
 
     void async_accept(std::shared_ptr<Socket> socket, std::function<void(beast::error_code ec)> lamda) override {
-        acceptor_.async_accept(*socket, lamda);
+        acceptor_.async_accept(socket->sock, lamda);
     }
 };
 

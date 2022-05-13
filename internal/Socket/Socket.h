@@ -42,6 +42,18 @@ public:
                 request,
                 lamda);
     }
+    void async_write(const http::response<http::dynamic_body>& response,
+                    std::function<void(boost::system::error_code, unsigned long)> lamda) {
+        http::async_write(
+                sock,
+                response,
+                lamda);
+    }
+
+    void shutdown(beast::error_code ec) {
+        sock.shutdown(tcp::socket::shutdown_send, ec);
+    }
+
 };
 
 #endif //GOTO_CHAT_SOCKET_H
