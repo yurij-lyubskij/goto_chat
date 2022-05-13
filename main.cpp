@@ -1,17 +1,6 @@
-#include "Server.h"
 #include "Listener.h"
+#include "Context.h"
 
-
-class Context : public iContext {
-public:
-    Context(net::io_context &ioc) : ioc(ioc) {};
-
-    void run() {
-        ioc.run();
-    };
-private:
-    net::io_context &ioc;
-};
 
 int main() {
     auto const address = net::ip::make_address("127.0.0.1");
@@ -28,8 +17,7 @@ int main() {
     // Run the I/O service in Server
 //    ioc.run();
     std::shared_ptr<iContext> cont(new Context(ioc));
-    Server server = Server(cont);
     printf("all is well\n");
-    server.Run();
+    cont->run();
     return 0;
 }
