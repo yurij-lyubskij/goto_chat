@@ -24,7 +24,6 @@ int main() {
             sock,
             acceptor, router)->run();
     // Run the I/O service in Server
-//    ioc.run();
     std::shared_ptr<iContext> cont(new Context(ioc));
     printf("all is well\n");
     cont->run();

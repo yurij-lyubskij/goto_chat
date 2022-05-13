@@ -22,7 +22,7 @@ public:
 private:
     virtual void do_accept() = 0;
 
-    virtual void on_accept(beast::error_code ec) = 0;
+    virtual void on_accept(std::error_code ec) = 0;
 };
 
 class Listener : public std::enable_shared_from_this<Listener>, public iListener {
@@ -30,7 +30,7 @@ class Listener : public std::enable_shared_from_this<Listener>, public iListener
     std::shared_ptr<iSocket> sock;
     std::shared_ptr<iRouter> router;
 
-    static void fail(beast::error_code ec, char const *what) {
+    static void fail(std::error_code ec, char const *what) {
         std::cerr << what << ": " << ec.message() << "\n";
     }
 
@@ -43,8 +43,7 @@ public:
             std::shared_ptr<iRouter> router
     )
             : acceptor_(std::move(acceptor)), sock(std::move(sock)), router(std::move(router)) {
-        beast::error_code ec;
-
+         std::error_code ec;
         // Open the acceptor
         acceptor_->open(ec);
         if (ec) {
@@ -82,14 +81,14 @@ public:
 private:
     void
     do_accept() override {
-        std::function lamda = [&](beast::error_code ec) {
+        std::function lamda = [&](std::error_code ec) {
             if (!ec)
                 on_accept(ec);
         };
         acceptor_->async_accept(sock, lamda);
     }
 
-    void on_accept(beast::error_code ec) override {
+    void on_accept(std::error_code ec) override {
         if (ec) {
             fail(ec, "accept");
             return; // To avoid infinite loop

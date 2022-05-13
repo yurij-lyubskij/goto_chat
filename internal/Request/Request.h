@@ -15,6 +15,7 @@ public:
     Request() {
         responseStatus = OK;
     }
+
     std::vector<std::string> headers;
     std::string method;
     std::string cookie;
