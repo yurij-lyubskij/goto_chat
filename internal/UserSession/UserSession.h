@@ -70,7 +70,7 @@ private:
     // Determine what needs to be done with the request message.
     void routeRequest() {
         Request request = createRequest();
-        Response res;
+        Response res = iRouter->;
         createResponse(res);
         writeResponse();
     }

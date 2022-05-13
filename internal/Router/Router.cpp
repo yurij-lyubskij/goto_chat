@@ -4,16 +4,12 @@
 
 #include "Router.h"
 
-void Router::AddHandler(std::shared_ptr<iHandler>) {
-
+void Router::AddHandler(std::shared_ptr<iHandler> handler) {
+    handlers.emplace_back(handler);
 };
 
-void Router::RemoveHandler(std::shared_ptr<iHandler>) {
-
-};
-
-void Router::AddMiddle(std::shared_ptr<iMiddle>) {
-
+void Router::AddMiddle(std::shared_ptr<iMiddle> middle) {
+    middleware.emplace_back(middle);
 };
 
 Request &Router::UseMiddle(Request &request) {

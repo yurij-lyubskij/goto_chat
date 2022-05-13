@@ -15,6 +15,7 @@ public:
     std::string cookie;
     std::string body;
     std::string target;
+    int16_t responseStatus;
     std::map<std::string, std::string> parameters;
 };
 

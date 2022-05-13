@@ -17,8 +17,6 @@ public:
 
     virtual void AddHandler(std::shared_ptr<iHandler>) = 0;
 
-    virtual void RemoveHandler(std::shared_ptr<iHandler>) = 0;
-
     virtual void AddMiddle(std::shared_ptr<iMiddle>) = 0;
 
     virtual Request &UseMiddle(Request &) = 0;
@@ -31,8 +29,6 @@ public:
 class Router : public iRouter {
 public:
     void AddHandler(std::shared_ptr<iHandler>) override;
-
-    void RemoveHandler(std::shared_ptr<iHandler>) override;
 
     void AddMiddle(std::shared_ptr<iMiddle>) override;
 

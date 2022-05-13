@@ -29,11 +29,12 @@ class Listener : public std::enable_shared_from_this<Listener>, public iListener
     std::shared_ptr<iAcceptor> acceptor_;
     std::shared_ptr<iSocket> sock;
     std::shared_ptr<iRouter> router;
+
     static void fail(beast::error_code ec, char const *what) {
         std::cerr << what << ": " << ec.message() << "\n";
     }
-public:
 
+public:
 
 
     Listener(
@@ -41,7 +42,7 @@ public:
             std::shared_ptr<iAcceptor> acceptor,
             std::shared_ptr<iRouter> router
     )
-            : acceptor_(std::move(acceptor)), sock(std::move(sock)), router(std::move(router)){
+            : acceptor_(std::move(acceptor)), sock(std::move(sock)), router(std::move(router)) {
         beast::error_code ec;
 
         // Open the acceptor
@@ -74,17 +75,15 @@ public:
     }
 
     // Start accepting incoming connections
-    void
-    run() {
+    void run() {
         do_accept();
     }
 
 private:
     void
     do_accept() override {
-        std::function lamda  = [&](beast::error_code ec)
-        {
-            if(!ec)
+        std::function lamda = [&](beast::error_code ec) {
+            if (!ec)
                 on_accept(ec);
         };
         acceptor_->async_accept(sock, lamda);
