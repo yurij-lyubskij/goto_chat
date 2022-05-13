@@ -9,6 +9,7 @@
 #include <vector>
 
 const int16_t OK = 200;
+const int16_t UnAuthorized = 401;
 
 class Request {
 public:

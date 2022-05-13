@@ -9,6 +9,8 @@
 #include <functional>
 #include <memory>
 
+#include "AuthDb.h"
+
 class iMiddle {
 public:
     virtual ~iMiddle() = default;
@@ -17,6 +19,7 @@ public:
 };
 
 class CheckAuth : public iMiddle {
+    std::shared_ptr<iAuthDb> auth;
 public:
     Request& operator() (Request& request) override;
 };
