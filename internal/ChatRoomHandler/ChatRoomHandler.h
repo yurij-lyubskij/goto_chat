@@ -9,30 +9,43 @@ class GetMessageFromChat: public iHandler{
 	public:
 		bool canHandle(Request) override;
 		Response handle(Request) override;
+	private:
+		const std::string REQUESTED_METHOD = "GET";
+		const std::string REQUESTED_URL = "/chat/message/list";
 };
 
 class CreateChatRoom: public iHandler{
 	public:
 		bool canHandle(Request) override;
 		Response handle(Request) override;
+	private:
+		const std::string REQUESTED_METHOD = "POST";
+		const std::string REQUESTED_URL = "/chat/create";
 };
 
 class JoinChatRoom: public iHandler{
 	public:
 		bool canHandle(Request) override;
 		Response handle(Request) override;
+	private:
+		const std::string REQUESTED_METHOD = "POST";
+		const std::string REQUESTED_URL = "/chat/join";
 };
 
 class FindChatRoom: public iHandler{
 	public:
 		bool canHandle(Request) override;
 		Response handle(Request) override;
+	private:
+		const std::string REQUESTED_METHOD = "GET";
+		const std::string REQUESTED_URL = "/chat/find";
 };
-
+/*
+// ???
 class NotifyUsers: public iHandler{
 	public:
 		bool canHandle(Request) override;
 		Response handle(Request) override;
 };
-
+*/
 #endif

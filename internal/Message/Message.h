@@ -21,9 +21,9 @@ class iMessage{
 
 class Message: public iMessage{
 	public:
-		Message();								//Creates empty(false) object
+		Message();													//Creates empty(false) object
 		Message(int);
-		Message(std::string, time_t, int);		//Creates object with id = 0 to add to database
+		Message(std::string, time_t, int);							//Creates object with id = 0 to add to database
 		Message(int, std::string, time_t, int);
 		Message(const Message&);
 		Message operator=(const Message&);
