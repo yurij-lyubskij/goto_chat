@@ -15,6 +15,10 @@ void Router::AddMiddle(std::shared_ptr<iMiddle> middle) {
 };
 
 Request &Router::UseMiddle(Request &request) {
+    std::shared_ptr<iMiddle> prev;
+    for (auto& middle : middleware) {
+        request = (*middle)(request);
+    }
     return request;
 }
 
