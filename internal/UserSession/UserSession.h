@@ -114,12 +114,11 @@ public:
 
     Request createRequest() {
         Request req;
-        req.headers;
-        req.method = (std::string) request_.method_string();
-        req.cookie;
-        req.body;
-        req.URL;
-//        req.parameters;
+        req.parameters["<field_name>"] = static_cast<std::string> (request_["<field_name>"]);
+        req.method = static_cast<std::string>(request_.method_string());
+        req.cookie = static_cast<std::string>(http::param_list(request_[http::field::cookie]).begin()->second);
+        req.target = static_cast<std::string>(request_.target());
+        req.body = boost::beast::buffers_to_string(request_.body().data());
         return req;
     }
 

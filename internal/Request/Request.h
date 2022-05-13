@@ -14,7 +14,7 @@ public:
     std::string method;
     std::string cookie;
     std::string body;
-    std::string URL;
+    std::string target;
     std::map<std::string, std::string> parameters;
 };
 
