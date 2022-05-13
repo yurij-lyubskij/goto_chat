@@ -8,8 +8,13 @@
 #include <map>
 #include <vector>
 
+const int16_t OK = 200;
+
 class Request {
 public:
+    Request() {
+        responseStatus = OK;
+    }
     std::vector<std::string> headers;
     std::string method;
     std::string cookie;

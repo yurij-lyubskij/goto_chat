@@ -18,7 +18,11 @@ Request &Router::UseMiddle(Request &request) {
     std::shared_ptr<iMiddle> prev;
     for (auto& middle : middleware) {
         request = (*middle)(request);
+        if (request.responseStatus != OK) {
+            break;
+        }
     }
+    
     return request;
 }
 
