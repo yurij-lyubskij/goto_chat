@@ -27,10 +27,8 @@ ChatRoom::ChatRoom(const ChatRoom& cht){
 	name = cht.name;
 };
 
-bool ChatRoom::reactOn(Message mes){
-	return true;
-}
-
 ChatRoom ChatRoom::operator=(const ChatRoom& cht){
-	return ChatRoom(cht);
+	id = cht.id;
+	name = cht.name;
+	return *this;
 };
