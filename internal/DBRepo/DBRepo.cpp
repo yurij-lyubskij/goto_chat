@@ -369,6 +369,27 @@ std::vector<ChatRoom> ChatRepo::getUserChats(const User& user){
 
 	return chats;
 };
+
+std::vector<ChatRoom> ChatRepo::findByName(std::string name){
+
+	std::shared_ptr<iConnection> conn = connection->connection();			//getting connection to DB
+
+	DBRequest request;
+	request.operation = findWithName;
+	request.objectType = chat;
+	request.request = name;
+	
+	std::vector<DBObject> objects = conn->get(request);
+	int len = objects.size();
+
+	len = objects.size();													//objects with some ids might don't exist so check size
+	std::vector<ChatRoom> chats;
+	for( int i = 0; i < len; ++i) chats.push_back(objects[i]);
+
+	connection->freeConnection(conn);										//return connection to the queue
+
+	return chats;
+};
 //
 //end of ChatRepo Section
 //

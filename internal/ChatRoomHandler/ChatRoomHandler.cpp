@@ -31,7 +31,6 @@ Response GetMessageFromChat::handle(Request request){
 
 	std::vector<iMessage> messages = repo.getFromRange(start, end, ChatRoom(std::stoi(bodySplit[0])));
 
-	std::cout << messages.size() << std::endl;
 	for( int i = 0; i < messages.size(); ++i ) {
 		response.body += messages[i].getContent() + " " + std::to_string(messages[i].getTime()) + " " + std::to_string(messages[i].getSender()) + "\n";
 	}
@@ -142,17 +141,38 @@ bool FindChatRoom::canHandle(Request request){
 };
 
 Response FindChatRoom::handle(Request request){
-	return Response();
-};
-//end of FindChatRoom
-/*
-//NotifyUsers
-bool NotifyUsers::canHandle(Request request){
-	return false;
+	Response response;
+	response.cookie = request.cookie;
+	response.method = request.method;
+	response.body = "";
+	std::vector<std::string> bodySplit = split(request.body);
+	ChatRepo repo(connections);
+	if( bodySplit.size() != 1){ 
+		response.statusCode = 400;
+		return response;
+	};
+	if( bodySplit[0] == ""){ 
+		response.statusCode = 400;
+		return response;
+	};
+
+	std::vector<ChatRoom> chats = repo.findByName(bodySplit[0]);
+	for( int i = 0; i < chats.size(); ++i ) {
+		response.body += std::to_string(chats[i].getId()) + " " + chats[i].getName() + "\n";
+	}
+
+	response.statusCode = 200;
+	return response;
 };
 
-Response NotifyUsers::handle(Request request){
-	return Response();
-};
-//end of NotifyUsers
-*/
+std::vector<std::string> FindChatRoom::split(const std::string &s) {
+    std::vector<std::string> elems;
+    std::stringstream ss(s);
+    std::string item;
+    while (std::getline(ss, item, ' ')) {
+            elems.push_back(item);
+    }
+    return elems;
+}
+
+//end of FindChatRoom

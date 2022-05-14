@@ -133,6 +133,17 @@ std::vector<DBObject> MockConnection::get(DBRequest request){
             }
             }
             break;
+        case findWithName:
+            {
+            int size = chats.size();
+            std::string name = attrs[0];
+            std::cout << chats.size() << std::endl;
+            for(std::map<int, ChatRoom>::iterator it = chats.begin(); it != chats.end(); ++it) {
+                if( it->second.getName().find(name) != std::string::npos )
+                result.push_back(it->second);
+            }
+            }
+            break;
         case getRange:
             int chtId = std::stoi(attrs[0]);
             int start = std::stoi(attrs[1]) - 1;
@@ -140,7 +151,7 @@ std::vector<DBObject> MockConnection::get(DBRequest request){
             std::vector<int> mess = chats_messages.at(chtId);
             for ( int i = start; i < end; ++i )
                 result.push_back(messages.at(mess[i]));
-        break;
+            break;
     }
 
     return result;

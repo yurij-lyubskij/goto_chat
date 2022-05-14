@@ -102,6 +102,13 @@ TEST(ChatRoomHandlersTests, JoinChatRoom) {
 
 TEST(ChatRoomHandlersTests, FindChatRoom) {
     std::shared_ptr<DBConnection<MockConnection>> connections = std::make_shared<DBConnection<MockConnection>>(1);
+    std::shared_ptr<MockConnection> conn = connections->connection();
+	connections->freeConnection(conn);
+    conn->chats.insert(std::make_pair(1, ChatRoom(1, "test")));
+    conn->chats.insert(std::make_pair(2, ChatRoom(2, "est")));
+    conn->chats.insert(std::make_pair(3, ChatRoom(3, "testing")));
+
+	EXPECT_CALL(*conn, reGet(::testing::_)).Times(testing::AtLeast(0));
     FindChatRoom handler((DBConnection<iConnection>*) connections.get());
 
     Request testRequest;
@@ -112,13 +119,16 @@ TEST(ChatRoomHandlersTests, FindChatRoom) {
 
     testRequest.method = "GET";
     testRequest.target = "/chat/find";
+    testRequest.cookie = "1";
+    testRequest.body = "test";
     EXPECT_TRUE(handler.canHandle(testRequest));
-
-    testRequest.body = "testRequestBody";
-    Response testResult;
-    testResult.body = "testResultBody";
+    Response result;
+    result = handler.handle(testRequest);   
+    EXPECT_EQ(result.cookie, "1");
+    EXPECT_EQ(result.method, "GET");
+    EXPECT_EQ(result.body, "1 test\n3 testing\n");
+    EXPECT_EQ(result.statusCode, 200);
       
-    //EXPECT_EQ(handler.handle(testRequest).body, testResult.body);
 }
 
 /*

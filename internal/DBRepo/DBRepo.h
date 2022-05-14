@@ -43,9 +43,9 @@ typedef struct{
 enum DBObjectType { user, chat, message, input };
 
 enum DBOperation { checkIt, putIt, deleteIt, updateIt, getFew,
-																						//user spec operations
-					addMembers, removeMembers, getMessageOrigin, getChatsofUser,		//chat spec operations
-					getRange															//message spec operations
+																								//user spec operations
+					addMembers, removeMembers, getMessageOrigin, getChatsofUser, findWithName,	//chat spec operations
+					getRange																	//message spec operations
 };
 
 typedef struct{
@@ -130,6 +130,7 @@ class iChatRepo{
 		virtual std::vector<int> put(std::vector<ChatRoom> chats) = 0;
 		virtual bool addUsersToChat(const ChatRoom &chat, std::vector<User> users) = 0;
 		virtual bool removeUsersFromChat(const ChatRoom &chat, std::vector<User> users) = 0;
+		virtual std::vector<ChatRoom> findByName(std::string) = 0;
 		virtual ChatRoom getMesChat(Message mes) = 0;
 		virtual std::vector<ChatRoom> getUserChats(const User& user) = 0;
 };
@@ -168,6 +169,7 @@ class ChatRepo: public iChatRepo{
 		std::vector<int> put(std::vector<ChatRoom> chats) override;
 		bool addUsersToChat(const ChatRoom &chat, std::vector<User> users) override;
 		bool removeUsersFromChat(const ChatRoom &chat, std::vector<User> users) override;
+		std::vector<ChatRoom> findByName(std::string) override;
 		ChatRoom getMesChat(Message mes);
 		std::vector<ChatRoom> getUserChats(const User& user) override;
 };
