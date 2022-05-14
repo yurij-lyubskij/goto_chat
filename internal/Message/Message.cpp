@@ -9,7 +9,7 @@ Message::Message(){
 	content = "";
 	sendTime = 0;
 	senderId = 0;
-	type = text;
+	type = textMessage;
 };
 
 Message::Message(int _id) { 
@@ -17,7 +17,7 @@ Message::Message(int _id) {
 	content = "";
 	sendTime = 0;
 	senderId = 0;
-	type = text;
+	type = textMessage;
 };
 
 Message::Message(std::string _content, time_t time, int sender){
@@ -25,7 +25,7 @@ Message::Message(std::string _content, time_t time, int sender){
 	content = _content;
 	sendTime = time;
 	senderId = sender;
-	type = text;
+	type = textMessage;
 };
 
 Message::Message(int _id, std::string _content, time_t time, int sender){
@@ -33,7 +33,7 @@ Message::Message(int _id, std::string _content, time_t time, int sender){
 	content = _content;
 	sendTime = time;
 	senderId = sender;
-	type = text;
+	type = textMessage;
 };
 
 Message::Message(const Message& mes){
@@ -41,7 +41,7 @@ Message::Message(const Message& mes){
 	senderId = mes.senderId;
 	sendTime = mes.sendTime;
 	content = mes.content;
-	type = text;
+	type = textMessage;
 };
 
 Message Message::operator=(const Message& mes){
@@ -61,7 +61,7 @@ VoiceMessage::VoiceMessage(){
 	content = "";
 	sendTime = 0;
 	senderId = 0;
-	type = voice;
+	type = voiceMessage;
 };
 
 VoiceMessage::VoiceMessage(int _id) { 
@@ -69,7 +69,7 @@ VoiceMessage::VoiceMessage(int _id) {
 	content = "";
 	sendTime = 0;
 	senderId = 0;
-	type = voice;
+	type = voiceMessage;
 };
 
 VoiceMessage::VoiceMessage(std::string _content, time_t time, int sender){
@@ -77,7 +77,7 @@ VoiceMessage::VoiceMessage(std::string _content, time_t time, int sender){
 	content = _content;
 	sendTime = time;
 	senderId = sender;
-	type = voice;
+	type = voiceMessage;
 };
 
 VoiceMessage::VoiceMessage(int _id, std::string _content, time_t time, int sender){
@@ -85,7 +85,7 @@ VoiceMessage::VoiceMessage(int _id, std::string _content, time_t time, int sende
 	content = _content;
 	sendTime = time;
 	senderId = sender;
-	type = voice;
+	type = voiceMessage;
 };
 
 VoiceMessage::VoiceMessage(const VoiceMessage& mes){
@@ -93,7 +93,7 @@ VoiceMessage::VoiceMessage(const VoiceMessage& mes){
 	senderId = mes.senderId;
 	sendTime = mes.sendTime;
 	content = mes.content;
-	type = voice;
+	type = voiceMessage;
 };
 
 VoiceMessage VoiceMessage::operator=(const VoiceMessage& mes){

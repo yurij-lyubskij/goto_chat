@@ -130,17 +130,3 @@ TEST(ChatRoomHandlersTests, FindChatRoom) {
     EXPECT_EQ(result.statusCode, 200);
       
 }
-
-/*
-TEST(ChatRoomHandlersTests, NotifyUsers) {
-
-    Request testRequest;
-    testRequest.body = "testRequestBody";
-    Response testResult;
-    testResult.body = "testResultBody";
-
-    NotifyUsers handler;
-    EXPECT_EQ(handler.canHandle(testRequest), true);
-    EXPECT_EQ(handler.handle(testRequest).body, testResult.body);
-}
-*/

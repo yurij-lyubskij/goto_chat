@@ -6,7 +6,7 @@
 
 #include "User.h"
 
-enum MessegeType{ text, voice };
+enum MessegeType{ textMessage, voiceMessage };
 
 class iMessage{
 	protected:
@@ -20,6 +20,7 @@ class iMessage{
 		int getSender() const { return senderId; };
 		time_t getTime() const { return sendTime; };
 		std::string getContent() const { return content; };
+		enum MessegeType getType() const { return type; };
 };
 
 class Message: public iMessage{
@@ -35,6 +36,8 @@ class Message: public iMessage{
 };
 
 class VoiceMessage: public iMessage{
+	protected:
+	public:
 		VoiceMessage();													//Creates empty(false) object
 		VoiceMessage(int);
 		VoiceMessage(std::string, time_t, int);							//Creates object with id = 0 to add to database

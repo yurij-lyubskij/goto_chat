@@ -90,7 +90,7 @@ std::vector<DBObject> MockConnection::exec(DBRequest request, std::vector<DBObje
                 if ( users_chats.contains(usrs[i].Id) ) { return res; }
             }
             for( int i = 0; i < len; ++i ) {
-                users_chats.insert(std::make_pair(User(objects[i]).Id, cht.getId()));
+                users_chats.insert(std::make_pair(User(objects[i+1]).Id, cht.getId()));
                 res.push_back(ChatRoom(chatsCount));
             }
         }
@@ -137,7 +137,6 @@ std::vector<DBObject> MockConnection::get(DBRequest request){
             {
             int size = chats.size();
             std::string name = attrs[0];
-            std::cout << chats.size() << std::endl;
             for(std::map<int, ChatRoom>::iterator it = chats.begin(); it != chats.end(); ++it) {
                 if( it->second.getName().find(name) != std::string::npos )
                 result.push_back(it->second);

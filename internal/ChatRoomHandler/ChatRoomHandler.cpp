@@ -1,7 +1,6 @@
 #include <sstream>
 #include <vector>
 
-#include <iostream>
 
 #include "ChatRoomHandler.h"
 #include "ChatRoom.h"

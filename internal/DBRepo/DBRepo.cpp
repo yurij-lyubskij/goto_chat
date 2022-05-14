@@ -7,8 +7,7 @@
 #include <memory>
 #include <mutex>
 #include <condition_variable>
-
-#include <iostream>
+#include <stdexcept>
 #include <algorithm>
 
 #include "DBRepo.h"
@@ -24,6 +23,11 @@ DBObject::DBObject(){};
 DBObject::DBObject(const DBObject& obj): type(obj.type), attr(obj.attr){};
 
 DBObject::~DBObject(){};
+DBObject DBObject::operator=(const DBObject& obj){
+	type = obj.type;
+	attr = obj.attr;
+	return *this;
+};
 //
 //object to DBObject section
 //
@@ -53,7 +57,7 @@ DBObject::DBObject(const ChatRoom& cht){
 
 DBObject::DBObject(const iMessage& mes){
 	type = message;
-	attr = std::vector<std::string>(4);
+	attr = std::vector<std::string>(5);
 
 	std::string tempAttr;
 	//id
@@ -68,6 +72,9 @@ DBObject::DBObject(const iMessage& mes){
 	//sender
 	tempAttr = std::to_string(mes.getSender());
 	attr[3] = tempAttr;
+	//type
+	tempAttr = std::to_string(mes.getType());
+	attr[4] = tempAttr;
 };
 //
 //enod of object to DBObject section
@@ -78,7 +85,10 @@ DBObject::DBObject(const iMessage& mes){
 //
 DBObject::operator User(){
 	User usr;
-	if( type != user ) return usr;
+	if( type != user ) {
+		throw std::invalid_argument("DBObject type isn't user");
+		return usr;
+	}
 
 	usr.Id = std::stoi(attr[0]);
 	usr.Name = attr[1];
@@ -87,26 +97,31 @@ DBObject::operator User(){
 };
 
 DBObject::operator ChatRoom(){
-	if( type != chat ) return ChatRoom(-1);
+	if( type != chat ) {
+		throw std::invalid_argument("DBObject type isn't chat");
+		return ChatRoom(-1);
+	}
 	return ChatRoom(std::stoi(attr[0]), attr[1]);
 };
 
 DBObject::operator iMessage(){
-	if( type != message ) return Message(-1);
+	if( type != message ) {
+		throw std::invalid_argument("DBObject type isn't message");
+		return Message(-1);
+	}
 
-	return Message(std::stoi(attr[0]), attr[1], std::stoi(attr[2]), std::stoi(attr[3]));
+	if ( std::stoi(attr[4]) == textMessage) return Message(std::stoi(attr[0]), attr[1], std::stoi(attr[2]), std::stoi(attr[3]));
+	else return VoiceMessage(std::stoi(attr[0]), attr[1], std::stoi(attr[2]), std::stoi(attr[3]));
 };
 
 //
 //end of DBObject to object section
 //
 
-DBObject DBObject::operator=(const DBObject& obj){
-	type = obj.type;
-	attr = obj.attr;
-	return *this;
-};
 
+//
+//end of DBObject Section
+//
 
 std::vector<std::string> iConnection::split(const std::string &s) {
     std::vector<std::string> elems;
@@ -117,9 +132,6 @@ std::vector<std::string> iConnection::split(const std::string &s) {
     }
     return elems;
 }
-//
-//end of DBObject Section
-//
 
 /*
 //

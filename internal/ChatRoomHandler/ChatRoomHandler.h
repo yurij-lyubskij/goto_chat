@@ -50,12 +50,5 @@ class FindChatRoom: public iHandler{
 		const std::string REQUESTED_TARGET = "/chat/find";
 		std::vector<std::string> split(const std::string&);
 };
-/*
-// ???
-class NotifyUsers: public iHandler{
-	public:
-		bool canHandle(Request) override;
-		Response handle(Request) override;
-};
-*/
+
 #endif
