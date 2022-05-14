@@ -31,7 +31,7 @@ std::vector<DBObject> MockConnection::exec(DBRequest request, std::vector<DBObje
                     for( int i = 0; i < len; ++i ) {
                         chts.push_back(objects[i]);
                         ++chatsCount;
-                        chats.insert(std::make_pair(chatsCount, chts[i]));
+                        chats.insert(std::make_pair(chatsCount, ChatRoom(chatsCount, chts[i].getName())));
                         res.push_back(ChatRoom(chatsCount));                  
                     }
                     }  
@@ -42,7 +42,7 @@ std::vector<DBObject> MockConnection::exec(DBRequest request, std::vector<DBObje
                     for( int i = 0; i < len; ++i ) {
                         mess.push_back(objects[i]);
                         ++mesCount;
-                        messages.insert(std::make_pair(mesCount, mess[i]));
+                        messages.insert(std::make_pair(mesCount, Message(mesCount, mess[i].getContent(), mess[i].getTime(), mess[i].getSender())));
                         res.push_back(Message(mesCount));                 
                     }
                     }
