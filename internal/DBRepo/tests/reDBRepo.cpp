@@ -61,17 +61,14 @@ TEST(ChatRepoTests, DoesExist){
 
 	std::shared_ptr<MockConnection> conn = connections->connection();
 	connections->freeConnection(conn);
-	
-	EXPECT_CALL(*conn, reExec(::testing::_, ::testing::_)).Times(3);
+
+	conn->chats.insert(std::make_pair(2, ChatRoom(2, "test")));
+
+	EXPECT_CALL(*conn, reExec(::testing::_, ::testing::_)).Times(2);
 	ChatRepo repo((DBConnection<iConnection>*) connections.get());
 
 	EXPECT_FALSE(repo.doesExist(1));
- 
-	ChatRoom chat("name");
-	std::vector<ChatRoom> chats;
-	chats.push_back(chat);
-	EXPECT_THAT(repo.put(chats),  testing::ElementsAre(1));
-	EXPECT_TRUE(repo.doesExist(1));
+	EXPECT_TRUE(repo.doesExist(2));
 }
 
 TEST(ChatRepoTests, putAndgetById){
