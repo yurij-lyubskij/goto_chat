@@ -83,14 +83,11 @@ std::vector<DBObject> MockConnection::exec(DBRequest request, std::vector<DBObje
         {   
             ChatRoom cht = objects[0].operator ChatRoom();
             std::vector<User> usrs;
+            if ( ! chats.contains(cht.getId()) ) { return res; }
             --len;
-            std::cout << len << std::endl;
             for( int i = 0; i < len; ++i ) {
-                std::cout << "P" << std::endl;
                 usrs.push_back(User(objects[i+1]));
-                std::cout << "P" << std::endl;
                 if ( users_chats.contains(usrs[i].Id) ) { return res; }
-                
             }
             for( int i = 0; i < len; ++i ) {
                 users_chats.insert(std::make_pair(User(objects[i]).Id, cht.getId()));

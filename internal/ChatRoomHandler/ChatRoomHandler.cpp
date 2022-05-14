@@ -103,19 +103,16 @@ Response JoinChatRoom::handle(Request request){
 
 	std::vector<std::string> bodySplit = split(request.body);
 	ChatRepo repo(connections);
-	std::vector<ChatRoom> chts;
-	chts.push_back(ChatRoom(bodySplit[0]));
 
-	std::vector<int> res = repo.put(chts);
-	if( res.empty() ){ 
+	ChatRoom chat(std::stoi(bodySplit[0]));
+	User usr(std::stoi(bodySplit[1]));
+	if( chat.getId() < 1 || usr.Id < 1 ){ 
 		response.statusCode = 400;
 		return response;
 	};
-	ChatRoom chat(res[0], bodySplit[0]);
-	int usrCount = std::stoi(bodySplit[1]);
+
 	std::vector<User> usrs;
-	
-	for( int i = 0; i < usrCount; ++i) usrs.push_back(User(std::stoi(bodySplit[i+2])));
+	usrs.push_back(usr);
 
 	if ( repo.addUsersToChat(chat, usrs) ) response.statusCode = 200;
 	else response.statusCode = 400;

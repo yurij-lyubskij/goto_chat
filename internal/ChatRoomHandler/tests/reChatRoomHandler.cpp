@@ -58,20 +58,22 @@ TEST(ChatRoomHandlersTests, CreateChatRoom) {
     Response result;
 
     result = handler.handle(testRequest);
-    	std::cout << "P" << std::endl;
     EXPECT_EQ(result.cookie, "1");
     EXPECT_EQ(result.method, "POST");
     EXPECT_EQ(result.body, "");
     EXPECT_EQ(result.statusCode, 200);
 
-
     result = handler.handle(testRequest);
     EXPECT_EQ(result.statusCode, 400);
-    
 }
 
 TEST(ChatRoomHandlersTests, JoinChatRoom) {
     std::shared_ptr<DBConnection<MockConnection>> connections = std::make_shared<DBConnection<MockConnection>>(1);
+    std::shared_ptr<MockConnection> conn = connections->connection();
+	connections->freeConnection(conn);
+    conn->chats.insert(std::make_pair(1, ChatRoom(1, "test")));
+
+	EXPECT_CALL(*conn, reExec(::testing::_, ::testing::_)).Times(testing::AtLeast(0));
     JoinChatRoom handler((DBConnection<iConnection>*) connections.get());
 
     Request testRequest;
@@ -82,11 +84,18 @@ TEST(ChatRoomHandlersTests, JoinChatRoom) {
     testRequest.method = "POST";
     testRequest.target = "/chat/join";
     testRequest.cookie = "1";
-    testRequest.body = "testName 1 1";
+    testRequest.body = "1 1";
     EXPECT_TRUE(handler.canHandle(testRequest));
+    
     Response result;
-      
-    //EXPECT_EQ(handler.handle(testRequest).body, testResult.body);
+    result = handler.handle(testRequest);   
+    EXPECT_EQ(result.cookie, "1");
+    EXPECT_EQ(result.method, "POST");
+    EXPECT_EQ(result.body, "");
+    EXPECT_EQ(result.statusCode, 200);
+
+    result = handler.handle(testRequest);
+    EXPECT_EQ(result.statusCode, 400);
 }
 
 TEST(ChatRoomHandlersTests, FindChatRoom) {
