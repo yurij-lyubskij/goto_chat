@@ -1,19 +1,24 @@
 #include <gtest/gtest.h>
 
 #include <MiddleWare.h>
+#include <jsonParser.h>
 
 TEST(Middleware, CheckAuth) {
     Request req;
     req.body = "TEST_DATA";
     req.method = "POST";
-    req.URL = "server/create/user?name=123";
+    req.target = "server/create/user?name=123";
     req.cookie = "SFDA^S(:IAJ09msmdc";
-    req.response.statusCode = 200;
+    req.responseStatus = 200;
     Request test_result = req;
-    test_result.response.body = "TEST_RESULT";
-    test_result.response.statusCode = 401;
-    CheckAuth middle;
-    Request result = middle(req, {});
-    EXPECT_EQ(test_result.response.statusCode, result.response.statusCode);
-    EXPECT_EQ(test_result.response.body, result.response.body);
+    test_result.body = "TEST_RESULT";
+    test_result.responseStatus = 401;
+    std::shared_ptr<iAuthDb> auth(new AuthDb);
+    CheckAuth middle(auth);
+    jsonParser parser;
+    User test = parser.parseUser(req.body);
+    auth->SetCookie(test);
+    Request result = middle(req);
+    EXPECT_EQ(test_result.responseStatus, result.responseStatus);
+    EXPECT_EQ(test_result.body, result.body);
 }

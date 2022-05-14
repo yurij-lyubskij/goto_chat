@@ -5,7 +5,10 @@
 #include "jsonParser.h"
 
 User jsonParser::parseUser(std::string body) {
-    return User();
+    User user;
+    user.Name = body;
+    user.PhoneNumber = body;
+    return user;
 }
 
 std::string jsonParser::serializeUser(User user) {

@@ -5,15 +5,6 @@
 #include <gmock/gmock.h>
 #include "DBRepo.h"
 
-class reUserRepo: public iUserRepo{
-	public:
-		MOCK_METHOD(bool, doesExist, (int), () );
-		MOCK_METHOD(std::vector<User>, getById, (std::vector<int>), ());
-		MOCK_METHOD(bool, update, (std::vector<User>), ());
-		MOCK_METHOD(bool, put, (std::vector<User>), ());
-		MOCK_METHOD(std::vector<User>, getChatMembers, (ChatRoom), ());
-		MOCK_METHOD(std::vector<User>, getSender, (Message), ());
-};
 
 class reChatRepo: public iChatRepo{
 	public:

@@ -8,6 +8,7 @@
 #include "Request.h"
 #include <functional>
 #include <memory>
+#include <utility>
 
 #include "AuthDb.h"
 
@@ -21,6 +22,7 @@ public:
 class CheckAuth : public iMiddle {
     std::shared_ptr<iAuthDb> auth;
 public:
+    explicit CheckAuth(std::shared_ptr<iAuthDb> auth): auth(std::move(auth)){};
     Request& operator() (Request& request) override;
 };
 

@@ -1,11 +1,13 @@
 #include <gtest/gtest.h>
 
 #include <AuthDb.h>
+#include <User.h>
 
 TEST(db, default) {
-    std::string key = "123";
+    User user;
+    user.Name = "yura";
     AuthDb TestDb = AuthDb();
-    std::string val1 = TestDb.SetCookie(key);
-    std::string val2 = TestDb.GetCookie(key);
-    EXPECT_EQ(val1, val2);
+    std::string cookie = TestDb.SetCookie(user);
+    User check = TestDb.GetUser(cookie);
+    EXPECT_EQ(user.Name, check.Name);
 }
