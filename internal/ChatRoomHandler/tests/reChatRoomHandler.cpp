@@ -6,7 +6,14 @@
 
 TEST(ChatRoomHandlersTests, GetMessage) {
     std::shared_ptr<DBConnection<MockConnection>> connections = std::make_shared<DBConnection<MockConnection>>(1);
+    std::shared_ptr<MockConnection> conn = connections->connection();
+	connections->freeConnection(conn);
+    conn->chats.insert(std::make_pair(1, ChatRoom(1, "test")));
+    conn->messages.insert(std::make_pair(1, Message(1, "test", 2, 3)));
+    conn->messages.insert(std::make_pair(2, Message(2, "test", 3, 2)));
+    conn->chats_messages.insert(std::make_pair(1, std::vector<int>({1 , 2})));
 
+	EXPECT_CALL(*conn, reGet(::testing::_)).Times(testing::AtLeast(0));
     GetMessageFromChat handler((DBConnection<iConnection>*) connections.get());
     Request testRequest;
     testRequest.method = "POST";
@@ -16,31 +23,26 @@ TEST(ChatRoomHandlersTests, GetMessage) {
     testRequest.method = "GET";
     testRequest.target = "/chat/message/list";
     testRequest.cookie = "1";
-    testRequest.body = "testRequestBody";
+    testRequest.body = "1 range 1 2";
     EXPECT_TRUE(handler.canHandle(testRequest));
 
-    Response testResult, result;
-    testResult.method = "GET";
-    testResult.cookie = "1";
-    testResult.body = "";
-    testResult.statusCode = 400;
+    Response result;
 
     EXPECT_TRUE(handler.canHandle(testRequest));
-/*
+
     result = handler.handle(testRequest);
+    EXPECT_EQ(result.cookie, "1");
+    EXPECT_EQ(result.method, "GET");
+    EXPECT_EQ(result.body, "test 2 3\ntest 3 2\n");
+    EXPECT_EQ(result.statusCode, 200);
 
-    EXPECT_EQ(result.cookie, testResult.cookie);
-    EXPECT_EQ(result.method, testResult.method);
-    EXPECT_EQ(result.body, testResult.body);
-    EXPECT_EQ(result.statusCode, testResult.statusCode);
-*/
 }
 
 TEST(ChatRoomHandlersTests, CreateChatRoom) {
     std::shared_ptr<DBConnection<MockConnection>> connections = std::make_shared<DBConnection<MockConnection>>(1);
     std::shared_ptr<MockConnection> conn = connections->connection();
 	connections->freeConnection(conn);
-	
+
 	EXPECT_CALL(*conn, reExec(::testing::_, ::testing::_)).Times(testing::AtLeast(0));
     CreateChatRoom handler((DBConnection<iConnection>*) connections.get());
 

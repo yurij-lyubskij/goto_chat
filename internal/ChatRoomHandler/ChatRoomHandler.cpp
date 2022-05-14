@@ -1,6 +1,8 @@
 #include <sstream>
 #include <vector>
 
+#include <iostream>
+
 #include "ChatRoomHandler.h"
 #include "ChatRoom.h"
 #include "Handler.h"
@@ -18,19 +20,22 @@ Response GetMessageFromChat::handle(Request request){
 	response.method = request.method;
 	response.body = "";
 	std::vector<std::string> bodySplit = split(request.body);
-	ChatRepo repo(connections);
-	std::vector<int> res = repo.put({ChatRoom(bodySplit[0])});
-	if( res.empty() ){ 
+	MessageRepo repo(connections);
+
+	if( bodySplit.size() != 4 ){ 
 		response.statusCode = 400;
 		return response;
 	};
+	int start = std::stoi(bodySplit[2]);
+	int end = std::stoi(bodySplit[2]) + std::stoi(bodySplit[3]) - 1;
 
-	ChatRoom chat(res[0], bodySplit[0]);
-	int usrCount = std::stoi(bodySplit[1]);
-	std::vector<User> usrs;
-	
-	for( int i = 0; i < usrCount; ++i) usrs.push_back(User(std::stoi(bodySplit[i+2])));
-	repo.addUsersToChat(chat, usrs);
+	std::vector<iMessage> messages = repo.getFromRange(start, end, ChatRoom(std::stoi(bodySplit[0])));
+
+	std::cout << messages.size() << std::endl;
+	for( int i = 0; i < messages.size(); ++i ) {
+		response.body += messages[i].getContent() + " " + std::to_string(messages[i].getTime()) + " " + std::to_string(messages[i].getSender()) + "\n";
+	}
+
 	response.statusCode = 200;
 	return response;
 };

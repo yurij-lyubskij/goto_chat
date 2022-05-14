@@ -8,6 +8,7 @@
 #include <mutex>
 #include <condition_variable>
 
+#include <iostream>
 #include <algorithm>
 
 #include "DBRepo.h"
@@ -490,7 +491,7 @@ std::vector<iMessage> MessageRepo::getFromRange(int start, int end,const ChatRoo
 	DBRequest request;
 	request.operation = getRange;
 	request.objectType = message;
-	request.request = std::to_string(start) + " " + std::to_string(end);
+	request.request = std::to_string(chat.getId()) + " " + std::to_string(start) + " " + std::to_string(end);
 
 	std::vector<DBObject> result = conn->get(request);
 
@@ -500,7 +501,6 @@ std::vector<iMessage> MessageRepo::getFromRange(int start, int end,const ChatRoo
 	for( int i = 0; i < len; ++i ) mesages[i] = (iMessage) result[i];
 
 	connection->freeConnection(conn);										//return connection to the queue
-
 	return mesages;
 };
 

@@ -4,6 +4,7 @@
 #include <map>
 #include <gmock/gmock.h>
 #include <vector>
+#include <list>
 
 #include "DBRepo.h"
 #include "User.h"
@@ -31,6 +32,7 @@ class MockConnection: public iConnection{
         int mesCount = 0;
         std::map<int, iMessage> messages;
         std::map<int, int> users_chats;
+        std::map<int, std::vector<int>> chats_messages;
         MOCK_METHOD(bool, reExec, (DBRequest, std::vector<DBObject>), ());
         MOCK_METHOD(std::vector<DBObject>, reGet, (DBRequest), ());
     private:

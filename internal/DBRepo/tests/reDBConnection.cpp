@@ -107,6 +107,7 @@ std::vector<DBObject> MockConnection::get(DBRequest request){
     std::vector<std::string> attrs = split(request.request);
     switch(request.operation){
         case getFew:
+            {
             int len = attrs.size();
             std::vector<int> ids(len);
 
@@ -130,7 +131,16 @@ std::vector<DBObject> MockConnection::get(DBRequest request){
                     }
                     break;
             }
+            }
             break;
+        case getRange:
+            int chtId = std::stoi(attrs[0]);
+            int start = std::stoi(attrs[1]) - 1;
+            int end = std::stoi(attrs[2]);
+            std::vector<int> mess = chats_messages.at(chtId);
+            for ( int i = start; i < end; ++i )
+                result.push_back(messages.at(mess[i]));
+        break;
     }
 
     return result;
