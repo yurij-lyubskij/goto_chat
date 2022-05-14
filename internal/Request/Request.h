@@ -10,6 +10,7 @@
 
 const int16_t OK = 200;
 const int16_t UnAuthorized = 401;
+const int16_t BadRequest = 400;
 
 class Request {
 public:

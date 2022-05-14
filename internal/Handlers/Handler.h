@@ -4,8 +4,12 @@
 #ifndef GOTO_CHAT_HANDLER_H
 #define GOTO_CHAT_HANDLER_H
 
+#include <memory>
 #include "Request.h"
 #include "Response.h"
+#include "AuthDb.h"
+#include "UserRepo.h"
+#include "jsonParser.h"
 
 class iHandler {
 public:
@@ -45,6 +49,9 @@ public:
 };
 
 class CreateNewUser : public iHandler {
+    std::shared_ptr<iAuthDb> auth;
+    std::shared_ptr<iUserRepo> users;
+    std::shared_ptr<jsonParser> parser;
 public:
     bool CanHandle(Request) override;
 
@@ -52,6 +59,8 @@ public:
 };
 
 class Login : public iHandler {
+    std::shared_ptr<iAuthDb> auth;
+    std::shared_ptr<iUserRepo> users;
 public:
     bool CanHandle(Request) override;
 
@@ -59,6 +68,8 @@ public:
 };
 
 class Logout : public iHandler {
+    std::shared_ptr<iAuthDb> auth;
+    std::shared_ptr<iUserRepo> users;
 public:
     bool CanHandle(Request) override;
 

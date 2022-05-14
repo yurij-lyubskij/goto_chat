@@ -23,17 +23,17 @@ std::string gen_random(const int len) {
 
 const int cookieLength = 255;
 
-std::string AuthDb::SetCookie(std::string User) {
+std::string AuthDb::SetCookie(User User) {
     srand((unsigned) time(NULL) * getpid());
     std::string NewCookie = gen_random(cookieLength);
     CookieMap[NewCookie] = User;
     return NewCookie;
 }
 
-std::string AuthDb::GetUser(std::string Cookie) {
-   std::string User = "";
-   User = CookieMap[Cookie];
-   return User;
+User AuthDb::GetUser(std::string Cookie) {
+    User user;
+   user = CookieMap[Cookie];
+   return user;
 }
 
 int AuthDb::DeleteCookie(std::string Cookie) {

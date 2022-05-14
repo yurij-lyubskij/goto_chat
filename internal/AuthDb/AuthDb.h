@@ -8,31 +8,32 @@
 
 #include <string>
 #include <map>
+#include <User.h>
 
 class iAuthDb {
 public:
     virtual ~iAuthDb() = default;
 
-    virtual std::string GetUser(std::string Cookie) = 0;
+    virtual User GetUser(std::string Cookie) = 0;
 
     virtual int DeleteCookie(std::string Cookie) = 0;
 
-    virtual std::string SetCookie(std::string User) = 0;
+    virtual std::string SetCookie(User User) = 0;
 
 
 };
 
 class AuthDb : public iAuthDb {
 
-    std::map<std::string, std::string> CookieMap;
+    std::map<std::string, User> CookieMap;
 
 public:
 
-    std::string GetUser(std::string Cookie) override = 0;
+    User GetUser(std::string Cookie) override = 0;
 
     int DeleteCookie(std::string Cookie) override = 0;
 
-    std::string SetCookie(std::string User) override;
+    std::string SetCookie(User User) override;
 };
 
 #endif //GOTO_CHAT_AUTHDB_H
