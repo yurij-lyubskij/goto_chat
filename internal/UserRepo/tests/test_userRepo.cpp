@@ -14,7 +14,7 @@ TEST(UserRepo, GetbyId) {
     UserRepo repo;
     User user;
     user.Name = "VANYA";
-    size_t id = 1;
+    size_t id = repo.CreateUser(user);;
     User result = repo.GetbyId(id);
     EXPECT_EQ(result.Name, user.Name);
 }

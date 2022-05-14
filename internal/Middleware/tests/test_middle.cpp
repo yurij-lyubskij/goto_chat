@@ -11,7 +11,7 @@ TEST(Middleware, CheckAuth) {
     req.cookie = "SFDA^S(:IAJ09msmdc";
     req.responseStatus = 200;
     Request test_result = req;
-    test_result.body = "TEST_RESULT";
+    test_result.body = "TEST_DATA";
     test_result.responseStatus = 401;
     std::shared_ptr<iAuthDb> auth(new AuthDb);
     CheckAuth middle(auth);
