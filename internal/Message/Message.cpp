@@ -1,4 +1,5 @@
 #include "Message.h"
+#include <stdexcept>
 
 //
 //(Text)Message section
@@ -44,8 +45,24 @@ Message::Message(const Message& mes){
 	type = textMessage;
 };
 
+Message::Message(const iMessage& mes){
+	if( mes.getType() != textMessage ) {
+		throw std::invalid_argument("the iMessage isn't text message");
+	}
+	id = mes.getId();
+	senderId = mes.getSender();
+	sendTime = mes.getTime();
+	content = mes.getContent();
+	type = textMessage;
+};
+
 Message Message::operator=(const Message& mes){
-	return Message(mes);
+	id = mes.id;
+	senderId = mes.senderId;
+	sendTime = mes.sendTime;
+	content = mes.content;
+	type = textMessage;
+	return *this;
 }
 
 //
@@ -96,8 +113,24 @@ VoiceMessage::VoiceMessage(const VoiceMessage& mes){
 	type = voiceMessage;
 };
 
+VoiceMessage::VoiceMessage(const iMessage& mes){
+	if( mes.getType() != voiceMessage ) {
+		throw std::invalid_argument("the iMessage isn't voice message");
+	}
+	id = mes.getId();
+	senderId = mes.getSender();
+	sendTime = mes.getTime();
+	content = mes.getContent();
+	type = voiceMessage;
+};
+
 VoiceMessage VoiceMessage::operator=(const VoiceMessage& mes){
-	return VoiceMessage(mes);
+	id = mes.id;
+	senderId = mes.senderId;
+	sendTime = mes.sendTime;
+	content = mes.content;
+	type = voiceMessage;
+	return *this;
 }
 
 //
