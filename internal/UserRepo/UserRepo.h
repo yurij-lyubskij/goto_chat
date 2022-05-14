@@ -17,7 +17,7 @@ class iUserRepo {
 public:
     virtual ~iUserRepo() = default;
 
-    virtual bool CreateUser(User user) = 0;
+    virtual size_t CreateUser(User user) = 0;
 
     virtual bool UpdateUser(User user) = 0;
 
@@ -37,7 +37,7 @@ class UserRepo : public iUserRepo {
     size_t counter;
 public:
     UserRepo(): counter(0){};
-    bool CreateUser(User user) override;
+    size_t CreateUser(User user) override;
 
     bool UpdateUser(User user) override;
 

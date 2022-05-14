@@ -6,6 +6,7 @@
 
 User jsonParser::parseUser(std::string body) {
     User user;
+    user.Id = 1;
     user.Name = body;
     user.PhoneNumber = body;
     return user;

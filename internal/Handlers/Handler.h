@@ -5,6 +5,7 @@
 #define GOTO_CHAT_HANDLER_H
 
 #include <memory>
+#include <utility>
 #include "Request.h"
 #include "Response.h"
 #include "AuthDb.h"
@@ -63,6 +64,7 @@ class Login : public iHandler {
     std::shared_ptr<iAuthDb> auth;
     std::shared_ptr<iUserRepo> users;
 public:
+    explicit Login(std::shared_ptr<iAuthDb> auth, std::shared_ptr<iUserRepo> user):auth(std::move(auth)), users(std::move(user)){};
     Login();
     bool CanHandle(Request) override;
 

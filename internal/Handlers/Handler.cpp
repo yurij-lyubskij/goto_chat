@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Handler.h"
 
 //
@@ -17,6 +18,7 @@ Response Login::Handle(Request req) {
     response.cookie = req.cookie;
     response.statusCode = OK;
     if (user.Name.empty() || (user.Name != userCheck.Name)){
+        std::cout <<"result = "<< user.Name << "\n";
         response.statusCode = UnAuthorized;
     }
 //    response.body = "json here sometimes";

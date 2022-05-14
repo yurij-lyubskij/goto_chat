@@ -82,7 +82,7 @@ TEST(handlers, CreateNewUser) {
     Request req;
     req.body = "TEST_DATA";
     req.method = "POST";
-    req.target = "create/user";
+    req.target = "/user/create";
     Response test_result;
     test_result.statusCode = 200;
     CreateNewUser handler;
@@ -96,28 +96,32 @@ TEST(handlers, Login) {
     Request req;
     req.body = "TEST_DATA";
     req.method = "POST";
-    req.target = "create/session";
+    req.target = "/session/create";
     Response test_result;
-    test_result.body = "TEST_RESULT";
     test_result.statusCode = 200;
-    Login handler;
+    std::shared_ptr<iAuthDb> auth(new AuthDb);
+    std::shared_ptr<iUserRepo> repo(new UserRepo);
+    Login handler(auth, repo);
     bool can = handler.CanHandle(req);
+    jsonParser parser;
+    User test = parser.parseUser(req.body);
+    test.Id = repo->CreateUser(test);
+    req.cookie = auth->SetCookie(test);
     EXPECT_EQ(true, can);
     Response result = handler.Handle(req);
-    EXPECT_EQ(test_result.body, result.body);
+    EXPECT_EQ(test_result.statusCode, result.statusCode);
 }
 
 TEST(handlers, Logout) {
     Request req;
     req.body = "TEST_DATA";
     req.method = "POST";
-    req.target = "delete/session";
+    req.target = "/session/delete";
     Response test_result;
-    test_result.body = "TEST_RESULT";
     test_result.statusCode = 200;
     Logout handler;
     bool can = handler.CanHandle(req);
     EXPECT_EQ(true, can);
     Response result = handler.Handle(req);
-    EXPECT_EQ(test_result.body, result.body);
+    EXPECT_EQ(test_result.statusCode, result.statusCode);
 }

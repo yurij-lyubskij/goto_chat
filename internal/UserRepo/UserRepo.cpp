@@ -4,10 +4,10 @@
 
 #include "UserRepo.h"
 
-bool UserRepo::CreateUser(User user) {
+size_t UserRepo::CreateUser(User user) {
     user.Id = ++counter;
     UserMap[user.Id] = user;
-    return true;
+    return user.Id;
 }
 
 User UserRepo::GetbyId(size_t id) {
