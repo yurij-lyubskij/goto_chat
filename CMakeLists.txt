@@ -7,7 +7,7 @@ set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}  -pthread -lboost_thread" 
 
 file(GLOB SOURCES internal/*/*.cpp server/*.cpp)
 
-file(GLOB TEST_SOURCES ${SOURCES} internal/*/tests/*.cpp internal/httpBuffer)
+file(GLOB TEST_SOURCES ${SOURCES} internal/*/tests/*.cpp)
 message("TEST SOURCES\n ${TEST_SOURCES}")
 
 #one main in tests and in project

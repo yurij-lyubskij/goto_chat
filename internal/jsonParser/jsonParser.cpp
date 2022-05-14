@@ -15,12 +15,13 @@ User jsonParser::parseUser(std::string body) {
 std::string jsonParser::serializeUser(User user) {
     std::string body;
     body += "{";
-    body += "Id:";
+    body += "\"Id\":\"";
     body += std::to_string(user.Id);
-    body += "Name:";
+    body += "\",";
+    body += "\"Name\":\"";
     body += user.Name;
-    body += "PhoneNumber:";
+    body += "\",\"PhoneNumber\":\"";
     body += user.PhoneNumber;
-    body += "}";
+    body += "\"}";
     return body;
 }
