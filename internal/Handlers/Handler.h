@@ -51,8 +51,9 @@ public:
 class CreateNewUser : public iHandler {
     std::shared_ptr<iAuthDb> auth;
     std::shared_ptr<iUserRepo> users;
-    std::shared_ptr<jsonParser> parser;
+    std::shared_ptr<IjsonParser> parser;
 public:
+    CreateNewUser();
     bool CanHandle(Request) override;
 
     Response Handle(Request) override;
@@ -62,6 +63,7 @@ class Login : public iHandler {
     std::shared_ptr<iAuthDb> auth;
     std::shared_ptr<iUserRepo> users;
 public:
+    Login();
     bool CanHandle(Request) override;
 
     Response Handle(Request) override;
@@ -71,6 +73,7 @@ class Logout : public iHandler {
     std::shared_ptr<iAuthDb> auth;
     std::shared_ptr<iUserRepo> users;
 public:
+    Logout ();
     bool CanHandle(Request) override;
 
     Response Handle(Request) override;

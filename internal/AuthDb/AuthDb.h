@@ -29,9 +29,9 @@ class AuthDb : public iAuthDb {
 
 public:
 
-    User GetUser(std::string Cookie) override = 0;
+    User GetUser(std::string Cookie) override;
 
-    int DeleteCookie(std::string Cookie) override = 0;
+    int DeleteCookie(std::string Cookie) override;
 
     std::string SetCookie(User User) override;
 };

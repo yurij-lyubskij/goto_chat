@@ -23,6 +23,10 @@ Response Login::Handle(Request req) {
     return response;
 }
 
+Login::Login(): auth(new AuthDb), users(new UserRepo) {
+
+}
+
 bool Logout::CanHandle(Request req) {
     return req.target == "/session/delete";
 }
@@ -33,6 +37,9 @@ Response Logout::Handle(Request req) {
     response.cookie = "";
     response.statusCode = OK;
     return response;
+}
+
+Logout::Logout(): auth(new AuthDb), users(new UserRepo){
 }
 
 bool SendMessage::CanHandle(Request) {
@@ -92,4 +99,9 @@ Response CreateNewUser::Handle(Request req) {
     response.cookie = auth->SetCookie(user) ;
     response.statusCode = OK;
     return response;
+}
+
+CreateNewUser::CreateNewUser(): auth(new AuthDb), users(new UserRepo), parser(new jsonParser) {
+
+
 }
