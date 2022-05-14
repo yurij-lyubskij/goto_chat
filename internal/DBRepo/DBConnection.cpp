@@ -52,7 +52,6 @@ void DBConnection<Connection>::createPool()
     }
 }
 
-
 //
 //end of DBConnection Section
 //

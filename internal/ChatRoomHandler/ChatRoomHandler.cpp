@@ -21,7 +21,7 @@ Response GetMessageFromChat::handle(Request request){
 	std::vector<std::string> bodySplit = split(request.body);
 	MessageRepo repo(connections);
 
-	if( bodySplit.size() != 4 ){ 
+	if( bodySplit.size() != 4 ){
 		response.statusCode = 400;
 		return response;
 	};
