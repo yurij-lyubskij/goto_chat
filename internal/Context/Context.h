@@ -22,5 +22,12 @@ private:
     net::io_context &ioc;
 };
 
+class reContext : public iContext {
+public:
+    void run() {
+    };
+private:
+};
+
 
 #endif //GOTO_CHAT_CONTEXT_H

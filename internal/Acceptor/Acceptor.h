@@ -62,5 +62,24 @@ public:
     }
 };
 
+class reAcceptor : public iAcceptor {
+public:
+    void open(std::error_code ec) override {
+    };
+
+    void set_option(bool reuse, std::error_code ec) override {
+    };
+
+    void bind(std::error_code ec) override {
+
+    };
+
+    void listen(std::error_code ec) override {
+
+    };
+
+    void async_accept(std::shared_ptr<iSocket> socket, std::function<void(std::error_code ec)> lamda) override {
+    }
+};
 
 #endif //GOTO_CHAT_ACCEPTOR_H

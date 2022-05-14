@@ -52,4 +52,21 @@ public:
 
 };
 
+class reSocket : public iSocket {
+public:
+    void async_read(std::shared_ptr<IhttpBuffer> buffer,
+                    std::function<void(std::error_code, unsigned long)> lamda) override {
+
+    }
+
+    void async_write(std::shared_ptr<IhttpBuffer> buffer,
+                     std::function<void(std::error_code, unsigned long)> lamda) override {
+    }
+
+    void shutdown(std::error_code ec) override {
+
+    }
+
+};
+
 #endif //GOTO_CHAT_SOCKET_H

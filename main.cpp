@@ -3,30 +3,40 @@
 
 
 int main() {
-    auto const address = net::ip::make_address("127.0.0.1");
-    auto const port = static_cast<unsigned short>(8080);
+//    auto const address = net::ip::make_address("127.0.0.1");
+//    auto const port = static_cast<unsigned short>(8080);
 
     // The io_context is required for all I/O
-    net::io_context ioc{1};
-    tcp::socket mysock {ioc};
-    std::shared_ptr<iRouter> router (new Router);
-    std::shared_ptr<iMiddle> checkAuth(new CheckAuth);
-    router->AddMiddle(checkAuth);
-    std::shared_ptr<iHandler> createUser(new CreateNewUser);
-    router->AddHandler(createUser);
-    std::shared_ptr<iHandler> login(new Login);
-    router->AddHandler(login);
-    std::shared_ptr<iHandler> logout(new Logout);
-    router->AddHandler(logout);
-    std::shared_ptr<iSocket> sock (new Socket(mysock));
-    std::shared_ptr<iBufferFabric> fabric (new BufferFabric);
-    std::shared_ptr<iAcceptor> acceptor(new Acceptor(ioc, tcp::endpoint{address, port}));
+//    net::io_context ioc{1};
+//    tcp::socket mysock {ioc};
+//    std::shared_ptr<iRouter> router (new Router);
+//    std::shared_ptr<iMiddle> checkAuth(new CheckAuth);
+//    router->AddMiddle(checkAuth);
+//    std::shared_ptr<iHandler> createUser(new CreateNewUser);
+//    router->AddHandler(createUser);
+//    std::shared_ptr<iHandler> login(new Login);
+//    router->AddHandler(login);
+//    std::shared_ptr<iHandler> logout(new Logout);
+//    router->AddHandler(logout);
+//    std::shared_ptr<iSocket> sock (new Socket(mysock));
+//    std::shared_ptr<iBufferFabric> fabric (new BufferFabric);
+//    std::shared_ptr<iAcceptor> acceptor(new Acceptor(ioc, tcp::endpoint{address, port}));
+//    std::make_shared<Listener>(
+//            sock,
+//            acceptor, router, fabric)->run();
+//    // Run the I/O service in Server
+//
+//    cont->run();
+
+    std::shared_ptr<iAcceptor> acceptor(new reAcceptor);
+    std::shared_ptr<iSocket> sock(new reSocket);
+    std::shared_ptr<iRouter> router(new Router);
+    std::shared_ptr<iBufferFabric> fabric(new BufferFabric);
     std::make_shared<Listener>(
             sock,
             acceptor, router, fabric)->run();
-    // Run the I/O service in Server
-    std::shared_ptr<iContext> cont(new Context(ioc));
-    printf("all is well\n");
+    std::shared_ptr<iContext> cont(new reContext);
     cont->run();
+    printf("all is well\n");
     return 0;
 }
