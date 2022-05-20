@@ -22,15 +22,17 @@ jobs:
       - run: sudo apt-get install python3-pip
       - run: pip3 install --user cpplint
       - run: sudo apt install clang-format
-      - run: cppcheck internal/*/*.cpp internal/*/*.h server/*.cpp server/*.h --enable=all --inconclusive --error-exitcode=1 --std=c++20 -I internal/ server/ --suppress=missingIncludeSystem
+      - run: cppcheck internal/*/*.cpp internal/*/*.h main.cpp --enable=all --inconclusive --error-exitcode=1 --std=c++20 -I internal/*/  --suppress=missingIncludeSystem
+      - run: cpplint --filter=-readability/casting,-legal/copyright internal/*/*.cpp internal/*/*.h main.cpp
 
   tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - run: sudo apt-get update -y
-      - run: sudo apt install cmake g++ libboost-all-dev
+      - run: sudo apt install cmake g++ valgrind libboost-all-dev
       - run: sudo ./install_gtest.sh
       - run: sudo cmake .
       - run: sudo make
       - run: sudo ./alltests
+      - run: sudo valgrind --tool=memcheck --leak-check=yes --error-exitcode=1 ./alltests
