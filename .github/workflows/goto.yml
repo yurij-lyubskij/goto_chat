@@ -29,7 +29,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: sudo apt-get update -y
-      - run: sudo apt install cmake g++ libgtest-dev libboost-all-dev
+      - run: sudo apt install cmake g++ libboost-all-dev
+      - run: sudo ./install_gtest.sh
       - run: sudo cmake .
       - run: sudo make
       - run: sudo ./alltests
