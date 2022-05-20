@@ -11,7 +11,7 @@
 #include <memory>
 #include <mutex>
 #include <condition_variable>
-//#include <libpq-fe.h>
+#include <libpq-fe.h>
 
 #include "ChatRoom.h"
 #include "User.h"
@@ -79,7 +79,7 @@ class iConnection{
 		std::vector<std::string> split(const std::string&);
 };
 
-/*
+
 //PostgreSQL connection
 class PGConnection : public iConnection{
     private:
@@ -89,7 +89,7 @@ class PGConnection : public iConnection{
     	PGConnection();
     	std::shared_ptr<PGconn> connection() const;
 };
-*/
+
 
 template <class Connection>
 class DBConnection{
