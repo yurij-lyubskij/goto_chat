@@ -83,11 +83,40 @@ class iConnection{
 //PostgreSQL connection
 class PGConnection : public iConnection{
     private:
-        void establish_connection();
+		std::vector<DBObject> putUsers(std::vector<DBObject>);
+        //void establish_connection();
+		//actual connections settings
         std::shared_ptr<PGconn>  m_connection;
+
+		std::string m_dbhost = "localhost";
+    	int         m_dbport = 5432;
+		std::string m_dbname = "gotochatdatabase";
+    	std::string m_dbuser = "postgres";
+    	std::string m_dbpass = "postgres";
+		//table and columns names
+		const std::string usersTableName = 			"users";
+			const std::string userIdCol = 				"us_id";
+			const std::string userNameCol = 			"us_name";
+			const std::string userPhoneCol = 			"us_phone";
+		const std::string chatsTableName = 			"chats";
+			const std::string chatIdCol = 				"ch_id";
+			const std::string chatNameCol = 			"ch_name";
+		const std::string usersChatsTableName = 	"users_chats";
+		const std::string messagesTableName = 		"messages";
+			const std::string messageIdCol = 			"ms_id";
+			const std::string messageTimeCol = 			"ms_sendTime";
+		const std::string textInputsTableName = 	"textinputs";
+			const std::string textInputIdCol = 			"tip_id";
+			const std::string textInputContentCol = 	"tip_content";
+		const std::string voiceInputsTableName =	"voiceinputs";
+			const std::string voiceInputIdCol = 		"vip_id";
+			const std::string voiceInputContentCol = 	"vip_content";
+		const std::string inputsTableName = 		"inputs";
+			const std::string inputsIdCol = 			"ip_id";
+			const std::string inputTypeCol = 			"ip_type";
    	public:
     	PGConnection();
-    	std::shared_ptr<PGconn> connection() const;
+    	//std::shared_ptr<PGconn> connection() const;
 };
 
 
