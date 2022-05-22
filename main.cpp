@@ -28,5 +28,6 @@ int main() {
     printf("all is well\n");
     cont->run();
     printf("server is not running\n");
+
     return 0;
 }

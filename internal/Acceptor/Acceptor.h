@@ -27,8 +27,12 @@ public:
 class Acceptor : public iAcceptor {
     tcp::acceptor acceptor_;
     tcp::endpoint endpoint;
+    net::io_context &ioc;
 public:
-    Acceptor(net::io_context &ioc, tcp::endpoint endpoint) : acceptor_(net::make_strand(ioc)),
+//    Acceptor(net::io_context &ioc, tcp::endpoint endpoint) : acceptor_(net::make_strand(ioc)),
+//                                                             endpoint(std::move(endpoint))
+//                                                              {};
+    Acceptor(net::io_context &ioc, tcp::endpoint endpoint) : ioc(ioc), acceptor_(ioc),
                                                              endpoint(std::move(endpoint))
                                                               {};
 

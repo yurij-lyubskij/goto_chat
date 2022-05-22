@@ -99,7 +99,6 @@ private:
             // Create the session and run it
             std::make_shared<UserSession>(sock, router, fabric->make())->start();
         }
-
         // Accept another connection
         do_accept();
     }

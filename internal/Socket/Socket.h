@@ -45,7 +45,7 @@ public:
     }
 
     void shutdown(error_code ec) override {
-        sock.shutdown(tcp::socket::shutdown_send, ec);
+//        sock.shutdown(tcp::socket::shutdown_send, ec);
     }
 
 };
