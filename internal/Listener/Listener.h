@@ -7,7 +7,8 @@
 
 #include <utility>
 
-#include "Acceptor.h"
+//#include "Acceptor.h"
+#include "Socket.h"
 #include "UserSession.h"
 
 class iListener {
@@ -25,7 +26,10 @@ private:
 };
 
 class Listener : public std::enable_shared_from_this<Listener>, public iListener {
-    std::shared_ptr<iAcceptor> acceptor_;
+//    std::shared_ptr<iAcceptor> acceptor_;
+    tcp::acceptor acceptor_;
+    tcp::endpoint endpoint;
+    net::io_context &ioc;
     std::shared_ptr<iSocket>& sock;
     std::shared_ptr<iRouter> router;
     std::shared_ptr<iBufferFabric> fabric;
@@ -39,35 +43,37 @@ public:
 
     Listener(
             std::shared_ptr<iSocket>& sock,
-            std::shared_ptr<iAcceptor> acceptor,
+            net::io_context &ioc, tcp::endpoint endpoint,
             std::shared_ptr<iRouter> router,
             std::shared_ptr<iBufferFabric> fabric
     )
-            : acceptor_(std::move(acceptor)), sock(sock), router(std::move(router)), fabric(std::move(fabric)) {
+            : acceptor_(ioc), router(std::move(router)), fabric(std::move(fabric)), ioc(ioc),
+    endpoint(std::move(endpoint)), sock(sock){
          error_code ec;
         // Open the acceptor
-        acceptor_->open(ec);
+        acceptor_.open(endpoint.protocol(), ec);
         if (ec) {
             fail(ec, "open");
             return;
         }
 
         // Allow address reuse
-        acceptor_->set_option(true, ec);
+        acceptor_.set_option(net::socket_base::reuse_address(true), ec);
         if (ec) {
             fail(ec, "set_option");
             return;
         }
 
         // Bind to the server address
-        acceptor_->bind(ec);
+        acceptor_.bind(endpoint, ec);
         if (ec) {
             fail(ec, "bind");
             return;
         }
 
         // Start listening for connections
-        acceptor_->listen(ec);
+        acceptor_.listen(
+                net::socket_base::max_listen_connections, ec);
         if (ec) {
             fail(ec, "listen");
             return;
@@ -87,7 +93,8 @@ private:
             if (!ec)
                 self->on_accept(ec);
         };
-        acceptor_->async_accept(sock, lamda);
+
+        acceptor_.async_accept((std::static_pointer_cast<Socket>(sock))->sock, lamda);
     }
 
     void on_accept(error_code ec) override {
