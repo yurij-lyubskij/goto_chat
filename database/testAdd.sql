@@ -1,7 +1,7 @@
 
 INSERT INTO users_chats VALUES(1, 1);
 
-INSERT INTO users(us_name, us_phone) VALUES('TestUser', '9657852675');
+INSERT INTO users(us_name, us_phone) VALUES('TestUser', '9657852675') RETURNING us_id;
 
 INSERT INTO chats(ch_name) VALUES('TestChat');
 
