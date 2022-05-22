@@ -349,7 +349,7 @@ bool ChatRepo::removeUsersFromChat(const ChatRoom &updatedChat, std::vector<User
 	if(res.empty()) return false;
 	else return true;
 };
-
+/*
 ChatRoom ChatRepo::getMesChat(Message mes){
 	std::shared_ptr<iConnection> conn = connection->connection();			//getting connection to DB
 
@@ -364,7 +364,7 @@ ChatRoom ChatRepo::getMesChat(Message mes){
 
 	return (ChatRoom) objects[0];
 };
-
+*/
 std::vector<ChatRoom> ChatRepo::getUserChats(const User& user){
 
 	std::shared_ptr<iConnection> conn = connection->connection();			//getting connection to DB

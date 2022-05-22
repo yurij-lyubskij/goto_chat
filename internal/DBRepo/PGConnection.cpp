@@ -47,10 +47,13 @@ std::vector<DBObject> PGConnection::exec(DBRequest request, std::vector<DBObject
         case checkIt:
             switch(request.objectType){
                 case user:
+                    return checkUsers(objects);
                     break;
                 case chat:
+                    return checkChats(objects);
                     break;
                 case message:
+                    return checkMessages(objects);
                     break;
             }
             break;
@@ -61,7 +64,107 @@ std::vector<DBObject> PGConnection::exec(DBRequest request, std::vector<DBObject
     if ( res.empty() ) res.push_back(DBObject());
     return res;
 }
+//
+//check Methods
+//
+std::vector<DBObject> PGConnection::checkUsers(std::vector<DBObject> users){ 
+    //suppose to be                  SELECT EXISTS( SELECT us_id FROM users WHERE us_id = 
+    const std::string baseRequest = "SELECT EXISTS( SELECT " + userIdCol + " FROM " + usersTableName + " WHERE " + userIdCol + " = ";
+    const std::string endRequest = " );\n";
+    std::string request = "";
 
+    //making request
+    for(DBObject object: users)
+        request += baseRequest + object.attr[0] + endRequest;
+
+    //sending request
+    PQsendQuery( m_connection.get(), request.c_str() );
+
+    //checking results. If one doesn't exist return empty vector otherwise with one fictional object
+    std::vector<DBObject> result;
+    PGresult* res;
+    while ( res = PQgetResult( m_connection.get()) ) {
+        if (PQresultStatus(res) == PGRES_TUPLES_OK && PQntuples(res)) {
+
+            if( ((std::string) PQgetvalue (res ,0, 0)) == "f"){
+                PQclear(res);
+                return result;
+            };
+
+            PQclear(res);
+        }
+    }
+    result.push_back(DBObject());
+    return result;
+};
+
+std::vector<DBObject> PGConnection::checkChats(std::vector<DBObject> chats){
+    //suppose to be                  SELECT EXISTS( SELECT ch_id FROM chats WHERE ch_id = 
+    const std::string baseRequest = "SELECT EXISTS( SELECT " + chatIdCol + " FROM " + chatsTableName + " WHERE " + chatIdCol + " = ";
+    const std::string endRequest = " );\n";
+    std::string request = "";
+
+    //making request
+    for(DBObject object: chats)
+        request += baseRequest + object.attr[0] + endRequest;
+    //sending request
+    PQsendQuery( m_connection.get(), request.c_str() );
+
+    //checking results. If one doesn't exist return empty vector otherwise with one fictional object
+    std::vector<DBObject> result;
+    PGresult* res;
+    while ( res = PQgetResult( m_connection.get()) ) {
+        if (PQresultStatus(res) == PGRES_TUPLES_OK && PQntuples(res)) {
+
+            if( ((std::string) PQgetvalue (res ,0, 0)) == "f"){
+                PQclear(res);
+                return result;
+            };
+
+            PQclear(res);
+        }
+    }
+    result.push_back(DBObject());
+    return result;
+};
+
+std::vector<DBObject> PGConnection::checkMessages(std::vector<DBObject> messages){
+    //suppose to be                  SELECT EXISTS( SELECT ms_id FROM messages WHERE ms_id = 
+    const std::string baseRequest = "SELECT EXISTS( SELECT " + messageIdCol + " FROM " + messagesTableName + " WHERE " + messageIdCol + " = ";
+    const std::string endRequest = " );\n";
+    std::string request = "";
+
+    //making request
+    for(DBObject object: messages)
+        request += baseRequest + object.attr[0] + endRequest;
+    std::cout << request;
+    //sending request
+    PQsendQuery( m_connection.get(), request.c_str() );
+
+    //checking results. If one doesn't exist return empty vector otherwise with one fictional object
+    std::vector<DBObject> result;
+    PGresult* res;
+    while ( res = PQgetResult( m_connection.get()) ) {
+        if (PQresultStatus(res) == PGRES_TUPLES_OK && PQntuples(res)) {
+
+            if( ((std::string) PQgetvalue (res ,0, 0)) == "f"){
+                PQclear(res);
+                return result;
+            };
+
+            PQclear(res);
+        }
+    }
+    result.push_back(DBObject());
+    return result;
+};
+//
+//check of put Methods
+//
+
+//
+//put Methods
+//
 std::vector<DBObject> PGConnection::putUsers(std::vector<DBObject> users){
     //suppose to be                  INSERT INTO users(us_name, us_phone) VALUES(;
     const std::string baseRequest = "INSERT INTO " + usersTableName + "(" + userNameCol + ", " + userPhoneCol + ") VALUES(";
@@ -228,7 +331,9 @@ std::vector<DBObject> PGConnection::putMessages(std::vector<DBObject> messages){
     }
     return ids;
 };
-
+//
+//end of put Methods
+//
 std::vector<DBObject> PGConnection::get(DBRequest request){
     std::vector<DBObject> result;
     std::vector<std::string> attrs = split(request.request);

@@ -42,7 +42,7 @@ enum DBObjectType { user, chat, message, input };
 
 enum DBOperation { checkIt, putIt, deleteIt, updateIt, getFew,
 																								//user spec operations
-					addMembers, removeMembers, getMessageOrigin, getChatsofUser, findWithName,	//chat spec operations
+					addMembers, removeMembers/*, getMessageOrigin*/, getChatsofUser, findWithName,	//chat spec operations
 					getRange																	//message spec operations
 };
 
@@ -82,6 +82,9 @@ class iConnection{
 class PGConnection: public iConnection{
     private:
 		time_t convertTimeStamp(char*);
+		std::vector<DBObject> checkUsers(std::vector<DBObject>);
+		std::vector<DBObject> checkChats(std::vector<DBObject>);
+		std::vector<DBObject> checkMessages(std::vector<DBObject>);
 		std::vector<DBObject> putUsers(std::vector<DBObject>);
 		std::vector<DBObject> putChats(std::vector<DBObject>);
 		std::vector<DBObject> putMessages(std::vector<DBObject>);
@@ -163,7 +166,7 @@ class iChatRepo{
 		virtual bool addUsersToChat(const ChatRoom &chat, std::vector<User> users) = 0;
 		virtual bool removeUsersFromChat(const ChatRoom &chat, std::vector<User> users) = 0;
 		virtual std::vector<ChatRoom> findByName(std::string) = 0;
-		virtual ChatRoom getMesChat(Message mes) = 0;
+		//virtual ChatRoom getMesChat(Message mes) = 0;
 		virtual std::vector<ChatRoom> getUserChats(const User& user) = 0;
 };
 
@@ -202,7 +205,7 @@ class ChatRepo: public iChatRepo{
 		bool addUsersToChat(const ChatRoom &chat, std::vector<User> users) override;
 		bool removeUsersFromChat(const ChatRoom &chat, std::vector<User> users) override;
 		std::vector<ChatRoom> findByName(std::string) override;
-		ChatRoom getMesChat(Message mes);
+		//ChatRoom getMesChat(Message mes);
 		std::vector<ChatRoom> getUserChats(const User& user) override;
 };
 
