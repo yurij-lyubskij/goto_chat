@@ -26,7 +26,7 @@ private:
 
 class Listener : public std::enable_shared_from_this<Listener>, public iListener {
     std::shared_ptr<iAcceptor> acceptor_;
-    std::shared_ptr<iSocket> sock;
+    std::shared_ptr<iSocket>& sock;
     std::shared_ptr<iRouter> router;
     std::shared_ptr<iBufferFabric> fabric;
     static void fail(error_code ec, char const *what) {
@@ -37,12 +37,12 @@ public:
 
 
     Listener(
-            std::shared_ptr<iSocket> sock,
+            std::shared_ptr<iSocket>& sock,
             std::shared_ptr<iAcceptor> acceptor,
             std::shared_ptr<iRouter> router,
             std::shared_ptr<iBufferFabric> fabric
     )
-            : acceptor_(std::move(acceptor)), sock(std::move(sock)), router(std::move(router)), fabric(std::move(fabric)) {
+            : acceptor_(std::move(acceptor)), sock(sock), router(std::move(router)), fabric(std::move(fabric)) {
          error_code ec;
         // Open the acceptor
         acceptor_->open(ec);
@@ -82,16 +82,15 @@ private:
     void
     do_accept() override {
         auto self = shared_from_this();
-        std::function lamda = [self](error_code ec) {
+        static std::function lamda = [self](error_code ec) {
             if (!ec)
                 self->on_accept(ec);
         };
-        error_code ec;
-//        lamda(ec);
         acceptor_->async_accept(sock, lamda);
     }
 
     void on_accept(error_code ec) override {
+        auto self = shared_from_this();
         if (ec) {
             fail(ec, "accept");
             return; // To avoid infinite loop
@@ -100,7 +99,7 @@ private:
             std::make_shared<UserSession>(sock, router, fabric->make())->start();
         }
         // Accept another connection
-        do_accept();
+        self->do_accept();
     }
 };
 

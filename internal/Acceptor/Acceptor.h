@@ -20,7 +20,7 @@ public:
 
     virtual void listen(error_code ec) = 0;
 
-    virtual void async_accept(std::shared_ptr<iSocket> socket, std::function<void(error_code ec)> lamda) = 0;
+    virtual void async_accept(std::shared_ptr<iSocket>& socket, std::function<void(error_code ec)>& lamda) = 0;
 };
 
 
@@ -53,7 +53,7 @@ public:
                 net::socket_base::max_listen_connections, ec);
     };
 
-    void async_accept(std::shared_ptr<iSocket> socket, std::function<void(error_code ec)> lamda) override {
+    void async_accept(std::shared_ptr<iSocket>& socket, std::function<void(error_code ec)>& lamda) override {
         acceptor_.async_accept((std::static_pointer_cast<Socket>(socket)) ->sock, lamda);
     }
 };
@@ -74,7 +74,7 @@ public:
 
     };
 
-    void async_accept(std::shared_ptr<iSocket> socket, std::function<void(error_code ec)> lamda) override {
+    void async_accept(std::shared_ptr<iSocket>& socket, std::function<void(error_code ec)>& lamda) override {
     }
 };
 

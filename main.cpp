@@ -20,9 +20,10 @@ int main() {
     std::shared_ptr<iSocket> sock (new Socket(mysock));
     std::shared_ptr<iBufferFabric> fabric (new BufferFabric);
     std::shared_ptr<iAcceptor> acceptor(new Acceptor(ioc, tcp::endpoint{address, port}));
-    std::make_shared<Listener>(
+    auto listener = std::make_shared<Listener>(
             sock,
-            acceptor, router, fabric)->run();
+            acceptor, router, fabric);
+    listener->run();
     // Run the I/O service in Server
     std::shared_ptr<iContext> cont(new Context(ioc));
     printf("all is well\n");

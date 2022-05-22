@@ -77,6 +77,7 @@ private:
 
         std::function lamda = [self](error_code ec, std::size_t) {
             self->socket->shutdown(ec);
+//            self->readRequest();
         };
 
         socket->async_write(
