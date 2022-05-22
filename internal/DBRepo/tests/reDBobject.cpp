@@ -86,24 +86,26 @@ TEST(DBOBjectConverting, MessageConverting){
 	Message mes1(1);
 	DBObject object(mes1);
 
-	EXPECT_EQ(object.attr.size(), 5);
+	EXPECT_EQ(object.attr.size(), 6);
 	EXPECT_EQ(object.attr[0], "1");
 	EXPECT_EQ(object.attr[1], "");
 	EXPECT_EQ(object.attr[2], "0");
 	EXPECT_EQ(object.attr[3], "0");
 	EXPECT_EQ(object.attr[4], "0");
+	EXPECT_EQ(object.attr[5], "0");
 
-	Message mes2(2, "text", 50, 1);
+	Message mes2(2, "text", 50, 1, 1);
 	object = DBObject(mes2);
 	EXPECT_EQ(object.attr[0], "2");
 	EXPECT_EQ(object.attr[1], "text");
 	EXPECT_EQ(object.attr[2], "50");
 	EXPECT_EQ(object.attr[3], "1");
-	EXPECT_EQ(object.attr[4], "0");
+	EXPECT_EQ(object.attr[4], "1");
+	EXPECT_EQ(object.attr[5], "0");
 
 	DBObject toConvert;
 	toConvert.type = user;
-	toConvert.attr = { "3" , "TestText", "45", "2", "0" };
+	toConvert.attr = { "3" , "TestText", "45", "2", "2", "0" };
 	
 	EXPECT_THROW({
         try
@@ -123,5 +125,6 @@ TEST(DBOBjectConverting, MessageConverting){
 	EXPECT_EQ(mes3.getContent(), "TestText");
 	EXPECT_EQ(mes3.getTime(), 45);
 	EXPECT_EQ(mes3.getSender(), 2);
+	EXPECT_EQ(mes3.getChat(), 2);
 	EXPECT_EQ(mes3.getType(), textMessage);
 }

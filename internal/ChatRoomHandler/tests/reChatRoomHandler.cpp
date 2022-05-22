@@ -9,8 +9,8 @@ TEST(ChatRoomHandlersTests, GetMessage) {
     std::shared_ptr<MockConnection> conn = connections->connection();
 	connections->freeConnection(conn);
     conn->chats.insert(std::make_pair(1, ChatRoom(1, "test")));
-    conn->messages.insert(std::make_pair(1, Message(1, "test", 2, 3)));
-    conn->messages.insert(std::make_pair(2, Message(2, "test", 3, 2)));
+    conn->messages.insert(std::make_pair(1, Message(1, "test", 2, 3, 3)));
+    conn->messages.insert(std::make_pair(2, Message(2, "test", 3, 2, 3)));
     conn->chats_messages.insert(std::make_pair(1, std::vector<int>({1 , 2})));
 
 	EXPECT_CALL(*conn, reGet(::testing::_)).Times(testing::AtLeast(0));
@@ -33,7 +33,7 @@ TEST(ChatRoomHandlersTests, GetMessage) {
     result = handler.handle(testRequest);
     EXPECT_EQ(result.cookie, "1");
     EXPECT_EQ(result.method, "GET");
-    EXPECT_EQ(result.body, "test 2 3\ntest 3 2\n");
+    EXPECT_EQ(result.body, "test 2 3 3\ntest 3 2 3\n");
     EXPECT_EQ(result.statusCode, 200);
 
 }

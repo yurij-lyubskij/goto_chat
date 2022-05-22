@@ -42,7 +42,7 @@ std::vector<DBObject> MockConnection::exec(DBRequest request, std::vector<DBObje
                     for( int i = 0; i < len; ++i ) {
                         mess.push_back(objects[i]);
                         ++mesCount;
-                        messages.insert(std::make_pair(mesCount, Message(mesCount, mess[i].getContent(), mess[i].getTime(), mess[i].getSender())));
+                        messages.insert(std::make_pair(mesCount, Message(mesCount, mess[i].getContent(), mess[i].getTime(), mess[i].getSender(), mess[i].getChat())));
                         res.push_back(Message(mesCount));                 
                     }
                     }

@@ -57,7 +57,7 @@ DBObject::DBObject(const ChatRoom& cht){
 
 DBObject::DBObject(const iMessage& mes){
 	type = message;
-	attr = std::vector<std::string>(5);
+	attr = std::vector<std::string>(6);
 
 	std::string tempAttr;
 	//id
@@ -72,9 +72,12 @@ DBObject::DBObject(const iMessage& mes){
 	//sender
 	tempAttr = std::to_string(mes.getSender());
 	attr[3] = tempAttr;
+	//chat
+	tempAttr = std::to_string(mes.getChat());
+	attr[4] = tempAttr;
 	//type
 	tempAttr = std::to_string(mes.getType());
-	attr[4] = tempAttr;
+	attr[5] = tempAttr;
 };
 //
 //enod of object to DBObject section
@@ -110,8 +113,8 @@ DBObject::operator iMessage(){
 		return Message(-1);
 	}
 
-	if ( std::stoi(attr[4]) == textMessage) return Message(std::stoi(attr[0]), attr[1], std::stoi(attr[2]), std::stoi(attr[3]));
-	else return VoiceMessage(std::stoi(attr[0]), attr[1], std::stoi(attr[2]), std::stoi(attr[3]));
+	if ( std::stoi(attr[5]) == textMessage) return Message(std::stoi(attr[0]), attr[1], std::stoi(attr[2]), std::stoi(attr[3]), std::stoi(attr[4]));
+	else return VoiceMessage(std::stoi(attr[0]), attr[1], std::stoi(attr[2]), std::stoi(attr[3]), std::stoi(attr[4]));
 };
 
 //

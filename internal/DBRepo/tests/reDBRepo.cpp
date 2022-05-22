@@ -145,7 +145,7 @@ TEST(MessageRepoTests, DoesExist){
 	std::shared_ptr<MockConnection> conn = connections->connection();
 	connections->freeConnection(conn);
 	
-	conn->messages.insert(std::make_pair(2, Message(2, "test", 50, 1)));
+	conn->messages.insert(std::make_pair(2, Message(2, "test", 50, 1, 1)));
 
 	EXPECT_CALL(*conn, reExec(::testing::_, ::testing::_)).Times(2);
 	MessageRepo repo((DBConnection<iConnection>*) connections.get());
@@ -163,7 +163,7 @@ TEST(MessageRepoTests, put){
 	EXPECT_CALL(*conn, reExec(::testing::_, ::testing::_)).Times(2);
 	MessageRepo repo((DBConnection<iConnection>*) connections.get());
 
-	Message message1("text1", 12, 1), message2("text2", 50, 2);
+	Message message1("text1", 12, 1, 1), message2("text2", 50, 2, 1);
 	std::vector<iMessage> messages;
 	messages.push_back(message1);
 	messages.push_back(message2);
@@ -176,24 +176,28 @@ TEST(MessageRepoTests, put){
 	EXPECT_EQ(conn->messages.at(1).getContent(), "text1");
 	EXPECT_EQ(conn->messages.at(1).getTime(), 12);
 	EXPECT_EQ(conn->messages.at(1).getSender(), 1);
+	EXPECT_EQ(conn->messages.at(1).getChat(), 1);
 
 	ASSERT_TRUE(conn->messages.contains(2));
 	EXPECT_EQ(conn->messages.at(2).getId(), 2);
 	EXPECT_EQ(conn->messages.at(2).getContent(), "text2");
 	EXPECT_EQ(conn->messages.at(2).getTime(), 50);
 	EXPECT_EQ(conn->messages.at(2).getSender(), 2);
+	EXPECT_EQ(conn->messages.at(2).getChat(), 1);
 
 	ASSERT_TRUE(conn->messages.contains(3));
 	EXPECT_EQ(conn->messages.at(3).getId(), 3);
 	EXPECT_EQ(conn->messages.at(3).getContent(), "text1");
 	EXPECT_EQ(conn->messages.at(3).getTime(), 12);
 	EXPECT_EQ(conn->messages.at(3).getSender(), 1);
+	EXPECT_EQ(conn->messages.at(3).getChat(), 1);
 
 	ASSERT_TRUE(conn->messages.contains(4));
 	EXPECT_EQ(conn->messages.at(4).getId(), 4);
 	EXPECT_EQ(conn->messages.at(4).getContent(), "text2");
 	EXPECT_EQ(conn->messages.at(4).getTime(), 50);
 	EXPECT_EQ(conn->messages.at(4).getSender(), 2);
+	EXPECT_EQ(conn->messages.at(4).getChat(), 1);
 	
 }
 
@@ -203,8 +207,8 @@ TEST(MessageRepoTests, getById){
 	std::shared_ptr<MockConnection> conn = connections->connection();
 	connections->freeConnection(conn);
 	
-	conn->messages.insert(std::make_pair(1, Message(1, "test1", 12, 1)));
-	conn->messages.insert(std::make_pair(2, Message(2, "test2", 50, 2)));
+	conn->messages.insert(std::make_pair(1, Message(1, "test1", 12, 1, 1)));
+	conn->messages.insert(std::make_pair(2, Message(2, "test2", 50, 2, 1)));
 
 	EXPECT_CALL(*conn, reGet(::testing::_)).Times(2);
 	MessageRepo repo((DBConnection<iConnection>*) connections.get());
@@ -223,11 +227,13 @@ TEST(MessageRepoTests, getById){
 	EXPECT_EQ(messages[0].getContent(), "test1");
 	EXPECT_EQ(messages[0].getTime(), 12);
 	EXPECT_EQ(messages[0].getSender(), 1);
+	EXPECT_EQ(messages[0].getChat(), 1);
 	
 	EXPECT_EQ(messages[1].getId(), 2);
 	EXPECT_EQ(messages[1].getContent(), "test2");
 	EXPECT_EQ(messages[1].getTime(), 50);
 	EXPECT_EQ(messages[1].getSender(), 2);
+	EXPECT_EQ(messages[0].getChat(), 1);
 }
 
 //

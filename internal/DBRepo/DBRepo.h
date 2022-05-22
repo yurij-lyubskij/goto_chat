@@ -82,6 +82,8 @@ class iConnection{
 class PGConnection: public iConnection{
     private:
 		std::vector<DBObject> putUsers(std::vector<DBObject>);
+		std::vector<DBObject> putChats(std::vector<DBObject>);
+		std::vector<DBObject> putMessages(std::vector<DBObject>);
         //void establish_connection();
 		//actual connections settings
         std::shared_ptr<PGconn>  m_connection;

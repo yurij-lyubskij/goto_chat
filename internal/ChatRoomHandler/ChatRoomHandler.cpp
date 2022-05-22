@@ -31,7 +31,7 @@ Response GetMessageFromChat::handle(Request request){
 	std::vector<iMessage> messages = repo.getFromRange(start, end, ChatRoom(std::stoi(bodySplit[0])));
 
 	for( int i = 0; i < messages.size(); ++i ) {
-		response.body += messages[i].getContent() + " " + std::to_string(messages[i].getTime()) + " " + std::to_string(messages[i].getSender()) + "\n";
+		response.body += messages[i].getContent() + " " + std::to_string(messages[i].getTime()) + " " + std::to_string(messages[i].getSender()) + " " + std::to_string(messages[i].getChat()) + "\n";
 	}
 
 	response.statusCode = 200;
