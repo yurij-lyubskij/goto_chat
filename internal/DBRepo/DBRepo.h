@@ -81,6 +81,7 @@ class iConnection{
 //PostgreSQL connection
 class PGConnection: public iConnection{
     private:
+		time_t convertTimeStamp(char*);
 		std::vector<DBObject> putUsers(std::vector<DBObject>);
 		std::vector<DBObject> putChats(std::vector<DBObject>);
 		std::vector<DBObject> putMessages(std::vector<DBObject>);

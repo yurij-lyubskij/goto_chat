@@ -1,3 +1,5 @@
+#include <time.h>
+
 #include "reDBConnection.h"
 
 TEST(PGConnectionTest, putUsers) {
@@ -74,9 +76,10 @@ TEST(PGConnectionTest, putMessages) {
 	request.objectType = chat;
 	chats = conn.exec(request, chats);
 	ASSERT_NE(chats[0].attr[0], "0");
+	chat1 = chats[0];
 
-	Message mes1("Content", 12, usr.Id, chat1.getId());
-	VoiceMessage mes2("path", 13, usr.Id, chat1.getId());
+	Message mes1("Content", std::time(NULL), usr.Id, chat1.getId());
+	VoiceMessage mes2("path", std::time(NULL), usr.Id, chat1.getId());
 
 	messages.push_back(mes1);
 	messages.push_back(mes2);
@@ -87,14 +90,15 @@ TEST(PGConnectionTest, putMessages) {
 
 	mes1 = (iMessage) messages[0];
 	mes2 = (iMessage) messages[1];
+	time_t sendTime = std::time(NULL);
 
 	EXPECT_EQ(mes1.getContent(), "Content");
-	EXPECT_EQ(mes1.getTime(), 12);
+	EXPECT_EQ(mes1.getTime(), sendTime);
 	EXPECT_EQ(mes1.getSender(), usr.Id);
 	EXPECT_EQ(mes1.getChat(), chat1.getId());
 
 	EXPECT_EQ(mes2.getContent(), "path");
-	EXPECT_EQ(mes2.getTime(), 13);
+	EXPECT_EQ(mes2.getTime(), sendTime);
 	EXPECT_EQ(mes2.getSender(), usr.Id);
 	EXPECT_EQ(mes2.getChat(), chat1.getId());
 
