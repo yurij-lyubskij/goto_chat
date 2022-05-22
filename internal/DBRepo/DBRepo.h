@@ -1,8 +1,6 @@
 #ifndef DATA_BASE_REPOS
 #define DATA_BASE_REPOS
 
-
-
 #include <stdlib.h>
 #include <string>
 #include <time.h>
@@ -81,7 +79,7 @@ class iConnection{
 
 
 //PostgreSQL connection
-class PGConnection : public iConnection{
+class PGConnection: public iConnection{
     private:
 		std::vector<DBObject> putUsers(std::vector<DBObject>);
         //void establish_connection();
@@ -116,6 +114,8 @@ class PGConnection : public iConnection{
 			const std::string inputTypeCol = 			"ip_type";
    	public:
     	PGConnection();
+		std::vector<DBObject> exec(DBRequest, std::vector<DBObject>) override;
+        std::vector<DBObject> get(DBRequest) override;
     	//std::shared_ptr<PGconn> connection() const;
 };
 
