@@ -56,7 +56,7 @@ public:
     };
 
     void async_accept(std::shared_ptr<iSocket>& socket, std::function<void(error_code ec)>& lamda) override {
-        acceptor_.async_accept((std::static_pointer_cast<Socket>(socket)) ->sock, lamda);
+        acceptor_.async_accept((std::static_pointer_cast<Socket>(socket))->sock, lamda);
     }
 };
 
