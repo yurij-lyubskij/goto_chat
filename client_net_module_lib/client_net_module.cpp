@@ -126,8 +126,14 @@ void NetModule::Parse(beast::error_code ec, size_t bytes_transferred)
 
 void NetModule::Send(const std::string &str)
 {
-    ws.async_write(asio::buffer(str), beast::bind_front_handler(&NetModule::Disconnect, shared_from_this()));
+    ws.async_write(asio::buffer(str), beast::bind_front_handler(&NetModule::OnWriting, shared_from_this()));
     ioc.run();
+}
+
+void NetModule::OnWriting(beast::error_code ec, size_t bytes_transferred) {
+    if (ec) {
+        return fail(ec, "writing");
+    }
 }
 
 void NetModule::Disconnect()
