@@ -36,6 +36,7 @@ private:
     void OnHandshake(beast::error_code);
     void Listen();
     void OnRead(beast::error_code, size_t);
+    void OnWriting(beast::error_code, size_t);
     void Parse(beast::error_code, size_t);
     void OnClose(beast::error_code);
 
