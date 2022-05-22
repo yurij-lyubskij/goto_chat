@@ -89,12 +89,11 @@ private:
     void
     do_accept() override {
         auto self = shared_from_this();
-        static std::function lamda = [self](error_code ec) {
-            if (!ec)
-                self->on_accept(ec);
-        };
-
-        acceptor_.async_accept((std::static_pointer_cast<Socket>(sock))->sock, lamda);
+//        static std::function lamda = [self](error_code ec) {
+//            if (!ec)
+//                self->on_accept(ec);
+//        };
+        acceptor_.async_accept((std::static_pointer_cast<Socket>(sock))->sock, beast::bind_front_handler(&Listener::on_accept, shared_from_this()));
     }
 
     void on_accept(error_code ec) override {
