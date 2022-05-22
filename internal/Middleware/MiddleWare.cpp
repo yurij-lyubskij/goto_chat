@@ -6,8 +6,11 @@
 
 Request &CheckAuth::operator()(Request &request) {
     std::string cookie = request.cookie;
-    User user = auth->GetUser(cookie);
-    if (user.Name.empty()) {
+    User user;
+    if (!request.cookie.empty()) {
+        user = auth->GetUser(cookie);
+    }
+    if (request.cookie.empty()|| user.Name.empty()) {
         request.responseStatus = UnAuthorized;
     }
     return request;

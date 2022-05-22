@@ -64,11 +64,7 @@ private:
     void processRequest() {
         Request request = buff->createRequest();
         request = router->UseMiddle(request);
-        Response res;
-        res.statusCode = request.responseStatus;
-        if (request.responseStatus != Unauthorized) {
-            res = router->Route(request);
-        }
+        Response res = router->Route(request);
         buff->createResponse(res);
         writeResponse();
     }
