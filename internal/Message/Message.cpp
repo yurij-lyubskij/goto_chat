@@ -10,6 +10,7 @@ Message::Message(){
 	content = "";
 	sendTime = 0;
 	senderId = 0;
+	chatId = 0;
 	type = textMessage;
 };
 
@@ -18,28 +19,32 @@ Message::Message(int _id) {
 	content = "";
 	sendTime = 0;
 	senderId = 0;
+	chatId = 0;
 	type = textMessage;
 };
 
-Message::Message(std::string _content, time_t time, int sender){
+Message::Message(std::string _content, time_t time, int sender, int chat){
 	id = 0;
 	content = _content;
 	sendTime = time;
 	senderId = sender;
+	chatId = chat;
 	type = textMessage;
 };
 
-Message::Message(int _id, std::string _content, time_t time, int sender){
+Message::Message(int _id, std::string _content, time_t time, int sender, int chat){
 	id = _id;
 	content = _content;
 	sendTime = time;
 	senderId = sender;
+	chatId = chat;
 	type = textMessage;
 };
 
 Message::Message(const Message& mes){
 	id = mes.id;
 	senderId = mes.senderId;
+	chatId = mes.chatId;
 	sendTime = mes.sendTime;
 	content = mes.content;
 	type = textMessage;
@@ -51,6 +56,7 @@ Message::Message(const iMessage& mes){
 	}
 	id = mes.getId();
 	senderId = mes.getSender();
+	chatId = mes.getChat();
 	sendTime = mes.getTime();
 	content = mes.getContent();
 	type = textMessage;
@@ -59,6 +65,7 @@ Message::Message(const iMessage& mes){
 Message Message::operator=(const Message& mes){
 	id = mes.id;
 	senderId = mes.senderId;
+	chatId = mes.chatId;
 	sendTime = mes.sendTime;
 	content = mes.content;
 	type = textMessage;
@@ -78,6 +85,7 @@ VoiceMessage::VoiceMessage(){
 	content = "";
 	sendTime = 0;
 	senderId = 0;
+	chatId = 0;
 	type = voiceMessage;
 };
 
@@ -86,28 +94,32 @@ VoiceMessage::VoiceMessage(int _id) {
 	content = "";
 	sendTime = 0;
 	senderId = 0;
+	chatId = 0;
 	type = voiceMessage;
 };
 
-VoiceMessage::VoiceMessage(std::string _content, time_t time, int sender){
+VoiceMessage::VoiceMessage(std::string _content, time_t time, int sender, int chat){
 	id = 0;
 	content = _content;
 	sendTime = time;
 	senderId = sender;
+	chatId = chat;
 	type = voiceMessage;
 };
 
-VoiceMessage::VoiceMessage(int _id, std::string _content, time_t time, int sender){
+VoiceMessage::VoiceMessage(int _id, std::string _content, time_t time, int sender, int chat){
 	id = _id;
 	content = _content;
 	sendTime = time;
 	senderId = sender;
+	chatId = chat;
 	type = voiceMessage;
 };
 
 VoiceMessage::VoiceMessage(const VoiceMessage& mes){
 	id = mes.id;
 	senderId = mes.senderId;
+	chatId = mes.chatId;
 	sendTime = mes.sendTime;
 	content = mes.content;
 	type = voiceMessage;
@@ -119,6 +131,7 @@ VoiceMessage::VoiceMessage(const iMessage& mes){
 	}
 	id = mes.getId();
 	senderId = mes.getSender();
+	chatId = mes.getChat();
 	sendTime = mes.getTime();
 	content = mes.getContent();
 	type = voiceMessage;
@@ -127,6 +140,7 @@ VoiceMessage::VoiceMessage(const iMessage& mes){
 VoiceMessage VoiceMessage::operator=(const VoiceMessage& mes){
 	id = mes.id;
 	senderId = mes.senderId;
+	chatId = mes.chatId;
 	sendTime = mes.sendTime;
 	content = mes.content;
 	type = voiceMessage;
