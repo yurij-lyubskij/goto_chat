@@ -35,6 +35,8 @@ public:
     Acceptor(net::io_context &ioc, tcp::endpoint endpoint) : ioc(ioc), acceptor_(ioc),
                                                              endpoint(std::move(endpoint))
                                                               {};
+    Acceptor(const  Acceptor&) = delete;
+    Acceptor& operator=(const  Acceptor&) = delete;
 
     void open(error_code ec) override {
         acceptor_.open(endpoint.protocol(), ec);

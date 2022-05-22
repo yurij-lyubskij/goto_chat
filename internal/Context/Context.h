@@ -16,7 +16,7 @@ public:
     Context(net::io_context &ioc) : ioc(ioc) {};
 
     void run() {
-        boost::asio::executor_work_guard<decltype(ioc.get_executor())> work{ioc.get_executor()};
+//        boost::asio::executor_work_guard<decltype(ioc.get_executor())> work{ioc.get_executor()};
             ioc.run();
     };
 private:

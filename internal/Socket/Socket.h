@@ -24,7 +24,8 @@ public:
 class Socket : public iSocket {
 public:
     tcp::socket &sock;
-
+    Socket(const Socket&) = delete;
+    Socket& operator=(const Socket&) = delete;
     explicit Socket(tcp::socket &sock) : sock(sock) {};
 
     void async_read(std::shared_ptr<IhttpBuffer> buffer,

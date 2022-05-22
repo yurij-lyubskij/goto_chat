@@ -34,7 +34,8 @@ class Listener : public std::enable_shared_from_this<Listener>, public iListener
     }
 
 public:
-
+    Listener(const  Listener&) = delete;
+    Listener& operator=(const  Listener&) = delete;
 
     Listener(
             std::shared_ptr<iSocket>& sock,
@@ -99,7 +100,8 @@ private:
             std::make_shared<UserSession>(sock, router, fabric->make())->start();
         }
         // Accept another connection
-        self->do_accept();
+        do_accept();
+//        ioc.post(do_accept());
     }
 };
 
