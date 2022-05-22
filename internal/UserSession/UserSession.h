@@ -79,7 +79,7 @@ private:
 
         buff->contentLength();
 
-        std::function lamda = [self](std::error_code ec, std::size_t) {
+        std::function lamda = [self](error_code ec, std::size_t) {
             self->socket->shutdown(ec);
         };
 

@@ -81,10 +81,13 @@ public:
 private:
     void
     do_accept() override {
-        std::function lamda = [&](error_code ec) {
+        auto self = shared_from_this();
+        std::function lamda = [self](error_code ec) {
             if (!ec)
-                on_accept(ec);
+                self->on_accept(ec);
         };
+        error_code ec;
+//        lamda(ec);
         acceptor_->async_accept(sock, lamda);
     }
 
