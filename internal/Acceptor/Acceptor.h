@@ -12,15 +12,15 @@ public:
 
     virtual ~iAcceptor() = default;
 
-    virtual void open(std::error_code ec) = 0;
+    virtual void open(error_code ec) = 0;
 
-    virtual void set_option(bool reuse, std::error_code ec) = 0;
+    virtual void set_option(bool reuse, error_code ec) = 0;
 
-    virtual void bind(std::error_code ec) = 0;
+    virtual void bind(error_code ec) = 0;
 
-    virtual void listen(std::error_code ec) = 0;
+    virtual void listen(error_code ec) = 0;
 
-    virtual void async_accept(std::shared_ptr<iSocket> socket, std::function<void(std::error_code ec)> lamda) = 0;
+    virtual void async_accept(std::shared_ptr<iSocket> socket, std::function<void(error_code ec)> lamda) = 0;
 };
 
 
@@ -32,53 +32,45 @@ public:
                                                              endpoint(std::move(endpoint))
                                                               {};
 
-    void open(std::error_code ec) override {
-        boost::system::error_code err;
-        acceptor_.open(endpoint.protocol(), err);
-        ec = std::make_error_code(static_cast<std::errc>(err.value()));
+    void open(error_code ec) override {
+        acceptor_.open(endpoint.protocol(), ec);
     };
 
-    void set_option(bool reuse, std::error_code ec) override {
-        boost::system::error_code err;
-        acceptor_.set_option(net::socket_base::reuse_address(reuse), err);
-        ec = std::make_error_code(static_cast<std::errc>(err.value()));
+    void set_option(bool reuse, error_code ec) override {
+        acceptor_.set_option(net::socket_base::reuse_address(reuse), ec);
     };
 
-    void bind(std::error_code ec) override {
-        boost::system::error_code err;
-        acceptor_.bind(endpoint, err);
-        ec = std::make_error_code(static_cast<std::errc>(err.value()));
+    void bind(error_code ec) override {
+        acceptor_.bind(endpoint, ec);
     };
 
-    void listen(std::error_code ec) override {
-        boost::system::error_code err;
+    void listen(error_code ec) override {
         acceptor_.listen(
-                net::socket_base::max_listen_connections, err);
-        ec = std::make_error_code(static_cast<std::errc>(err.value()));
+                net::socket_base::max_listen_connections, ec);
     };
 
-    void async_accept(std::shared_ptr<iSocket> socket, std::function<void(std::error_code ec)> lamda) override {
+    void async_accept(std::shared_ptr<iSocket> socket, std::function<void(error_code ec)> lamda) override {
         acceptor_.async_accept((std::static_pointer_cast<Socket>(socket)) ->sock, lamda);
     }
 };
 
 class reAcceptor : public iAcceptor {
 public:
-    void open(std::error_code ec) override {
+    void open(error_code ec) override {
     };
 
-    void set_option(bool reuse, std::error_code ec) override {
+    void set_option(bool reuse, error_code ec) override {
     };
 
-    void bind(std::error_code ec) override {
-
-    };
-
-    void listen(std::error_code ec) override {
+    void bind(error_code ec) override {
 
     };
 
-    void async_accept(std::shared_ptr<iSocket> socket, std::function<void(std::error_code ec)> lamda) override {
+    void listen(error_code ec) override {
+
+    };
+
+    void async_accept(std::shared_ptr<iSocket> socket, std::function<void(error_code ec)> lamda) override {
     }
 };
 
