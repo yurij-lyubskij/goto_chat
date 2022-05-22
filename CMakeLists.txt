@@ -9,4 +9,5 @@ add_subdirectory(client_net_module_lib)
 
 set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS} "-Wall -Werror -Wpedantic")
 
-add_subdirectory(test)
+add_subdirectory(tests)
+#add_subdirectory(client_net_module_lib)
