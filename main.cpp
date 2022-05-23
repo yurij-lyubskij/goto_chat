@@ -20,6 +20,8 @@ int main() {
     router->AddHandler(login);
     std::shared_ptr<iHandler> logout(new Logout(auth, repo));
     router->AddHandler(logout);
+    std::shared_ptr<iHandler> example(new Example);
+    router->AddHandler(example);
     std::shared_ptr<iBufferFabric> fabric (new BufferFabric);
     std::shared_ptr<iAcceptor> acceptor(new Acceptor(ioc, tcp::endpoint{address, port}));
     std::make_shared<Listener>(

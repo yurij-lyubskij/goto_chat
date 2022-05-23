@@ -100,3 +100,16 @@ Response CreateNewUser::Handle(Request req) {
     return response;
 }
 
+bool Example::CanHandle(Request req) {
+    return req.target == "/user/example";
+}
+
+Response Example::Handle(Request req) {
+    Response response;
+    response.statusCode = OK;
+    if (req.responseStatus != OK) {
+        response.statusCode = UnAuthorized;
+        return response;
+    }
+    return response;
+}

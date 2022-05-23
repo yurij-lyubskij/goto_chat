@@ -103,4 +103,11 @@ public:
     Response Handle(Request) override;;
 };
 
+class Example : public iHandler {
+public:
+    bool CanHandle(Request) override;
+
+    Response Handle(Request) override;;
+};
+
 #endif //GOTO_CHAT_HANDLER_H
