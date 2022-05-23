@@ -13,10 +13,14 @@ message("TEST SOURCES\n ${TEST_SOURCES}")
 #one main in tests and in project
 file(GLOB SOURCES ${SOURCES} main.cpp)
 
-file(GLOB INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR} internal/*/)
+file(GLOB INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR} internal/*/ include/)
+
+
+
 
 message("MAIN SOURCES\n ${SOURCES}")
 message("MAIN INCLUDE_DIRS\n ${INCLUDE_DIRS}")
+message("RAPID\n ${RAPID}")
 add_executable(${PROJECT_NAME} ${SOURCES})
 target_include_directories(${PROJECT_NAME} PUBLIC ${INCLUDE_DIRS})
 

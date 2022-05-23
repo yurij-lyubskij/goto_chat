@@ -5,6 +5,13 @@
 #ifndef GOTO_CHAT_JSONPARSER_H
 #define GOTO_CHAT_JSONPARSER_H
 #include "User.h"
+#include <iostream>
+
+#include "rapidjson/writer.h"
+
+#include "rapidjson/document.h"
+
+#include "rapidjson/stringbuffer.h"
 
 class IjsonParser {
 public:
