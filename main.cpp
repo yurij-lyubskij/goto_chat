@@ -7,7 +7,6 @@ int main() {
     auto const port = static_cast<unsigned short>(8080);
 
     net::io_context ioc{1};
-    tcp::socket mysock {ioc};
     std::shared_ptr<iRouter> router (new Router);
     std::shared_ptr<iMiddle> checkAuth(new CheckAuth);
     router->AddMiddle(checkAuth);
@@ -17,10 +16,9 @@ int main() {
     router->AddHandler(login);
     std::shared_ptr<iHandler> logout(new Logout);
     router->AddHandler(logout);
-    std::shared_ptr<iSocket> sock (new Socket(mysock));
     std::shared_ptr<iBufferFabric> fabric (new BufferFabric);
     auto listener = std::make_shared<Listener>(
-            sock, ioc, tcp::endpoint{address, port},
+            ioc, tcp::endpoint{address, port},
             router, fabric);
     listener->run();
     // Run the I/O service in Server

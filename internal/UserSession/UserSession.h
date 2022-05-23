@@ -31,7 +31,7 @@ class UserSession : public std::enable_shared_from_this<UserSession>, iUserSessi
 public:
     UserSession(const UserSession&) = delete;
     UserSession& operator=(const UserSession&) = delete;
-    UserSession(std::shared_ptr<iSocket>& socket,
+    UserSession(std::shared_ptr<iSocket> socket,
                 std::shared_ptr<iRouter> router,
                 std::shared_ptr<IhttpBuffer> buff)
             : socket(socket), router(std::move(router)), buff(std::move(buff)) {
@@ -44,7 +44,7 @@ public:
 
 private:
     // The socket for the currently connected client.
-    std::shared_ptr<iSocket>& socket;
+    std::shared_ptr<iSocket> socket;
     std::shared_ptr<iRouter> router;
     std::shared_ptr<IhttpBuffer> buff;
 
