@@ -2,19 +2,33 @@
 #include "DBRepo.h"
 
 
-bool ChatRoom::addUser(User user){
-	return true;
-}
+ChatRoom::ChatRoom(){ 
+	id = -1; 
+	name = "";
+};
 
-bool ChatRoom::removeUser(User user){
-	return true;
-}
+ChatRoom::ChatRoom(int _id){ 
+	id = _id; 
+	name = "";
+};
 
-bool ChatRoom::reactOn(Message mes){
-	return true;
-}
+ChatRoom::ChatRoom(std::string _name){
+	id = 0;
+	name = _name;
+};
 
-std::vector<User> ChatRoom::getMembers(){
-	std::vector<User> usrs;
-	return usrs;
-}
+ChatRoom::ChatRoom(int _id, std::string _name){
+	id = _id;
+	name = _name;
+};
+
+ChatRoom::ChatRoom(const ChatRoom& cht){
+	id = cht.id;
+	name = cht.name;
+};
+
+ChatRoom ChatRoom::operator=(const ChatRoom& cht){
+	id = cht.id;
+	name = cht.name;
+	return *this;
+};

@@ -9,21 +9,20 @@
 class iChatRoom{
 	protected:
 		int id;
+		std::string name;
 	public:
-		virtual bool addUser(User user) = 0;
-		virtual bool removeUser(User user) = 0;
-		virtual bool reactOn(Message mes) = 0;
-		virtual std::vector<User> getMembers() = 0;
+		int getId() const { return id; };
+		std::string getName() const { return name; };
 };
 
 class ChatRoom: public iChatRoom{
 	public:
-		ChatRoom(){};
-		ChatRoom(int){};
-		bool addUser(User user) override;
-		bool removeUser(User user) override;
-		bool reactOn(Message mes) override;
-		std::vector<User> getMembers() override;
+		ChatRoom();					//Creates empty(false) object
+		ChatRoom(int);
+		ChatRoom(std::string);		//Creates object with id = 0 to add to database
+		ChatRoom(int, std::string);
+		ChatRoom(const ChatRoom&);
+		ChatRoom operator=(const ChatRoom&);
 };
 
 #endif
