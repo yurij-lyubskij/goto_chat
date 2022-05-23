@@ -4,7 +4,8 @@
 #include <QMainWindow>
 #include "recorder.h"
 #include <QTime>
-
+#include <QMediaPlayer>
+#include <QAudioOutput>
 namespace Ui {
     class App_window;
 }
@@ -51,7 +52,11 @@ private slots:
 
     void on_toolButton_3_released();
 
+    void on_pushButton_clicked();
+
 private:
+    QMediaPlayer player;
+    QAudioOutput audioOutput;
     recorder rec;
     QString login;
     Ui::App_window *ui;
