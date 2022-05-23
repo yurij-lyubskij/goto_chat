@@ -31,6 +31,7 @@ public:
 
     void logout();
 
+    void refresh_timer();
 
 public slots:
     void set_person(const QString &Login);
@@ -54,6 +55,7 @@ private:
     recorder rec;
     QString login;
     Ui::App_window *ui;
+    std::atomic_bool f = true;
 };
 
 #endif // APP_WINDOW_H
