@@ -8,14 +8,9 @@
 /*
 //
 //UserRepo Section
-//
-TEST(UserRepoTests, DoesExist){
-	MockConnection conn;
-	EXPECT_CALL(conn, exec(::testing::_, ::testing::_)).Times(3);
-
-	UserRepo repo;
-	EXPECT_FALSE(repo.doesExist(1));
-
+/*
+TEST(UserRepoTests, getById){
+=======
 	User usr;
 	usr.Id = 1;
 	usr.Name = "abc";

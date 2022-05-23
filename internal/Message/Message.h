@@ -6,6 +6,7 @@
 
 enum MessegeType{ textMessage, voiceMessage };
 
+
 class iMessage{
 	protected:
 		int id;

@@ -10,6 +10,9 @@
 //Is used when user need to download new N messages from chat
 class GetMessageFromChat: public iHandler{
 	public:
+		bool CanHandle(Request) override;
+		Response Handle(Request);
+};
 		GetMessageFromChat(DBConnection<iConnection>* conn): connections(conn){};
 		bool canHandle(Request) override;
 		Response handle(Request) override;
@@ -34,6 +37,14 @@ class CreateChatRoom: public iHandler{
 //Is used when one user tries to join existing chat
 class JoinChatRoom: public iHandler{
 	public:
+		bool CanHandle(Request);
+		Response Handle(Request);
+
+
+class NotifyUsers: public iHandler{
+	public:
+		bool CanHandle(Request);
+		Response Handle(Request);
 		JoinChatRoom(DBConnection<iConnection>* conn): connections(conn){};
 		bool canHandle(Request) override;
 		Response handle(Request) override;

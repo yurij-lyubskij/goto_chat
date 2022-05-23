@@ -9,6 +9,7 @@
 #include "Response.h"
 #include "DBRepo.h"
 //GetMessageFromChat
+
 bool GetMessageFromChat::canHandle(Request request){
 	return request.target == REQUESTED_TARGET;
 };
@@ -36,6 +37,7 @@ Response GetMessageFromChat::handle(Request request){
 
 	response.statusCode = 200;
 	return response;
+
 };
 
 std::vector<std::string> GetMessageFromChat::split(const std::string &s) {
@@ -133,6 +135,16 @@ std::vector<std::string> JoinChatRoom::split(const std::string &s) {
     return elems;
 }
 //end of JoinChatRoom
+
+
+//NotifyUsers
+bool NotifyUsers::CanHandle(Request request){
+	return false;
+};
+
+Response NotifyUsers::Handle(Request request){
+	return Response();};
+//end of NotifyUsers
 
 //FindChatRoom
 bool FindChatRoom::canHandle(Request request){

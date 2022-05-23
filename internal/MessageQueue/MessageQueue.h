@@ -1,3 +1,6 @@
+//
+// Created by yura11011 on 15.04.22.
+//
 #ifndef GOTO_CHAT_MESSAGEQUEUE_H
 #define GOTO_CHAT_MESSAGEQUEUE_H
 
@@ -21,6 +24,5 @@ public:
 
     std::shared_ptr<iMessage> pop() override;
 };
-
 
 #endif //GOTO_CHAT_MESSAGEQUEUE_H
