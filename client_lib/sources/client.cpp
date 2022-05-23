@@ -1,5 +1,4 @@
 #include "client.h"
-#include "middleware.h"
 
 Client::Client() {
     mid = new Middleware(this);

@@ -17,6 +17,9 @@ add_library(client_lib STATIC
     ${CMAKE_CURRENT_SOURCE_DIR}/sources/client.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/middleware_lib/middleware.h
     ${CMAKE_CURRENT_SOURCE_DIR}/middleware_lib/middleware.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/client_net_module_lib/client_net_module.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/client_net_module_lib/client_net_module.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/client_net_module_lib/server_address.h
 )
 #target_link_libraries(client_lib PRIVATE Qt6::Widgets)
 target_include_directories(client_lib PRIVATE ${INCLUDES})

@@ -6,6 +6,11 @@ Middleware::Middleware(Client* c) : client(c) {
     net->Run(SERVER_IP, SERVER_PORT);
 }
 
+Middleware::~Middleware()
+{
+
+}
+
 void Middleware::send(const std::string &chat_name, const std::string &text) {
 
 }
