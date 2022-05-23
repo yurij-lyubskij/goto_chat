@@ -22,33 +22,6 @@ public:
     virtual Response Handle(Request) = 0;
 };
 
-class GetChatHistory : public iHandler {
-public:
-    bool CanHandle(Request) override;
-
-    Response Handle(Request) override;
-};
-
-class CreateChatRoom : public iHandler {
-public:
-    bool CanHandle(Request) override;
-
-    Response Handle(Request) override;
-};
-
-class FindChatRoom : public iHandler {
-public:
-    bool CanHandle(Request) override;
-
-    Response Handle(Request) override;
-};
-
-class JoiChatRoom : public iHandler {
-public:
-    bool CanHandle(Request) override;
-
-    Response Handle(Request) override;
-};
 
 class CreateNewUser : public iHandler {
     std::shared_ptr<iAuthDb> auth;

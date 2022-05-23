@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.14)
 project(goto_chat)
 
 set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_FLAGS  ${CMAKE_CXX_FLAGS} " -pthread -lboost_thread")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}  -pthread -lboost_thread" )
 
 file(GLOB SOURCES internal/*/*.cpp)
 
