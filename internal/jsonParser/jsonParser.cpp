@@ -3,12 +3,19 @@
 //
 
 #include "jsonParser.h"
+using namespace rapidjson;
 
 User jsonParser::parseUser(std::string body) {
+//    std::cout << body <<"\n";
+
+    Document d;
+    const char* json = body.c_str();
+    d.Parse(json);
+
     User user;
-    user.Id = 1;
-    user.Name = body;
-    user.PhoneNumber = body;
+//    user.Id = d["Id"].GetInt();
+    user.Name = d["username"].GetString();
+    user.PhoneNumber = d["phone"].GetString();;
     return user;
 }
 

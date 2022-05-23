@@ -1,0 +1,8 @@
+curl -i --header "Content-Type: application/json"   --request POST   --data '{"username": "string1",   "phone": "12345",   "password": "string" }'   http://localhost:8080/user/create
+
+HTTP/1.1 200 OK
+Server: Boost.Beast/266
+Content-Type: text/plain
+Cookie: eVfbxjDhZgHnpgeQBus4zw8NGYBUgGfIjIrh04OZidKWJwuSqmVphdAv9MQna53KMt1MxNteyDAH94hypCnWowRvGpjqtk8Fd7bZUUDSfNhoPNkEXWiJSAFgxwWqgd5IkerF84flPLYoiI1FojZGrmwpiRdM4heoLV1SXhDw0lli4kvsTU7JE16wQjJUQxHkRICyxNvx7edBOZ1p166G6CAWuTzIPG2qWCmSahNhJ1qfYpVXuZl0mwWeNVwmjza
+Connection: close
+Content-Length: 0
