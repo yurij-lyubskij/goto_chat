@@ -22,7 +22,7 @@ public:
 private:
     virtual void do_accept() = 0;
 
-    virtual void on_accept(error_code ec, tcp::socket socket) = 0;
+    virtual void on_accept(error_code ec) = 0;
 };
 
 class Listener : public std::enable_shared_from_this<Listener>, public iListener {
@@ -30,6 +30,7 @@ class Listener : public std::enable_shared_from_this<Listener>, public iListener
     tcp::acceptor acceptor_;
     tcp::endpoint endpoint;
     net::io_context &ioc;
+    tcp::socket socket;
     std::shared_ptr<iRouter> router;
     std::shared_ptr<iBufferFabric> fabric;
     static void fail(error_code ec, char const *what) {
@@ -45,7 +46,7 @@ public:
             std::shared_ptr<iRouter> router,
             std::shared_ptr<iBufferFabric> fabric
     )
-            : acceptor_(ioc), router(std::move(router)), fabric(std::move(fabric)), ioc(ioc),
+            : acceptor_(ioc), socket{ioc}, router(std::move(router)), fabric(std::move(fabric)), ioc(ioc),
     endpoint(std::move(endpoint)){
          error_code ec;
         // Open the acceptor
@@ -88,18 +89,18 @@ private:
     do_accept() override {
         auto self = shared_from_this();
 //        acceptor_.async_accept((std::static_pointer_cast<Socket>(sock))->sock, beast::bind_front_handler(&Listener::on_accept, shared_from_this()));
-        acceptor_.async_accept( ioc, beast::bind_front_handler(&Listener::on_accept, shared_from_this()));
+        acceptor_.async_accept(socket, beast::bind_front_handler(&Listener::on_accept, shared_from_this()));
 
     }
 
-    void on_accept(error_code ec, tcp::socket socket) override {
+    void on_accept(error_code ec) override {
         auto self = shared_from_this();
         if (ec) {
             fail(ec, "accept");
             return; // To avoid infinite loop
         } else {
             // Create the session and run it
-            std::shared_ptr<iSocket> sock (new Socket(socket));
+            std::shared_ptr<Socket> sock  = std::make_shared<Socket>(std::move(socket));
             std::make_shared<UserSession>(sock, router, fabric->make())->start();
         }
         // Accept another connection
