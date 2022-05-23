@@ -11,6 +11,7 @@ public:
     std::string Name;
     size_t Id;
     std::string PhoneNumber;
+    std::string password;
 };
 
 

@@ -15,7 +15,7 @@ Response Login::Handle(Request req) {
     User user = parser->parseUser(req.body);
     Response response;
     auto userCheck =  users->GetbyPhone(user.PhoneNumber);
-    if (userCheck.Name.empty() || (user.Name != userCheck.Name)){
+    if (userCheck.Name.empty() || (user.password!= userCheck.password)){
         response.statusCode = NotFound;  //User Not Found
         return response;
     }
