@@ -13,7 +13,10 @@ User jsonParser::parseUser(std::string body) {
     d.Parse(json);
     User user;
     user.Id = 0;
-    user.Name = d["username"].GetString();
+    user.Name = "";
+    if (d.HasMember("username")){
+        user.Name = d["username"].GetString();
+    }
     user.PhoneNumber = d["phone"].GetString();
     user.password = d["password"].GetString();
     return user;

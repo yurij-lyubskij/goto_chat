@@ -42,7 +42,7 @@ Content-Length: 0
 
 curl -i --header "Content-Type: application/json" \
   --request POST \
-  --data '{"username": "string1",   "phone": "12345",   "password": "string" }' \
+  --data '{"phone": "12345",   "password": "string" }' \
   http://localhost:8080/session/create
 
   curl -i --header "Content-Type: application/json" \
