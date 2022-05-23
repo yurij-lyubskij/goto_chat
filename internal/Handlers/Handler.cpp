@@ -14,7 +14,7 @@ bool Login::CanHandle(Request req) {
 Response Login::Handle(Request req) {
     User user = parser->parseUser(req.body);
     Response response;
-    auto userCheck =  users->GetbyName(user.Name);
+    auto userCheck =  users->GetbyPhone(user.PhoneNumber);
     if (userCheck.Name.empty() || (user.Name != userCheck.Name)){
         response.statusCode = NotFound;  //User Not Found
         return response;
@@ -88,13 +88,13 @@ bool CreateNewUser::CanHandle(Request req) {
 Response CreateNewUser::Handle(Request req) {
     User user = parser->parseUser(req.body);
     Response response;
-    auto userCheck =  users->GetbyName(user.Name);
+    auto userCheck =  users->GetbyPhone(user.PhoneNumber);
     if (! userCheck.Name.empty()){
         response.statusCode = BadRequest;
         return response;
     }
     users->CreateUser(user);
-    user = users->GetbyName(user.Name);
+    user = users->GetbyPhone(user.PhoneNumber);
     response.cookie = auth->SetCookie(user) ;
     response.statusCode = OK;
     return response;

@@ -8,7 +8,7 @@
 size_t UserRepo::CreateUser(User user) {
     user.Id = ++counter;
     UserMap[user.Id] = user;
-    UserbyName[user.Name] = user;
+    UserbyPhone[user.PhoneNumber] = user;
     return user.Id;
 }
 
@@ -16,15 +16,15 @@ User UserRepo::GetbyId(size_t id) {
     return UserMap[id];
 }
 
-User UserRepo::GetbyName(std::string Name) {
-    return UserbyName[Name];
+User UserRepo::GetbyPhone(std::string Phone){
+    return UserbyPhone[Phone];
 }
 
 bool UserRepo::UpdateUser(User user) {
     UserMap.erase(user.Id);
-    UserbyName.erase(user.Name);
+    UserbyPhone.erase(user.PhoneNumber);
     UserMap[user.Id] = user;
-    UserbyName[user.Name] = user;
+    UserbyPhone[user.PhoneNumber] = user;
     return true;
 }
 
@@ -39,10 +39,10 @@ std::vector<User> UserRepo::getManyByID(std::vector<size_t> id) {
 
 bool UserRepo::update(std::vector<User> users) {
     for (const auto& user : users) {
-        UserbyName.erase(user.Name);
+        UserbyPhone.erase(user.PhoneNumber);
         UserMap.erase(user.Id);
         UserMap[user.Id] = user;
-        UserbyName[user.Name] = user;
+        UserbyPhone[user.PhoneNumber] = user;
     }
     return true;
 }
@@ -50,7 +50,7 @@ bool UserRepo::update(std::vector<User> users) {
 bool UserRepo::CreateMany(std::vector<User> users) {
     for (const auto& user : users) {
         UserMap[user.Id] = user;
-        UserbyName[user.Name] = user;
+        UserbyPhone[user.PhoneNumber] = user;
     }
     return true;
 }
