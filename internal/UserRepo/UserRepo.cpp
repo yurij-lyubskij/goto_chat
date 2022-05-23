@@ -4,9 +4,11 @@
 
 #include "UserRepo.h"
 
+
 size_t UserRepo::CreateUser(User user) {
     user.Id = ++counter;
     UserMap[user.Id] = user;
+    UserbyName[user.Name] = user;
     return user.Id;
 }
 
@@ -14,9 +16,15 @@ User UserRepo::GetbyId(size_t id) {
     return UserMap[id];
 }
 
+User UserRepo::GetbyName(std::string Name) {
+    return UserbyName[Name];
+}
+
 bool UserRepo::UpdateUser(User user) {
     UserMap.erase(user.Id);
+    UserbyName.erase(user.Name);
     UserMap[user.Id] = user;
+    UserbyName[user.Name] = user;
     return true;
 }
 
@@ -31,8 +39,10 @@ std::vector<User> UserRepo::getManyByID(std::vector<size_t> id) {
 
 bool UserRepo::update(std::vector<User> users) {
     for (const auto& user : users) {
+        UserbyName.erase(user.Name);
         UserMap.erase(user.Id);
         UserMap[user.Id] = user;
+        UserbyName[user.Name] = user;
     }
     return true;
 }
@@ -40,6 +50,7 @@ bool UserRepo::update(std::vector<User> users) {
 bool UserRepo::CreateMany(std::vector<User> users) {
     for (const auto& user : users) {
         UserMap[user.Id] = user;
+        UserbyName[user.Name] = user;
     }
     return true;
 }

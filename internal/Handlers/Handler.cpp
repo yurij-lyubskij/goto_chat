@@ -25,23 +25,20 @@ Response Login::Handle(Request req) {
     return response;
 }
 
-Login::Login(): auth(new AuthDb), users(new UserRepo) {
-
-}
 
 bool Logout::CanHandle(Request req) {
     return req.target == "/session/delete";
 }
 
 Response Logout::Handle(Request req) {
-    auth->DeleteCookie(req.cookie);
+    int deleted = auth->DeleteCookie(req.cookie);
     Response response;
     response.cookie = "";
     response.statusCode = OK;
+    if (deleted == 0) {
+        response.statusCode = NotFound;
+    }
     return response;
-}
-
-Logout::Logout(): auth(new AuthDb), users(new UserRepo){
 }
 
 bool SendMessage::CanHandle(Request) {
@@ -91,19 +88,15 @@ bool CreateNewUser::CanHandle(Request req) {
 Response CreateNewUser::Handle(Request req) {
     User user = parser->parseUser(req.body);
     Response response;
-    auto userCheck =  users->GetbyId(user.Id);
+    auto userCheck =  users->GetbyName(user.Name);
     if (! userCheck.Name.empty()){
         response.statusCode = BadRequest;
         return response;
     }
     users->CreateUser(user);
-    user = users->GetbyId(user.Id);
+    user = users->GetbyName(user.Name);
     response.cookie = auth->SetCookie(user) ;
     response.statusCode = OK;
     return response;
 }
 
-CreateNewUser::CreateNewUser(): auth(new AuthDb), users(new UserRepo), parser(new jsonParser) {
-
-
-}

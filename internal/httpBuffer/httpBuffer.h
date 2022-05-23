@@ -55,7 +55,12 @@ public:
         Request req;
         req.parameters["<field_name>"] = static_cast<std::string> (request_["<field_name>"]);
         req.method = static_cast<std::string>(request_.method_string());
-        req.cookie = static_cast<std::string>(http::param_list(request_[http::field::cookie]).begin()->second);
+//        auto cookies = http::param_list(request_[http::field::cookie]);
+//        for(auto param : http::param_list(request_[http::field::cookie])) {
+//            std::cout << "Cookie " << param.first << " has value " << param.second << "\n";
+//        }
+        auto cookies = request_[http::field::cookie];
+        req.cookie = static_cast<std::string>(cookies.substr(cookies.find("=") + 1));
         req.target = static_cast<std::string>(request_.target());
         req.body = static_cast<std::string>(request_.body());
         return req;
@@ -71,6 +76,7 @@ public:
         response_.keep_alive(false);
         response_.body() = response_.body();
         response_.result(response.statusCode);
+        response_.set("Set-Cookie", response.cookie);
     }
 };
 

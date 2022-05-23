@@ -23,7 +23,7 @@ class CheckAuth : public iMiddle {
     std::shared_ptr<iAuthDb> auth;
 public:
     explicit CheckAuth(std::shared_ptr<iAuthDb> auth): auth(std::move(auth)){};
-    CheckAuth()= default;
+    CheckAuth()= delete;
     Request& operator() (Request& request) override;
 };
 

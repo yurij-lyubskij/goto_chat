@@ -23,6 +23,8 @@ public:
 
     virtual User GetbyId(size_t id) = 0;
 
+    virtual  User GetbyName(std::string Name) = 0;
+
     virtual std::vector<User> getManyByID(std::vector<size_t> id) = 0;
 
     virtual bool update(std::vector<User> users) = 0;
@@ -34,6 +36,7 @@ public:
 class UserRepo : public iUserRepo {
     DBConnection<iConnection> *connection;
     std::map<size_t, User> UserMap;
+    std::map<std::string, User> UserbyName;
     size_t counter;
 public:
     UserRepo(): counter(0){};
@@ -42,6 +45,7 @@ public:
     bool UpdateUser(User user) override;
 
     User GetbyId(size_t id) override;
+    User GetbyName(std::string Name) override;
 
     std::vector<User> getManyByID(std::vector<size_t> id) override;
 
