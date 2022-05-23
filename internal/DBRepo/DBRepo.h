@@ -104,8 +104,8 @@ class PGConnection: public iConnection{
 		std::string m_dbhost = "localhost";
     	int         m_dbport = 5432;
 		std::string m_dbname = "gotochatdatabase";
-    	std::string m_dbuser = "postgres";
-    	std::string m_dbpass = "postgres";
+    	std::string m_dbuser = "gotochat";
+    	std::string m_dbpass = "gotochat";
 		//table and columns names
 		const std::string usersTableName = 			"users";
 			const std::string userIdCol = 				"us_id";
