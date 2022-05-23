@@ -17,11 +17,10 @@ int main() {
     router->AddHandler(login);
     std::shared_ptr<iHandler> logout(new Logout);
     router->AddHandler(logout);
-    std::shared_ptr<iSocket> sock (new Socket(mysock));
     std::shared_ptr<iBufferFabric> fabric (new BufferFabric);
     std::shared_ptr<iAcceptor> acceptor(new Acceptor(ioc, tcp::endpoint{address, port}));
     std::make_shared<Listener>(
-            sock,
+            std::move(mysock),
             acceptor, router, fabric)->run();
     // Run the I/O service in Server
     std::shared_ptr<iContext> cont(new Context(ioc));

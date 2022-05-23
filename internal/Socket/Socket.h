@@ -23,9 +23,9 @@ public:
 
 class Socket : public iSocket {
 public:
-    tcp::socket &sock;
+    tcp::socket sock;
 
-    explicit Socket(tcp::socket &sock) : sock(sock) {};
+    explicit Socket(tcp::socket sock) : sock(std::move(sock)) {};
 
     void async_read(std::shared_ptr<IhttpBuffer> buffer,
                     std::function<void(error_code, unsigned long)> lamda) override {

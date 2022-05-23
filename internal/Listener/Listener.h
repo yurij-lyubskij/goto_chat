@@ -7,7 +7,6 @@
 
 #include <utility>
 
-#include "Acceptor.h"
 #include "UserSession.h"
 
 class iListener {
@@ -26,8 +25,9 @@ private:
 
 class Listener : public std::enable_shared_from_this<Listener>, public iListener {
     std::shared_ptr<iAcceptor> acceptor_;
-    std::shared_ptr<iSocket> sock;
     std::shared_ptr<iRouter> router;
+    tcp::socket socket;
+    std::shared_ptr<iSocket> sock;
     std::shared_ptr<iBufferFabric> fabric;
     static void fail(error_code ec, char const *what) {
         std::cerr << what << ": " << ec.message() << "\n";
@@ -37,12 +37,12 @@ public:
 
 
     Listener(
-            std::shared_ptr<iSocket> sock,
+            tcp::socket sock,
             std::shared_ptr<iAcceptor> acceptor,
             std::shared_ptr<iRouter> router,
             std::shared_ptr<iBufferFabric> fabric
     )
-            : acceptor_(std::move(acceptor)), sock(std::move(sock)), router(std::move(router)), fabric(std::move(fabric)) {
+            : acceptor_(std::move(acceptor)), socket(std::move(sock)), router(std::move(router)), fabric(std::move(fabric)) {
          error_code ec;
         // Open the acceptor
         acceptor_->open(ec);
@@ -87,7 +87,8 @@ private:
                 self->on_accept(ec);
         };
         error_code ec;
-//        lamda(ec);
+        std::shared_ptr<iSocket> new_sock (new Socket(std::move(socket)));
+        sock = new_sock;
         acceptor_->async_accept(sock, lamda);
     }
 
