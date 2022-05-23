@@ -12,15 +12,15 @@ bool Login::CanHandle(Request req) {
 }
 
 Response Login::Handle(Request req) {
-    User user = auth->GetUser(req.cookie);
+    User user = parser->parseUser(req.body);
     Response response;
-    auto userCheck =  users->GetbyId(user.Id);
-    response.cookie = req.cookie;
-    response.statusCode = OK;
-    if (user.Name.empty() || (user.Name != userCheck.Name)){
-        std::cout <<"result = "<< user.Name << "\n";
-        response.statusCode = UnAuthorized;
+    auto userCheck =  users->GetbyName(user.Name);
+    if (userCheck.Name.empty() || (user.Name != userCheck.Name)){
+        response.statusCode = NotFound;  //User Not Found
+        return response;
     }
+    response.cookie = auth->SetCookie(user) ;
+    response.statusCode = OK;
 //    response.body = "json here sometimes";
     return response;
 }

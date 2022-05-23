@@ -12,10 +12,11 @@ int main() {
     std::shared_ptr<iAuthDb> auth (new AuthDb);
     std::shared_ptr<iUserRepo> repo (new UserRepo());
     std::shared_ptr<iMiddle> checkAuth(new CheckAuth(auth));
+    std::shared_ptr<IjsonParser> parser(new jsonParser);
     router->AddMiddle(checkAuth);
-    std::shared_ptr<iHandler> createUser(new CreateNewUser(auth, repo));
+    std::shared_ptr<iHandler> createUser(new CreateNewUser(auth, repo, parser));
     router->AddHandler(createUser);
-    std::shared_ptr<iHandler> login(new Login(auth, repo));
+    std::shared_ptr<iHandler> login(new Login(auth, repo, parser));
     router->AddHandler(login);
     std::shared_ptr<iHandler> logout(new Logout(auth, repo));
     router->AddHandler(logout);

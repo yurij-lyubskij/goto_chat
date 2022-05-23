@@ -54,10 +54,13 @@ class CreateNewUser : public iHandler {
     std::shared_ptr<iUserRepo> users;
     std::shared_ptr<IjsonParser> parser;
 public:
-    CreateNewUser()= delete;
-    explicit CreateNewUser(std::shared_ptr<iAuthDb> auth, std::shared_ptr<iUserRepo> user):auth(std::move(auth)), users(std::move(user)){
-        parser(new jsonParser);
+    CreateNewUser() = delete;
+
+    explicit CreateNewUser(std::shared_ptr<iAuthDb> auth, std::shared_ptr<iUserRepo> user,
+                           std::shared_ptr<IjsonParser> parser) : auth(std::move(auth)), users(std::move(user)),
+                                                                  parser(std::move(parser)) {
     };
+
     bool CanHandle(Request) override;
 
     Response Handle(Request) override;
@@ -66,9 +69,14 @@ public:
 class Login : public iHandler {
     std::shared_ptr<iAuthDb> auth;
     std::shared_ptr<iUserRepo> users;
+    std::shared_ptr<IjsonParser> parser;
 public:
-    explicit Login(std::shared_ptr<iAuthDb> auth, std::shared_ptr<iUserRepo> user):auth(std::move(auth)), users(std::move(user)){};
+    explicit Login(std::shared_ptr<iAuthDb> auth, std::shared_ptr<iUserRepo> user,
+                   std::shared_ptr<IjsonParser> parser) : auth(std::move(auth)), users(std::move(user)),
+                                                          parser(std::move(parser)) {};
+
     Login() = delete;
+
     bool CanHandle(Request) override;
 
     Response Handle(Request) override;
@@ -78,8 +86,11 @@ class Logout : public iHandler {
     std::shared_ptr<iAuthDb> auth;
     std::shared_ptr<iUserRepo> users;
 public:
-    Logout ()= delete;
-    explicit Logout(std::shared_ptr<iAuthDb> auth, std::shared_ptr<iUserRepo> user):auth(std::move(auth)), users(std::move(user)){};
+    Logout() = delete;
+
+    explicit Logout(std::shared_ptr<iAuthDb> auth, std::shared_ptr<iUserRepo> user) : auth(std::move(auth)),
+                                                                                      users(std::move(user)) {};
+
     bool CanHandle(Request) override;
 
     Response Handle(Request) override;
