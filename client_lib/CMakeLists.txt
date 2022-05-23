@@ -1,11 +1,13 @@
 set(INCLUDES
         ${CMAKE_CURRENT_SOURCE_DIR}/headers/
+        ${CMAKE_CURRENT_SOURCE_DIR}/client_net_module_lib/
+        ${CMAKE_CURRENT_SOURCE_DIR}/middleware_lib/
         )
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC_SEARCH_PATHS ${INCLUDES})
 
-find_package(Qt6 REQUIRED COMPONENTS Widgets)
+#find_package(Qt6 REQUIRED COMPONENTS Widgets)
 
 add_subdirectory(client_net_module_lib)
 add_subdirectory(message_lib)
@@ -13,8 +15,10 @@ add_subdirectory(message_lib)
 add_library(client_lib STATIC
     ${CMAKE_CURRENT_SOURCE_DIR}/headers/client.h
     ${CMAKE_CURRENT_SOURCE_DIR}/sources/client.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/middleware_lib/middleware.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/middleware_lib/middleware.cpp
 )
-target_link_libraries(client_lib PRIVATE Qt6::Widgets)
+#target_link_libraries(client_lib PRIVATE Qt6::Widgets)
 target_include_directories(client_lib PRIVATE ${INCLUDES})
 target_include_directories(client_lib INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
 

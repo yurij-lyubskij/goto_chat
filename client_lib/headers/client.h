@@ -3,10 +3,15 @@
 
 #include <iostream>
 #include <string>
+#include "middleware.h"
 
-class Client {
+class Middleware;
+
+class Client
+{
 public:
     Client();
+    ~Client();
 
     static void open_chat(const std::string &chat_name);
 
@@ -18,7 +23,7 @@ public:
 
     static void reload_chat(const std::string &login, const std::string &chat_name);
 
-    static void send_message(const std::string &chat_name, const std::string &text);
+    void send_message(const std::string &chat_name, const std::string &text);
 
     static bool person_exist(const std::string &login);
 
@@ -28,6 +33,9 @@ public:
     static void logout(const std::string &user_name);
 
     static bool sign_in(const std::string &login, const std::string &password);
+
+private:
+    Middleware *mid;
 };
 
 #endif // CLIENT_H
