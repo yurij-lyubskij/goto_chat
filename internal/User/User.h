@@ -6,8 +6,9 @@
 class User {
 	public:
 		std::string Name;
-    	size_t Id;
-    	std::string PhoneNumber;
+		size_t Id;
+		std::string PhoneNumber;
+		std::string password;
 		User();
 		User(int);
 };

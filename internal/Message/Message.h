@@ -4,8 +4,6 @@
 #include <string>
 #include <time.h>
 
-#include "User.h"
-
 enum MessegeType{ textMessage, voiceMessage };
 
 class iMessage{

@@ -11,22 +11,25 @@ TEST(DBOBjectConverting, UserConverting){
 	usr.Id = 1;
 	DBObject object(usr);
 
-	EXPECT_EQ(object.attr.size(), 3);
+	EXPECT_EQ(object.attr.size(), 4);
 	EXPECT_EQ(object.attr[0], "1");
 	EXPECT_EQ(object.attr[1], "");
 	EXPECT_EQ(object.attr[2], "");
+	EXPECT_EQ(object.attr[3], "");
 
 
 	usr.Name = "TestName";
 	usr.PhoneNumber = "1234567890";
+	usr.password = "abc";
 	object = DBObject(usr);
 	EXPECT_EQ(object.attr[0], std::to_string(usr.Id));
 	EXPECT_EQ(object.attr[1], usr.Name);
 	EXPECT_EQ(object.attr[2], usr.PhoneNumber);
+	EXPECT_EQ(object.attr[3], usr.password);
 
 	DBObject toConvert;
 	toConvert.type = chat;
-	toConvert.attr = { "2" , "Name", "9087654321" };
+	toConvert.attr = { "2" , "Name", "9087654321", "abcd" };
 
 	EXPECT_THROW({
         try
@@ -45,6 +48,7 @@ TEST(DBOBjectConverting, UserConverting){
 	EXPECT_EQ(usr2.Id, 2);
 	EXPECT_EQ(usr2.Name, "Name");
 	EXPECT_EQ(usr2.PhoneNumber, "9087654321");
+	EXPECT_EQ(usr2.password, "abcd");
 }
 
 TEST(DBOBjectConverting, ChatRoomConverting){

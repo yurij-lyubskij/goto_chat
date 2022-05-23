@@ -5,7 +5,8 @@ CREATE DATABASE gotochatdatabase;
 create table if not exists users ( 
 	us_id			SERIAL PRIMARY KEY,
 	us_name			varchar(45) NOT NULL,
-	us_phone		varchar(13) NOT NULL
+	us_phone		varchar(13) NOT NULL UNIQUE,
+	us_password		varchar(45) NOT NULL
 );
 
 

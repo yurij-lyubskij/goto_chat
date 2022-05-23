@@ -33,7 +33,7 @@ DBObject DBObject::operator=(const DBObject& obj){
 //
 DBObject::DBObject(const User& usr){
 	type = user;
-	attr = std::vector<std::string>(3);
+	attr = std::vector<std::string>(4);
 
 	std::string tempAttr;
 	tempAttr = std::to_string(usr.Id);
@@ -42,6 +42,8 @@ DBObject::DBObject(const User& usr){
 	attr[1] = tempAttr;
 	tempAttr = usr.PhoneNumber;
 	attr[2] = tempAttr;
+	tempAttr = usr.password;
+	attr[3] = tempAttr;
 };
 
 DBObject::DBObject(const ChatRoom& cht){
@@ -96,6 +98,7 @@ DBObject::operator User(){
 	usr.Id = std::stoi(attr[0]);
 	usr.Name = attr[1];
 	usr.PhoneNumber = attr[2];
+	usr.password = attr[3];
 	return usr;
 };
 
