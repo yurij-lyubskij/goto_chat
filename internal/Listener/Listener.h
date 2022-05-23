@@ -45,7 +45,7 @@ public:
             std::shared_ptr<iRouter> router,
             std::shared_ptr<iBufferFabric> fabric
     )
-            : acceptor_(net::make_strand(ioc)), router(std::move(router)), fabric(std::move(fabric)), ioc(ioc),
+            : acceptor_(ioc), router(std::move(router)), fabric(std::move(fabric)), ioc(ioc),
     endpoint(std::move(endpoint)){
          error_code ec;
         // Open the acceptor
@@ -88,7 +88,7 @@ private:
     do_accept() override {
         auto self = shared_from_this();
 //        acceptor_.async_accept((std::static_pointer_cast<Socket>(sock))->sock, beast::bind_front_handler(&Listener::on_accept, shared_from_this()));
-        acceptor_.async_accept( net::make_strand(ioc), beast::bind_front_handler(&Listener::on_accept, shared_from_this()));
+        acceptor_.async_accept( ioc, beast::bind_front_handler(&Listener::on_accept, shared_from_this()));
 
     }
 

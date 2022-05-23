@@ -4,7 +4,7 @@
 
 #ifndef GOTO_CHAT_CONTEXT_H
 #define GOTO_CHAT_CONTEXT_H
-#include "Acceptor.h"
+#include "Socket.h"
 
 class iContext {
 public:

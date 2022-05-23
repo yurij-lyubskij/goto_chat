@@ -7,7 +7,7 @@
 
 #include <string>
 #include "Response.h"
-#include "Acceptor.h"
+#include "Socket.h"
 #include "Request.h"
 #include "Router.h"
 #include "httpBuffer.h"
