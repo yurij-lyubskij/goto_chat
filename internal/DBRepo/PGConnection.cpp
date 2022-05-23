@@ -58,6 +58,7 @@ std::vector<DBObject> PGConnection::exec(DBRequest request, std::vector<DBObject
             }
             break;
         case addMembers:
+            return addMembersToChat(objects);
         break;
         
     }
@@ -334,6 +335,35 @@ std::vector<DBObject> PGConnection::putMessages(std::vector<DBObject> messages){
 //
 //end of put Methods
 //
+
+std::vector<DBObject> PGConnection::addMembersToChat(std::vector<DBObject> chatAndUsers){
+    //suppose to be                 INSERT INTO users_chats(us_id, ch_id) VALUES(
+    const std::string baseRequest = "INSERT INTO " + usersChatsTableName + "(" + userIdCol + ", " + chatIdCol + ") VALUES(";
+    const std::string endRequest = ");\n";
+    std::string request = "";
+    std::vector<DBObject> result;
+
+    //making request
+    std::string chatId = chatAndUsers[0].attr[0];
+    int len = chatAndUsers.size();
+    if(len < 2) return result;
+    for( int i = 1; i < len; ++i)
+        request += baseRequest + "'" + chatAndUsers[i].attr[0] + "', '" + chatId + "'" + endRequest;
+    //sending request
+    PQsendQuery( m_connection.get(), request.c_str() );
+
+    //getting ids
+    PGresult* res;
+    while ( res = PQgetResult( m_connection.get()) ) {
+        if (PQresultStatus(res) == PGRES_TUPLES_OK && PQntuples(res)) {
+            PQclear(res);
+        }
+    }
+
+    result.push_back(DBObject());
+    return result;
+};
+
 std::vector<DBObject> PGConnection::get(DBRequest request){
     std::vector<DBObject> result;
     std::vector<std::string> attrs = split(request.request);

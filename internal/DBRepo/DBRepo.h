@@ -88,6 +88,13 @@ class PGConnection: public iConnection{
 		std::vector<DBObject> putUsers(std::vector<DBObject>);
 		std::vector<DBObject> putChats(std::vector<DBObject>);
 		std::vector<DBObject> putMessages(std::vector<DBObject>);
+		std::vector<DBObject> addMembersToChat(std::vector<DBObject>);
+		std::vector<DBObject> getUsersById(std::vector<DBObject>);
+		std::vector<DBObject> getChatsById(std::vector<DBObject>);
+		std::vector<DBObject> getMessagesById(std::vector<DBObject>);
+		std::vector<DBObject> getMembers(std::vector<DBObject>);
+		std::vector<DBObject> getUserChats(std::vector<DBObject>);
+		std::vector<DBObject> getMessagesFromRange(std::vector<DBObject>);
         //void establish_connection();
 		//actual connections settings
         std::shared_ptr<PGconn>  m_connection;

@@ -34,7 +34,7 @@ TEST(PGConnectionTests, checkUsers) {
 TEST(PGConnectionTests, checkChats) {
     PGConnection conn;
 
-	ChatRoom chat1("checChatTest");
+	ChatRoom chat1("checkChatTest");
 	std::vector<DBObject> chats;
 
 	chats.push_back(chat1);
@@ -202,4 +202,34 @@ TEST(PGConnectionTests, putMessages) {
 	EXPECT_EQ(mes2.getTime(), sendTime);
 	EXPECT_EQ(mes2.getSender(), usr.Id);
 	EXPECT_EQ(mes2.getChat(), chat1.getId());
+}
+
+TEST(PGConnectionTests, addMembersTest) {
+    PGConnection conn;
+	ChatRoom chat1("addMembersTest");
+	User user1(0);
+	user1.Name = "addMembersTest";
+	user1.PhoneNumber = "1234567890";
+	std::vector<DBObject> users, chats, chatAndUsers;
+
+	users.push_back(user1);
+	chats.push_back(chat1);
+	
+	DBRequest request;
+	request.operation = putIt;
+	request.objectType = user;
+	request.request = "";
+	users = conn.exec(request, users);
+	ASSERT_NE(users[0].attr[0], "0");
+
+	request.objectType = chat;
+	chats = conn.exec(request, chats);
+	ASSERT_NE(chats[0].attr[0], "0");
+	chatAndUsers.push_back(chats[0]);
+	chatAndUsers.push_back(users[0]);
+
+	request.operation = addMembers;
+	request.objectType = message;
+	chatAndUsers = conn.exec(request, chatAndUsers);
+	ASSERT_NE(chatAndUsers.size(), 0);
 }
