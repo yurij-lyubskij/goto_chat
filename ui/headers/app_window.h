@@ -2,6 +2,8 @@
 #define APP_WINDOW_H
 
 #include <QMainWindow>
+#include "recorder.h"
+#include <QTime>
 
 namespace Ui {
     class App_window;
@@ -29,8 +31,10 @@ public:
 
     void logout();
 
+
 public slots:
     void set_person(const QString &Login);
+
 
 signals:
     void login_window();
@@ -41,7 +45,13 @@ private slots:
 
     void on_pushButton_3_clicked();
 
+
+    void on_toolButton_3_pressed();
+
+    void on_toolButton_3_released();
+
 private:
+    recorder rec;
     QString login;
     Ui::App_window *ui;
 };

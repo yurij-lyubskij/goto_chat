@@ -1,6 +1,7 @@
 #include "app_window.h"
 #include "ui_app_window.h"
 
+
 App_window::App_window(QWidget *parent) :
         QMainWindow(parent),
         ui(new Ui::App_window) {
@@ -39,5 +40,24 @@ void App_window::on_toolButton_2_clicked() {
 void App_window::on_pushButton_3_clicked() {
     emit login_window();
     close();
+}
+
+
+
+
+void App_window::on_toolButton_3_pressed()
+{
+
+
+    QString time = QTime::currentTime().toString();
+    std::replace_if(time.begin(), time.end(), [](QChar x) {return x == ':' ;}, '_');
+
+    rec.record_audio("voices/" + time);
+}
+
+
+void App_window::on_toolButton_3_released()
+{
+    rec.stop_recording();
 }
 

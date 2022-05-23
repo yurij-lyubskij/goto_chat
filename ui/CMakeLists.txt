@@ -6,7 +6,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC_SEARCH_PATHS ${INCLUDES})
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
-
+find_package(Qt6 COMPONENTS Multimedia REQUIRED)
 
 add_executable(goto_chat
         ${CMAKE_CURRENT_SOURCE_DIR}/graphic/reg_window.ui
@@ -19,9 +19,11 @@ add_executable(goto_chat
         ${CMAKE_CURRENT_SOURCE_DIR}/sources/login_window.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/headers/login_window.h
         ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/headers/recorder.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/sources/recorder.cpp
         )
 
-target_link_libraries(goto_chat PRIVATE Qt6::Widgets ${CLIENT_LIB_LIBRARIES} ${CHECKER_LIB_LIBRARIES})
+target_link_libraries(goto_chat PRIVATE Qt6::Widgets Qt6::Multimedia ${CLIENT_LIB_LIBRARIES} ${CHECKER_LIB_LIBRARIES})
 target_include_directories(goto_chat PRIVATE ${INCLUDES} ${CLIENT_LIB_INCLUDE_DIRS} ${CHECKER_LIB_INCLUDE_DIRS})
 set_target_properties(goto_chat PROPERTIES
         WIN32_EXECUTABLE ON
