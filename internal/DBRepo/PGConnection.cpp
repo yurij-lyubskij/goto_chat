@@ -177,7 +177,6 @@ std::vector<DBObject> PGConnection::putUsers(std::vector<DBObject> users){
         request += baseRequest + "'" + object.attr[1] + "' ," + "'" + object.attr[2] + "' ," + "'" + object.attr[3] +"'" + endRequest;
     //sending request
     PQsendQuery( m_connection.get(), request.c_str() );
-
     //getting ids
     PGresult* res;
     DBObject obj;
@@ -384,14 +383,19 @@ std::vector<DBObject> PGConnection::get(DBRequest request){
             }
             break;
         case findWithName:
-            //return getChatsByName(request.request);
+            return getChatsByName(request.request);
             break;
-        case getRange:/*
+            /*
+        case findWithPhone:
+            return getUserByPhone(request.request);
+            break;
+            */
+        case getRange:
             int len = attrs.size();
             int chatId = std::stoi(attrs[0]);
             int start = std::stoi(attrs[1]);
             int end = std::stoi(attrs[2]);
-            return getMessagesFromRange(chatId, start, end);*/
+            return getMessagesFromRange(chatId, start, end);
             break;
     }
 
@@ -436,7 +440,7 @@ std::vector<DBObject> PGConnection::getUsersById(std::vector<std::string> ids){
 };
 
 std::vector<DBObject> PGConnection::getChatsById(std::vector<std::string> ids){
-    //suppose to be                 SELECT * FROM users WHERE us_id=32;
+    //suppose to be                 SELECT * FROM users WHERE us_id = 
     const std::string baseRequest = " SELECT * FROM " + chatsTableName + " WHERE " + chatIdCol + " = ";
     const std::string endRequest = ";\n";
     std::string request = "";
@@ -474,8 +478,7 @@ std::vector<DBObject> PGConnection::getMessagesById(std::vector<std::string> ids
                                         " FROM (SELECT * FROM " + messagesTableName + " WHERE " + messageIdCol + " = ";
     //suppose to be                 ) AS MESSAGE join inputs using(ms_id) left join textinputs using(tip_id) left join voiceinputs using(vip_id) join users using(us_id) join chats using(ch_id);
     const std::string endRequest = ") AS MESSAGE join " + inputsTableName + " using(" + messageIdCol + ") left join " + textInputsTableName + " using(" +
-                                    textInputIdCol + ") left join " + voiceInputsTableName + " using(" + voiceInputIdCol + ") join " + usersTableName +
-                                    " using(" + userIdCol + ") join " + chatsTableName + " using(" + chatIdCol + ");\n";
+                                    textInputIdCol + ") left join " + voiceInputsTableName + " using(" + voiceInputIdCol + ");\n";
     std::string request = "";
 
     //making request
@@ -511,6 +514,83 @@ std::vector<DBObject> PGConnection::getMessagesById(std::vector<std::string> ids
 //
 //end of get by id section
 //
+std::vector<DBObject> PGConnection::getChatsByName(std::string name){
+    //suppose to be                 SELECT * FROM chats WHERE ch_name LIKE '%Chat%';
+    const std::string baseRequest = " SELECT * FROM " + chatsTableName + " WHERE " + chatNameCol + " LIKE '%";
+    const std::string endRequest = "%';\n";
+    std::string request = "";
+
+    //making request
+    request += baseRequest + name + endRequest;
+    //sending request
+    PQsendQuery( m_connection.get(), request.c_str() );
+
+    //getting ids
+    PGresult* res;
+    DBObject obj;
+    obj.type = chat;
+    obj.attr = std::vector<std::string>(3);
+    std::vector<DBObject> result;
+    while ( res = PQgetResult( m_connection.get()) ) {
+        if (PQresultStatus(res) == PGRES_TUPLES_OK && PQntuples(res)) {
+            int len = PQntuples(res);
+            for(int i = 0; i < len; ++i){
+                obj.attr[0] = PQgetvalue (res ,i , 0);
+                obj.attr[1] = PQgetvalue (res ,i , 1);
+                result.push_back( obj ) ;
+            }
+           
+
+            PQclear(res);
+        }
+    }
+    return result;
+};
+
+std::vector<DBObject> PGConnection::getMessagesFromRange(int chatId, int start, int end){
+    
+    //suppose to be                 SELECT ms_id, ms_sendTime, ip_type, tip_content, vip_content, us_id, ch_id FROM (SELECT * FROM messages WHERE ch_id = 
+    const std::string baseRequest = "SELECT " + messageIdCol + ", " + messageTimeCol + ", " + inputTypeCol + "," +
+                                        textInputContentCol + ", " + voiceInputContentCol + ", " + userIdCol + ", " + chatIdCol +
+                                        " FROM (SELECT * FROM " + messagesTableName + " WHERE " + chatIdCol + " = ";
+    //suppose to be                 ) AS MESSAGE join inputs using(ms_id) left join textinputs using(tip_id) left join voiceinputs using(vip_id);
+    const std::string endRequest = ") AS MESSAGE join " + inputsTableName + " using(" + messageIdCol + ") left join " + textInputsTableName + " using(" +
+                                    textInputIdCol + ") left join " + voiceInputsTableName + " using(" + voiceInputIdCol + ") join " + usersTableName +
+                                    " using(" + userIdCol + ") join " + chatsTableName + " using(" + chatIdCol + ") ORDER BY ms_id;\n";
+    std::string request = "";
+
+    //making request
+    request += baseRequest + std::to_string(chatId) + endRequest;
+    //sending request
+    PQsendQuery( m_connection.get(), request.c_str() );
+
+    //getting ids
+    //getting ids for general inputs and returning
+    PGresult* res;
+    DBObject obj;
+    obj.type = message;
+    obj.attr = std::vector<std::string>(6);
+    std::vector<DBObject> result;
+    while ( res = PQgetResult( m_connection.get()) ) {
+        if (PQresultStatus(res) == PGRES_TUPLES_OK && PQntuples(res)) {
+            int len = PQntuples(res);
+            for(int i = start - 1; i < end; ++i){
+                obj.attr[0] = PQgetvalue (res ,i, 0);
+                obj.attr[1] = (PQgetvalue (res ,i, 2)[0] == '0')? PQgetvalue (res ,i, 3) : PQgetvalue (res ,i, 4);
+                std::time_t time = convertTimeStamp(PQgetvalue (res ,i, 1));
+                obj.attr[2] = std::to_string(time);
+                obj.attr[3] = PQgetvalue (res ,i, 5);
+                obj.attr[4] = PQgetvalue (res ,i, 6);
+                obj.attr[5] = PQgetvalue (res ,i, 2);
+                
+                result.push_back( obj ) ;
+            }
+            PQclear(res);
+        }
+    }
+    return result;
+};
+
 time_t PGConnection::convertTimeStamp(char* str){
 	time_t result = -1;
 	int year = 0, month = 0, day = 0, hour = 0, min = 0, sec = 0;

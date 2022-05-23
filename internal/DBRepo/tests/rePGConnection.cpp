@@ -353,3 +353,83 @@ TEST(PGConnectionTests, getMessages) {
 	EXPECT_EQ(mes2.getSender(), usr.Id);
 	EXPECT_EQ(mes2.getChat(), chat1.getId());
 }
+
+TEST(PGConnectionTests, getChatsByName) {
+    PGConnection conn;
+	ChatRoom chat1("getChatsByName1"), chat2("getChatsByName2");
+	std::vector<DBObject> chats;
+
+	chats.push_back(chat1);
+	chats.push_back(chat2);
+
+	DBRequest request;
+	request.operation = putIt;
+	request.objectType = chat;
+	request.request = "";
+
+	chats = conn.exec(request, chats);
+	ASSERT_EQ(chats.size(), 2);
+	chat1 = chats[0];
+	chat2 = chats[1];
+
+	request.operation = findWithName;
+	request.request = "ChatsByName";
+	chats = conn.get(request);
+
+	ASSERT_GE(chats.size(), 2);
+	EXPECT_EQ(((ChatRoom) chats[chats.size() - 2]).getId(), chat1.getId());
+	EXPECT_EQ(((ChatRoom) chats[chats.size() - 2]).getName(), chat1.getName());
+	EXPECT_EQ(((ChatRoom) chats[chats.size() - 1]).getId(), chat2.getId());
+	EXPECT_EQ(((ChatRoom) chats[chats.size() - 1]).getName(), chat2.getName());
+}
+
+TEST(PGConnectionTests, getMessagesFromRange) {
+PGConnection conn;
+	ChatRoom chat1("getFromRange");
+	User user1(0);
+	user1.Name = "getFromRange";
+	user1.PhoneNumber = std::to_string(time(NULL)%1000000000);
+	user1.password = "testPassword";
+	std::vector<DBObject> users, chats, messages;
+
+	users.push_back(user1);
+	chats.push_back(chat1);
+	
+	DBRequest request;
+	request.operation = putIt;
+	request.objectType = user;
+	request.request = "";
+	users = conn.exec(request, users);
+	ASSERT_NE(users.size(), 0);
+	User usr(users[0]);
+
+	request.objectType = chat;
+	chats = conn.exec(request, chats);
+	ASSERT_NE(chats.size(), 0);
+	chat1 = chats[0];
+
+	Message mes1("getFromRange", std::time(NULL), usr.Id, chat1.getId());
+	VoiceMessage mes2("/get/From/Range", std::time(NULL), usr.Id, chat1.getId());
+
+	messages.push_back(mes1);
+	messages.push_back(mes2);
+
+	request.objectType = message;
+	messages = conn.exec(request, messages);
+	ASSERT_EQ(messages.size(), 2);
+
+	request.operation = getRange;
+	request.request = std::to_string(chat1.getId()) + " 1 2";
+	messages = conn.get(request);
+	ASSERT_EQ(messages.size(), 2);
+	mes1 = (iMessage) messages[0];
+	mes2 = (iMessage) messages[1];
+
+	EXPECT_EQ(mes1.getContent(), "getFromRange");
+	EXPECT_EQ(mes1.getSender(), usr.Id);
+	EXPECT_EQ(mes1.getChat(), chat1.getId());
+	EXPECT_EQ(mes2.getContent(), "/get/From/Range");
+	EXPECT_EQ(mes2.getSender(), usr.Id);
+	EXPECT_EQ(mes2.getChat(), chat1.getId());
+}
+

@@ -92,6 +92,7 @@ class PGConnection: public iConnection{
 		std::vector<DBObject> getUsersById(std::vector<std::string>);
 		std::vector<DBObject> getChatsById(std::vector<std::string>);
 		std::vector<DBObject> getMessagesById(std::vector<std::string>);
+		std::vector<DBObject> getUserByPhone(std::vector<std::string>);
 		std::vector<DBObject> getMembers(DBObject);
 		std::vector<DBObject> getUserChats(DBObject);
 		std::vector<DBObject> getMessagesFromRange(int, int, int);
@@ -110,7 +111,7 @@ class PGConnection: public iConnection{
 			const std::string userIdCol = 				"us_id";
 			const std::string userNameCol = 			"us_name";
 			const std::string userPhoneCol = 			"us_phone";
-			const std::string userPasswordeCol = 			"us_password";
+			const std::string userPasswordeCol = 		"us_password";
 		const std::string chatsTableName = 			"chats";
 			const std::string chatIdCol = 				"ch_id";
 			const std::string chatNameCol = 			"ch_name";
