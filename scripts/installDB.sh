@@ -1,10 +1,10 @@
-#installs DB. Requres installed and running postgresql
 DB_NAME=gotochatdatabase
 DB_USER=gotochat
 DB_USER_PASS=gotochat
 su postgres <<EOF
 createdb  $DB_NAME;
 psql -c "CREATE USER $DB_USER WITH PASSWORD '$DB_USER_PASS';"
+psql -c "grant all privileges on database $DB_NAME to $DB_USER;"
 
 psql -U postgres -d  $DB_NAME -c "create table if not exists users ( 
 	us_id			SERIAL PRIMARY KEY,
@@ -48,7 +48,5 @@ psql -U postgres -d  $DB_NAME -c "create table if not exists inputs (
 	tip_id			int REFERENCES textinputs(tip_id) ON DELETE CASCADE,
 	vip_id			int REFERENCES voiceinputs(vip_id) ON DELETE CASCADE
 );"
-psql -U postgres -d  $DB_NAME -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public to $DB_USER;"
-psql -U postgres -d  $DB_NAME -c "GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public to $DB_USER;"
 echo "Postgres User '$DB_USER' and database '$DB_NAME' created."
 EOF

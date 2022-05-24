@@ -2,6 +2,7 @@
 #include <sstream>
 #include <iomanip>
 #include <iterator>
+#include <iostream>
 
 #include "DBRepo.h"
 
@@ -175,6 +176,7 @@ std::vector<DBObject> PGConnection::putUsers(std::vector<DBObject> users){
     for(DBObject object: users)
         request += baseRequest + "'" + object.attr[1] + "' ," + "'" + object.attr[2] + "' ," + "'" + object.attr[3] +"'" + endRequest;
     //sending request
+    std::cout << request;
     PQsendQuery( m_connection.get(), request.c_str() );
     //getting ids
     PGresult* res;

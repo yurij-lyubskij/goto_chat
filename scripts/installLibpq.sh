@@ -1,2 +1,1 @@
-#installs libraries for compiling (won't install on docker)
-sudo apt-get install -y libpq-dev postgresql-server-dev-all
+sudo apt-get install libpq-dev
