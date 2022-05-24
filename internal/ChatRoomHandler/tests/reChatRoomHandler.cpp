@@ -18,21 +18,20 @@ TEST(ChatRoomHandlersTests, GetMessage) {
     Request testRequest;
     testRequest.method = "POST";
     testRequest.target = "/chat/create";
-    EXPECT_FALSE(handler.canHandle(testRequest));
+    EXPECT_FALSE(handler.CanHandle(testRequest));
 
     testRequest.method = "GET";
     testRequest.target = "/chat/message/list";
     testRequest.cookie = "1";
     testRequest.body = "1 range 1 2";
-    EXPECT_TRUE(handler.canHandle(testRequest));
+    EXPECT_TRUE(handler.CanHandle(testRequest));
 
     Response result;
 
-    EXPECT_TRUE(handler.canHandle(testRequest));
+    EXPECT_TRUE(handler.CanHandle(testRequest));
 
-    result = handler.handle(testRequest);
+    result = handler.Handle(testRequest);
     EXPECT_EQ(result.cookie, "1");
-    EXPECT_EQ(result.method, "GET");
     EXPECT_EQ(result.body, "test 2 3 3\ntest 3 2 3\n");
     EXPECT_EQ(result.statusCode, 200);
 
@@ -49,23 +48,22 @@ TEST(ChatRoomHandlersTests, CreateChatRoom) {
     Request testRequest;
     testRequest.method = "GET";
     testRequest.target = "/chat/message/list";
-    EXPECT_FALSE(handler.canHandle(testRequest));
+    EXPECT_FALSE(handler.CanHandle(testRequest));
 
     testRequest.method = "POST";
     testRequest.target = "/chat/create";
     testRequest.cookie = "1";
     testRequest.body = "testName 1 1";
 
-    EXPECT_TRUE(handler.canHandle(testRequest));
+    EXPECT_TRUE(handler.CanHandle(testRequest));
     Response result;
 
-    result = handler.handle(testRequest);
+    result = handler.Handle(testRequest);
     EXPECT_EQ(result.cookie, "1");
-    EXPECT_EQ(result.method, "POST");
     EXPECT_EQ(result.body, "");
     EXPECT_EQ(result.statusCode, 200);
 
-    result = handler.handle(testRequest);
+    result = handler.Handle(testRequest);
     EXPECT_EQ(result.statusCode, 400);
 }
 
@@ -81,22 +79,21 @@ TEST(ChatRoomHandlersTests, JoinChatRoom) {
     Request testRequest;
     testRequest.method = "GET";
     testRequest.target = "/chat/message/list";
-    EXPECT_FALSE(handler.canHandle(testRequest));
+    EXPECT_FALSE(handler.CanHandle(testRequest));
 
     testRequest.method = "POST";
     testRequest.target = "/chat/join";
     testRequest.cookie = "1";
     testRequest.body = "1 1";
-    EXPECT_TRUE(handler.canHandle(testRequest));
+    EXPECT_TRUE(handler.CanHandle(testRequest));
     
     Response result;
-    result = handler.handle(testRequest);   
+    result = handler.Handle(testRequest);   
     EXPECT_EQ(result.cookie, "1");
-    EXPECT_EQ(result.method, "POST");
     EXPECT_EQ(result.body, "");
     EXPECT_EQ(result.statusCode, 200);
 
-    result = handler.handle(testRequest);
+    result = handler.Handle(testRequest);
     EXPECT_EQ(result.statusCode, 400);
 }
 
@@ -114,18 +111,17 @@ TEST(ChatRoomHandlersTests, FindChatRoom) {
     Request testRequest;
     testRequest.method = "GET";
     testRequest.target = "/chat/message/list";
-    EXPECT_FALSE(handler.canHandle(testRequest));
+    EXPECT_FALSE(handler.CanHandle(testRequest));
 
 
     testRequest.method = "GET";
     testRequest.target = "/chat/find";
     testRequest.cookie = "1";
     testRequest.body = "test";
-    EXPECT_TRUE(handler.canHandle(testRequest));
+    EXPECT_TRUE(handler.CanHandle(testRequest));
     Response result;
-    result = handler.handle(testRequest);   
+    result = handler.Handle(testRequest);   
     EXPECT_EQ(result.cookie, "1");
-    EXPECT_EQ(result.method, "GET");
     EXPECT_EQ(result.body, "1 test\n3 testing\n");
     EXPECT_EQ(result.statusCode, 200);
       
