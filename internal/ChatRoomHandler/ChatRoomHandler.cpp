@@ -16,13 +16,18 @@ bool GetMessageFromChat::CanHandle(Request request){
 
 Response GetMessageFromChat::Handle(Request request){
     Response response;
+    response.statusCode = OK;
+    if (request.responseStatus != OK) {
+        response.statusCode = UnAuthorized;
+        return response;
+    }
     response.cookie = request.cookie;
     response.body = "";
     std::vector<std::string> bodySplit = split(request.body);
     MessageRepo repo(connections);
 
     if( bodySplit.size() != 4 ){
-        response.statusCode = 400;
+        response.statusCode = BadRequest;
         return response;
     };
     int start = std::stoi(bodySplit[2]);
@@ -34,7 +39,7 @@ Response GetMessageFromChat::Handle(Request request){
         response.body += messages[i].getContent() + " " + std::to_string(messages[i].getTime()) + " " + std::to_string(messages[i].getSender()) + " " + std::to_string(messages[i].getChat()) + "\n";
     }
 
-    response.statusCode = 200;
+    response.statusCode = OK;
     return response;
 };
 
@@ -56,6 +61,11 @@ bool CreateChatRoom::CanHandle(Request request){
 
 Response CreateChatRoom::Handle(Request request){
     Response response;
+    response.statusCode = OK;
+    if (request.responseStatus != OK) {
+        response.statusCode = UnAuthorized;
+        return response;
+    }
     response.cookie = request.cookie;
     response.body = "";
 
@@ -66,7 +76,7 @@ Response CreateChatRoom::Handle(Request request){
 
     std::vector<int> res = repo.put(chts);
     if( res.empty() ){
-        response.statusCode = 400;
+        response.statusCode = BadRequest;
         return response;
     };
     ChatRoom chat(res[0], bodySplit[0]);
@@ -75,8 +85,8 @@ Response CreateChatRoom::Handle(Request request){
 
     for( int i = 0; i < usrCount; ++i) usrs.push_back(User(std::stoi(bodySplit[i+2])));
 
-    if ( repo.addUsersToChat(chat, usrs) ) response.statusCode = 200;
-    else response.statusCode = 400;
+    if ( repo.addUsersToChat(chat, usrs) ) response.statusCode = OK;
+    else response.statusCode = BadRequest;
 
     return response;
 };
@@ -99,6 +109,11 @@ bool JoinChatRoom::CanHandle(Request request){
 
 Response JoinChatRoom::Handle(Request request){
     Response response;
+    response.statusCode = OK;
+    if (request.responseStatus != OK) {
+        response.statusCode = UnAuthorized;
+        return response;
+    }
     response.cookie = request.cookie;
     response.body = "";
 
@@ -108,15 +123,15 @@ Response JoinChatRoom::Handle(Request request){
     ChatRoom chat(std::stoi(bodySplit[0]));
     User usr(std::stoi(bodySplit[1]));
     if( chat.getId() < 1 || usr.Id < 1 ){
-        response.statusCode = 400;
+        response.statusCode = BadRequest;
         return response;
     };
 
     std::vector<User> usrs;
     usrs.push_back(usr);
 
-    if ( repo.addUsersToChat(chat, usrs) ) response.statusCode = 200;
-    else response.statusCode = 400;
+    if ( repo.addUsersToChat(chat, usrs) ) response.statusCode = OK;
+    else response.statusCode = BadRequest;
 
     return response;
 };
@@ -139,16 +154,21 @@ bool FindChatRoom::CanHandle(Request request){
 
 Response FindChatRoom::Handle(Request request){
     Response response;
+    response.statusCode = OK;
+    if (request.responseStatus != OK) {
+        response.statusCode = UnAuthorized;
+        return response;
+    }
     response.cookie = request.cookie;
     response.body = "";
     std::vector<std::string> bodySplit = split(request.body);
     ChatRepo repo(connections);
     if( bodySplit.size() != 1){
-        response.statusCode = 400;
+        response.statusCode = BadRequest;
         return response;
     };
     if( bodySplit[0] == ""){
-        response.statusCode = 400;
+        response.statusCode = BadRequest;
         return response;
     };
 
@@ -157,7 +177,7 @@ Response FindChatRoom::Handle(Request request){
         response.body += std::to_string(chats[i].getId()) + " " + chats[i].getName() + "\n";
     }
 
-    response.statusCode = 200;
+    response.statusCode = OK;
     return response;
 };
 

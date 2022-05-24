@@ -32,6 +32,16 @@ void DBConnection<iConnection>::freeConnection(std::shared_ptr<iConnection> conn
     m_condition.notify_one();
 }
 
+template<>
+DBConnection<PGConnection>::DBConnection(){
+	createPool();
+};
+
+template<>
+DBConnection<PGConnection>::DBConnection(int _pool): POOL(_pool){ 
+	createPool();
+};
+
 template<class Connection>
 DBConnection<Connection>::DBConnection(){
 	createPool();
@@ -51,6 +61,7 @@ void DBConnection<Connection>::createPool()
          m_pool.emplace ( std::make_shared<Connection>() );
     }
 }
+
 
 //
 //end of DBConnection Section
