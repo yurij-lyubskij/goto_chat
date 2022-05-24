@@ -1,0 +1,5 @@
+curl -i --header "Content-Type: application/json" \
+  --request POST \
+  --cookie  "session=1y94Jx5p8Y8YTYrLx53syJKiL"\
+  --data '{"chatName": "someChat" ,"usersCount": 2,"users": [1, 2]}' \
+  http://localhost:8080/chat/create
