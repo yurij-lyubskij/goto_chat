@@ -16,7 +16,7 @@ TEST(Router, UseMiddle) {
     EXPECT_EQ(test_result.body, result.body);
 }
 
-
+/*
 TEST(Router, CallHandler) {
     Router router;
     std::shared_ptr<iHandler> create(new CreateNewUser);
@@ -32,3 +32,4 @@ TEST(Router, CallHandler) {
     Response result = router.Route(req);
     EXPECT_EQ(test_result.statusCode, result.statusCode);
 }
+*/

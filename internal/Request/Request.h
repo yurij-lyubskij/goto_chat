@@ -7,6 +7,7 @@
 
 #include <map>
 #include <vector>
+#include <string>
 
 const int16_t OK = 200;
 const int16_t UnAuthorized = 401;

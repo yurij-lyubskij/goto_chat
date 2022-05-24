@@ -77,7 +77,7 @@
 //    EXPECT_EQ(test_result.body, result.body);
 //}
 
-
+/*
 TEST(handlers, CreateNewUser) {
     Request req;
     req.body = "TEST_DATA";
@@ -125,3 +125,4 @@ TEST(handlers, Logout) {
     Response result = handler.Handle(req);
     EXPECT_EQ(test_result.statusCode, result.statusCode);
 }
+*/
