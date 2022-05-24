@@ -8,6 +8,11 @@
 #include "Request.h"
 #include "Response.h"
 #include "DBRepo.h"
+#include "rapidjson/writer.h"
+
+#include "rapidjson/document.h"
+
+#include "rapidjson/stringbuffer.h"
 
 //GetMessageFromChat
 bool GetMessageFromChat::CanHandle(Request request){
@@ -61,33 +66,50 @@ bool CreateChatRoom::CanHandle(Request request){
 
 Response CreateChatRoom::Handle(Request request){
     Response response;
-    response.statusCode = OK;
+    
     if (request.responseStatus != OK) {
         response.statusCode = UnAuthorized;
         return response;
     }
+    response.statusCode = BadRequest;
+
+    jsonParser parser;
+
+    ChatRepo repo(connections);
+    ChatRoom newChat;
+
+    rapidjson::Document d;
+    const char* json = request.body.c_str();
+    d.Parse(json);
+    if(! d.HasMember("chatName")) return response;
+    newChat = ChatRoom(d["chatName"].GetString());
+
+    int usersCount = 0;
+    if(! d.HasMember("usersCount")) return response;
+    usersCount = d["usersCount"].GetInt();
+
+    if(! d.HasMember("users")) return response;
+    if(! d["users"].IsArray()) return response;
+    std::vector<User> usrs;
+    const rapidjson::Value& usersId = d["users"];
+    for (rapidjson::SizeType i = 0; i < usersId.Size(); i++)
+        usrs.push_back(User(usersId[i].GetInt()));
+
+    response.statusCode = OK;
     response.cookie = request.cookie;
     response.body = "";
 
-    std::vector<std::string> bodySplit = split(request.body);
-    ChatRepo repo(connections);
-    std::vector<ChatRoom> chts;
-    chts.push_back(ChatRoom(bodySplit[0]));
-
-    std::vector<int> res = repo.put(chts);
+    std::vector<ChatRoom> chats;
+    chats.push_back(newChat);
+    std::vector<int> res = repo.put(chats);
     if( res.empty() ){
         response.statusCode = BadRequest;
         return response;
     };
-    ChatRoom chat(res[0], bodySplit[0]);
-    int usrCount = std::stoi(bodySplit[1]);
-    std::vector<User> usrs;
-
-    for( int i = 0; i < usrCount; ++i) usrs.push_back(User(std::stoi(bodySplit[i+2])));
-
-    if ( repo.addUsersToChat(chat, usrs) ) response.statusCode = OK;
+    response.body = "{\"chatId\":" + std::to_string(res[0]) + "}'";
+    if ( repo.addUsersToChat(res[0], usrs) ) response.statusCode = OK;
     else response.statusCode = BadRequest;
-
+    
     return response;
 };
 
