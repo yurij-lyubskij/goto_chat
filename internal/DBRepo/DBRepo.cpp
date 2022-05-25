@@ -546,6 +546,26 @@ std::vector<iMessage> MessageRepo::getLastFew(int mesId, int messageNumber){
 	return mesages;
 };
 
+std::vector<iMessage> MessageRepo::getLastFewVoice(int mesId, int messageNumber){
+
+	std::shared_ptr<iConnection> conn = connection->connection();			//getting connection to DB
+
+	DBRequest request;
+	request.operation = getLastVoice;
+	request.objectType = message;
+	request.request = std::to_string(mesId) + " " + std::to_string(messageNumber);
+
+	std::vector<DBObject> result = conn->get(request);
+
+	int len = result.size();													//objects with some ids might don't exist so check size
+	std::vector<iMessage> mesages = std::vector<iMessage>(len);
+
+	for( int i = 0; i < len; ++i ) mesages[i] = (iMessage) result[i];
+
+	connection->freeConnection(conn);										//return connection to the queue
+	return mesages;
+};
+
 //
 //end of MessageRepo Section
 //

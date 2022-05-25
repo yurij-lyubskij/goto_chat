@@ -190,6 +190,7 @@ public:
     virtual bool update(std::vector<iMessage> mes) = 0;
     virtual std::vector<int> put(std::vector<iMessage> mes) = 0;
     virtual std::vector<iMessage> getLastFew(int mesId, int messageNumber) = 0;
+	virtual std::vector<iMessage> getLastFewVoice(int mesId, int messageNumber) = 0;
 };
 
 //class UserRepo: public iUserRepo{
@@ -228,6 +229,7 @@ class MessageRepo: public iMessageRepo{
 		bool update(std::vector<iMessage> mes) override;
 		std::vector<int> put(std::vector<iMessage> mes) override;
 		std::vector<iMessage> getLastFew(int mesId, int messageNumber) override;
+		std::vector<iMessage> getLastFewVoice(int mesId, int messageNumber) override;
 };
 
 /*
