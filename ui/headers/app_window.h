@@ -4,7 +4,8 @@
 #include <QMainWindow>
 #include "recorder.h"
 #include <QTime>
-
+#include <QMediaPlayer>
+#include <QAudioOutput>
 namespace Ui {
     class App_window;
 }
@@ -31,6 +32,7 @@ public:
 
     void logout();
 
+    void refresh_timer();
 
 public slots:
     void set_person(const QString &Login);
@@ -50,10 +52,15 @@ private slots:
 
     void on_toolButton_3_released();
 
+    void on_pushButton_clicked();
+
 private:
+    std::unique_ptr<QMediaPlayer> player;
+    std::shared_ptr<QAudioOutput> audioOutput;
     recorder rec;
     QString login;
     Ui::App_window *ui;
+    std::atomic_bool f = true;
 };
 
 #endif // APP_WINDOW_H
