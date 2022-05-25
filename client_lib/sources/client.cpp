@@ -8,6 +8,19 @@ Client::~Client()
 {
 }
 
+void Client::send_request(http::request<http::string_body> request)
+{
+    std::shared_ptr<session> ptr = std::make_shared<session>(ioc);
+    ptr->run(request);
+    ioc.run();
+    handle_response(ptr->get_response());
+}
+
+void Client::send_message(const std::string &chat_name, const std::string &text, const std::string &phone)
+{
+
+}
+
 void Client::open_chat(const std::string &chat_name)
 {
 }
@@ -28,10 +41,6 @@ void Client::leave_chat(const std::string &chat_name)
 }
 
 void Client::reload_chat(const std::string &login, const std::string &chat_name)
-{
-}
-
-void Client::send_message(const std::string &chat_name, const std::string &text)
 {
 }
 

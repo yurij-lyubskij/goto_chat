@@ -35,6 +35,10 @@ class session : public std::enable_shared_from_this<session>
     http::response<http::string_body> res_;
 
 public:
+    http::response<http::string_body> get_response() {
+        return res_;
+    }
+
     // Objects are constructed with a strand to
     // ensure that handlers do not execute concurrently.
     explicit
@@ -49,12 +53,6 @@ public:
     run(http::request<http::string_body> request)
     {
         req_ = request;
-        // Set up an HTTP GET request message
-        // req_.version(version);
-        // req_.method(http::verb::get);
-        // req_.target(target);
-        // req_.set(http::field::host, host);
-        // req_.set(http::field::user_agent, BOOST_BEAST_VERSION_STRING);
 
         // Look up the domain name
         resolver_.async_resolve(
@@ -126,9 +124,6 @@ public:
 
         if(ec)
             return fail(ec, "read");
-
-        // Write the message to standard out
-        std::cout << res_ << std::endl;
 
         // Gracefully close the socket
         stream_.socket().shutdown(tcp::socket::shutdown_both, ec);
