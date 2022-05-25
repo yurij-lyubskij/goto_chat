@@ -70,6 +70,18 @@ TEST(PGConnectionTests, UsersDBTests) {
 	EXPECT_EQ(user4.Name, "UsersDBTests2");
 	EXPECT_EQ(user4.PhoneNumber, std::to_string(num2));
 	EXPECT_EQ(user4.password, "testPassword");
+
+	//get by phone test
+	request.operation = getWithPhone;
+	request.request = std::to_string(num1);
+
+	users = conn.get(request);
+	ASSERT_EQ(users.size(), 1);
+
+	User user5(users[0]);
+	EXPECT_EQ(user5.Name, "UsersDBTests1");
+	EXPECT_EQ(user5.PhoneNumber, std::to_string(num1));
+	EXPECT_EQ(user5.password, "testPassword");
 }
 
 TEST(PGConnectionTests, ChatsDBTests) {

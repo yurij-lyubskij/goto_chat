@@ -384,11 +384,9 @@ std::vector<DBObject> PGConnection::get(DBRequest request){
         case findWithName:
             return getChatsByName(request.request);
             break;
-            /*
-        case findWithPhone:
-            return getUserByPhone(request.request);
+        case getWithPhone:
+            return getUsersByPhone(attrs);
             break;
-            */
         case getRange:
             int len = attrs.size();
             int chatId = std::stoi(attrs[0]);
