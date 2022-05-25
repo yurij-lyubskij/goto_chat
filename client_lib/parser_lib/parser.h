@@ -2,7 +2,8 @@
 #define PARSER_H
 
 #include <iostream>
-
+#include "json.hpp"
+#include <fstream>
 class Parser
 {
 public:

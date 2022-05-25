@@ -6,6 +6,7 @@ set(INCLUDES
         ${CMAKE_CURRENT_SOURCE_DIR}/client_net_module_lib/
         ${CMAKE_CURRENT_SOURCE_DIR}/parser_lib/
         ${CMAKE_CURRENT_SOURCE_DIR}/session_lib/
+        ${CMAKE_CURRENT_SOURCE_DIR}/json_actions/
         )
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
