@@ -25,7 +25,7 @@ public:
 
     void Run(const std::string &host, const std::string &port);
 
-    void Send(const std::string&);
+    void Send(http::request<http::string_body>&);
 
     void Disconnect();
 
