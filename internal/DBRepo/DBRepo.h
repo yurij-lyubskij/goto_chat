@@ -41,7 +41,7 @@ typedef struct{
 enum DBObjectType { user, chat, message, input };
 
 enum DBOperation { checkIt, putIt, deleteIt, updateIt, getFew,
-					getWithPhone,																			//user spec operations
+					getWithPhone,																//user spec operations
 					addMembers, removeMembers/*, getMessageOrigin*/, getChatsofUser, findWithName,	//chat spec operations
 					getRange																	//message spec operations
 };

@@ -125,7 +125,7 @@ Response CreateChatRoom::Handle(Request request){
     jsonParser parser;
 
     ChatRepo repo(connections);
-    UserRepo usRepo/*(connections)*/;
+    UserRepo usRepo(connections);
     ChatRoom newChat;
 
     rapidjson::Document d;
@@ -201,7 +201,7 @@ Response JoinChatRoom::Handle(Request request){
     jsonParser parser;
 
     ChatRepo repo(connections);
-    UserRepo usRepo/*(connections)*/;
+    UserRepo usRepo(connections);
     ChatRoom joinedChat;
 
     rapidjson::Document d;

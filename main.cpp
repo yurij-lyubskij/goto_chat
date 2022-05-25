@@ -12,7 +12,7 @@ int main() {
     std::shared_ptr<DBConnection<PGConnection>> connections(new DBConnection<PGConnection>(4));
     std::shared_ptr<iRouter> router (new Router);
     std::shared_ptr<iAuthDb> auth (new AuthDb);
-    std::shared_ptr<iUserRepo> repo (new UserRepo());
+    std::shared_ptr<iUserRepo> repo (new UserRepo((DBConnection<iConnection>*) connections.get()));
     std::shared_ptr<iMiddle> checkAuth(new CheckAuth(auth));
     std::shared_ptr<IjsonParser> parser(new jsonParser);
     router->AddMiddle(checkAuth);

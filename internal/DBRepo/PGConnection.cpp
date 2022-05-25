@@ -29,7 +29,6 @@ PGConnection::PGConnection(){
 std::vector<DBObject> PGConnection::exec(DBRequest request, std::vector<DBObject> objects){
     std::vector<DBObject> res;
     std::vector<std::string> attrs = split(request.request);
-    int len = objects.size();
     switch(request.operation){
         case putIt:
             switch(request.objectType){
