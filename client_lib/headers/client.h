@@ -1,11 +1,13 @@
+#include <boost/asio.hpp>
+#include <boost/beast.hpp>
+
 #ifndef CLIENT_H
 #define CLIENT_H
 
 #include <iostream>
 #include <string>
-#include "middleware.h"
 
-class Middleware;
+namespace asio = boost::asio;
 
 class Client
 {
@@ -35,7 +37,7 @@ public:
     bool sign_in(const std::string &login, const std::string &password);
 
 private:
-    Middleware *mid;
+    asio::io_context ioc;
 };
 
 #endif // CLIENT_H

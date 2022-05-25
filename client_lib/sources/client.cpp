@@ -2,12 +2,10 @@
 
 Client::Client()
 {
-    mid = new Middleware(this);
 }
 
 Client::~Client()
 {
-    delete mid;
 }
 
 void Client::open_chat(const std::string &chat_name)
@@ -35,7 +33,6 @@ void Client::reload_chat(const std::string &login, const std::string &chat_name)
 
 void Client::send_message(const std::string &chat_name, const std::string &text)
 {
-    mid->send(chat_name, text);
 }
 
 bool Client::person_exist(const std::string &login)
@@ -47,7 +44,6 @@ bool Client::person_exist(const std::string &login)
 bool Client::registrate(const std::string &first_name, const std::string &second_name, const std::string &login,
                         const std::string &password, const std::string &email)
 {
-    mid->registrate(first_name, second_name, login, password, email);
     //    bool f = person_exist(login);
     //    if(f){
     //        reg_person(first_name, second_name, login,password, email);//функция Рината
