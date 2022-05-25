@@ -5,8 +5,8 @@
 TEST(PGConnectionTests, UsersDBTests) {
     PGConnection conn;
 
-	time_t num2 = time(NULL)%100;
-	time_t num1 = num2%10;
+	time_t num2 = time(NULL)%1000;
+	time_t num1 = num2%100;
 	User user1(0), user2(0);
 	user1.Name = "UsersDBTests1";
 	user1.PhoneNumber = std::to_string(num1);
@@ -82,7 +82,7 @@ TEST(PGConnectionTests, ChatsDBTests) {
 	chats.push_back(chat2);
 	
 	DBRequest request;
-	//put tests
+	//put test
 	request.operation = putIt;
 	request.objectType = chat;
 	request.request = "";
@@ -97,7 +97,7 @@ TEST(PGConnectionTests, ChatsDBTests) {
 	EXPECT_NE(chat2.getId(), 0);
 	EXPECT_EQ(chat2.getName(), "ChatsDBTests2");
 
-	//check tests
+	//check test
 	std::vector<DBObject> checkChats;
 	chat1 = chats[0];
 	chat2 = ChatRoom(0);
@@ -111,7 +111,7 @@ TEST(PGConnectionTests, ChatsDBTests) {
 	checkChats = conn.exec(request, checkChats);
 	EXPECT_EQ(checkChats.size(), 1);
 
-	//get tests
+	//get test
 	std::vector<DBObject> existedChats = chats;
 	request.operation = getFew;
 	request.request = "id";
@@ -128,9 +128,9 @@ TEST(PGConnectionTests, ChatsDBTests) {
 	EXPECT_EQ(chat2.getId(), exChat2.getId());
 	EXPECT_EQ(chat2.getName(), "ChatsDBTests2");
 
-	//addMembers
-	time_t num2 = time(NULL)%100;
-	time_t num1 = num2%10;
+	//addMembers test
+	time_t num2 = time(NULL)%100000;
+	time_t num1 = num2%10000;
 	User user1(0), user2(0);
 	user1.Name = "ChatsDBTests1";
 	user1.PhoneNumber = std::to_string(num1);
@@ -160,6 +160,17 @@ TEST(PGConnectionTests, ChatsDBTests) {
 	request.objectType = chat;
 	chatAndUsers = conn.exec(request, chatAndUsers);
 	ASSERT_NE(chatAndUsers.size(), 0);
+
+	//get with name test
+	request.operation = findWithName;
+	request.request = "DBTests";
+	chats = conn.get(request);
+
+	ASSERT_GE(chats.size(), 2);
+	EXPECT_EQ(((ChatRoom) chats[chats.size() - 2]).getId(), chat1.getId());
+	EXPECT_EQ(((ChatRoom) chats[chats.size() - 2]).getName(), chat1.getName());
+	EXPECT_EQ(((ChatRoom) chats[chats.size() - 1]).getId(), chat2.getId());
+	EXPECT_EQ(((ChatRoom) chats[chats.size() - 1]).getName(), chat2.getName());
 }
 
 TEST(PGConnectionTests, MessagesDBTests) {
@@ -167,7 +178,7 @@ TEST(PGConnectionTests, MessagesDBTests) {
 	ChatRoom chat1("MessagesDBTests");
 	User user1(0);
 	user1.Name = "MessagesDBTests";
-	user1.PhoneNumber = std::to_string(time(NULL)%100000);
+	user1.PhoneNumber = std::to_string(time(NULL)%1000000);
 	user1.password = "testPassword";
 	std::vector<DBObject> users, chats, messages;
 
@@ -244,103 +255,8 @@ TEST(PGConnectionTests, MessagesDBTests) {
 	EXPECT_EQ(mes4.getTime(), sendTime);
 	EXPECT_EQ(mes4.getSender(), usr.Id);
 	EXPECT_EQ(mes4.getChat(), chat1.getId());
-}
-/*
-TEST(PGConnectionTests, addMembersTest) {
-    PGConnection conn;
-	ChatRoom chat1("addMembersTest");
-	User user1(0);
-	user1.Name = "addMembersTest";
-	user1.PhoneNumber = std::to_string(time(NULL)%1000000);
-	user1.password = "testPassword";
-	std::vector<DBObject> users, chats, chatAndUsers;
 
-	users.push_back(user1);
-	chats.push_back(chat1);
-	
-	DBRequest request;
-	request.operation = putIt;
-	request.objectType = user;
-	request.request = "";
-	users = conn.exec(request, users);
-	ASSERT_NE(users[0].attr[0], "0");
-
-	request.objectType = chat;
-	chats = conn.exec(request, chats);
-	ASSERT_NE(chats[0].attr[0], "0");
-	chatAndUsers.push_back(chats[0]);
-	chatAndUsers.push_back(users[0]);
-
-	request.operation = addMembers;
-	request.objectType = message;
-	chatAndUsers = conn.exec(request, chatAndUsers);
-	ASSERT_NE(chatAndUsers.size(), 0);
-}
-*/
-TEST(PGConnectionTests, getChatsByName) {
-    PGConnection conn;
-	ChatRoom chat1("getChatsByName1"), chat2("getChatsByName2");
-	std::vector<DBObject> chats;
-
-	chats.push_back(chat1);
-	chats.push_back(chat2);
-
-	DBRequest request;
-	request.operation = putIt;
-	request.objectType = chat;
-	request.request = "";
-
-	chats = conn.exec(request, chats);
-	ASSERT_EQ(chats.size(), 2);
-	chat1 = chats[0];
-	chat2 = chats[1];
-
-	request.operation = findWithName;
-	request.request = "ChatsByName";
-	chats = conn.get(request);
-
-	ASSERT_GE(chats.size(), 2);
-	EXPECT_EQ(((ChatRoom) chats[chats.size() - 2]).getId(), chat1.getId());
-	EXPECT_EQ(((ChatRoom) chats[chats.size() - 2]).getName(), chat1.getName());
-	EXPECT_EQ(((ChatRoom) chats[chats.size() - 1]).getId(), chat2.getId());
-	EXPECT_EQ(((ChatRoom) chats[chats.size() - 1]).getName(), chat2.getName());
-}
-
-TEST(PGConnectionTests, getMessagesFromRange) {
-PGConnection conn;
-	ChatRoom chat1("getFromRange");
-	User user1(0);
-	user1.Name = "getFromRange";
-	user1.PhoneNumber = std::to_string(time(NULL)%1000000000);
-	user1.password = "testPassword";
-	std::vector<DBObject> users, chats, messages;
-
-	users.push_back(user1);
-	chats.push_back(chat1);
-	
-	DBRequest request;
-	request.operation = putIt;
-	request.objectType = user;
-	request.request = "";
-	users = conn.exec(request, users);
-	ASSERT_NE(users.size(), 0);
-	User usr(users[0]);
-
-	request.objectType = chat;
-	chats = conn.exec(request, chats);
-	ASSERT_NE(chats.size(), 0);
-	chat1 = chats[0];
-
-	Message mes1("getFromRange", std::time(NULL), usr.Id, chat1.getId());
-	VoiceMessage mes2("/get/From/Range", std::time(NULL), usr.Id, chat1.getId());
-
-	messages.push_back(mes1);
-	messages.push_back(mes2);
-
-	request.objectType = message;
-	messages = conn.exec(request, messages);
-	ASSERT_EQ(messages.size(), 2);
-
+	//get from range test
 	request.operation = getRange;
 	request.request = std::to_string(chat1.getId()) + " 1 2";
 	messages = conn.get(request);
@@ -348,11 +264,10 @@ PGConnection conn;
 	mes1 = (iMessage) messages[0];
 	mes2 = (iMessage) messages[1];
 
-	EXPECT_EQ(mes1.getContent(), "getFromRange");
+	EXPECT_EQ(mes1.getContent(), "MessagesDBTests");
 	EXPECT_EQ(mes1.getSender(), usr.Id);
 	EXPECT_EQ(mes1.getChat(), chat1.getId());
-	EXPECT_EQ(mes2.getContent(), "/get/From/Range");
+	EXPECT_EQ(mes2.getContent(), "/Messages/DB/Tests");
 	EXPECT_EQ(mes2.getSender(), usr.Id);
 	EXPECT_EQ(mes2.getChat(), chat1.getId());
 }
-
