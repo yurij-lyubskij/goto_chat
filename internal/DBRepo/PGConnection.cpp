@@ -387,12 +387,8 @@ std::vector<DBObject> PGConnection::get(DBRequest request){
         case getWithPhone:
             return getUsersByPhone(attrs);
             break;
-        case getRange:
-            int len = attrs.size();
-            int chatId = std::stoi(attrs[0]);
-            int start = std::stoi(attrs[1]);
-            int end = std::stoi(attrs[2]);
-            return getMessagesFromRange(chatId, start, end);
+        case getLast:
+            return getLastMessages(attrs[0], attrs[1]);
             break;
     }
 
@@ -578,8 +574,8 @@ std::vector<DBObject> PGConnection::getChatsByName(std::string name){
     return result;
 };
 
-std::vector<DBObject> PGConnection::getMessagesFromRange(int chatId, int start, int end){
-    
+std::vector<DBObject> PGConnection::getLastMessages(std::string mesId, std::string number){
+    /*
     //suppose to be                 SELECT ms_id, ms_sendTime, ip_type, tip_content, vip_content, us_id, ch_id FROM (SELECT * FROM messages WHERE ch_id = 
     const std::string baseRequest = "SELECT " + messageIdCol + ", " + messageTimeCol + ", " + inputTypeCol + "," +
                                         textInputContentCol + ", " + voiceInputContentCol + ", " + userIdCol + ", " + chatIdCol +
@@ -589,30 +585,41 @@ std::vector<DBObject> PGConnection::getMessagesFromRange(int chatId, int start, 
                                     textInputIdCol + ") left join " + voiceInputsTableName + " using(" + voiceInputIdCol + ") join " + usersTableName +
                                     " using(" + userIdCol + ") join " + chatsTableName + " using(" + chatIdCol + ") ORDER BY ms_id;\n";
     std::string request = "";
+*/
+    //suppose to be                SELECT ms_id, ms_sendTime, tip_content, us_phone FROM (SELECT * FROM messages WHERE ch_id = 
+    const std::string baseRequest = "SELECT " + messageIdCol + ", " + messageTimeCol + ", " + textInputContentCol + ", " + userPhoneCol + ", " + chatIdCol +
+                                    " FROM (SELECT * FROM " + messagesTableName + " WHERE " + chatIdCol + " = " +
+                                    "(SELECT ch_id FROM messages WHERE ms_id = ";
+    //suppose to be                 ) AS MESSAGE join inputs using(ms_id) join textinputs using(tip_id) join users using(us_id);
+    const std::string endRequest = ")) AS MESSAGE join " + inputsTableName + " using(" + messageIdCol + ") join " + textInputsTableName + " using(" +
+                                    textInputIdCol + ") join " + usersTableName + " using(" + userIdCol + ") ORDER BY ms_id;\n";
+    std::string request = "";
 
     //making request
-    request += baseRequest + std::to_string(chatId) + endRequest;
+    request = baseRequest + mesId + endRequest;
     //sending request
     PQsendQuery( m_connection.get(), request.c_str() );
 
-    //getting ids
-    //getting ids for general inputs and returning
-    PGresult* res;
     DBObject obj;
     obj.type = message;
     obj.attr = std::vector<std::string>(6);
+    int num = std::stoi(number);
+    PGresult* res;
     std::vector<DBObject> result;
     while ( res = PQgetResult( m_connection.get()) ) {
         if (PQresultStatus(res) == PGRES_TUPLES_OK && PQntuples(res)) {
             int len = PQntuples(res);
-            for(int i = start - 1; i < end; ++i){
-                obj.attr[0] = PQgetvalue (res ,i, 0);
-                obj.attr[1] = (PQgetvalue (res ,i, 2)[0] == '0')? PQgetvalue (res ,i, 3) : PQgetvalue (res ,i, 4);
-                std::time_t time = convertTimeStamp(PQgetvalue (res ,i, 1));
+            int start = len;
+            while (PQgetvalue(res , start - 1, 0) != mesId && start > 0) --start;
+
+            for(int i = 0; i < num && i + start < len; ++i){
+                obj.attr[0] = PQgetvalue (res , start + i, 0);
+                obj.attr[1] = PQgetvalue (res , start + i, 2);
+                std::time_t time = convertTimeStamp(PQgetvalue (res , start + i, 1));
                 obj.attr[2] = std::to_string(time);
-                obj.attr[3] = PQgetvalue (res ,i, 5);
-                obj.attr[4] = PQgetvalue (res ,i, 6);
-                obj.attr[5] = PQgetvalue (res ,i, 2);
+                obj.attr[3] = PQgetvalue (res , start + i, 3);
+                obj.attr[4] = PQgetvalue (res , start + i, 4);
+                obj.attr[5] = "0";
                 
                 result.push_back( obj ) ;
             }

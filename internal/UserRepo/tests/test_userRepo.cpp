@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "UserRepo.h"
-
+/*
 TEST(UserRepo, CreateUser) {
     UserRepo repo;
     User user;
@@ -27,3 +27,4 @@ TEST(UserRepo, CreateAndGet) {
     User result = repo.GetbyId(id);
     EXPECT_EQ(result.Name, user.Name);
 }
+*/

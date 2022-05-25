@@ -306,6 +306,7 @@ bool ChatRepo::addUsersToChat(const ChatRoom &updatedChat, std::vector<User> use
 	int len = users.size();
 	std::vector<DBObject> objects;
 	objects.push_back(updatedChat);
+
 	for(int i = 0; i < len; ++i) {
 		objects.push_back(DBObject(users[i]));
 		if ( users[i].PhoneNumber == "" ) {
@@ -313,6 +314,7 @@ bool ChatRepo::addUsersToChat(const ChatRoom &updatedChat, std::vector<User> use
 			return false;
 		}
 	}
+
 	DBRequest request;
 	request.operation = addMembers;
 	request.objectType = chat;
@@ -524,14 +526,14 @@ std::vector<int> MessageRepo::put(std::vector<iMessage> mes){
 	return ids;
 };
 
-std::vector<iMessage> MessageRepo::getFromRange(int start, int end,const ChatRoom &chat){
+std::vector<iMessage> MessageRepo::getLastFew(int mesId, int messageNumber){
 
 	std::shared_ptr<iConnection> conn = connection->connection();			//getting connection to DB
 
 	DBRequest request;
-	request.operation = getRange;
+	request.operation = getLast;
 	request.objectType = message;
-	request.request = std::to_string(chat.getId()) + " " + std::to_string(start) + " " + std::to_string(end);
+	request.request = std::to_string(mesId) + " " + std::to_string(messageNumber);
 
 	std::vector<DBObject> result = conn->get(request);
 

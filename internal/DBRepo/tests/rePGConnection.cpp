@@ -141,8 +141,8 @@ TEST(PGConnectionTests, ChatsDBTests) {
 	EXPECT_EQ(chat2.getName(), "ChatsDBTests2");
 
 	//addMembers test
-	time_t num2 = time(NULL)%100000;
-	time_t num1 = num2%10000;
+	time_t num2 = time(NULL)%10000;
+	time_t num1 = num2 + 1;
 	User user1(0), user2(0);
 	user1.Name = "ChatsDBTests1";
 	user1.PhoneNumber = std::to_string(num1);
@@ -189,8 +189,9 @@ TEST(PGConnectionTests, MessagesDBTests) {
     PGConnection conn;
 	ChatRoom chat1("MessagesDBTests");
 	User user1(0);
+	time_t phone = time(NULL)%1000000;
 	user1.Name = "MessagesDBTests";
-	user1.PhoneNumber = std::to_string(time(NULL)%1000000);
+	user1.PhoneNumber = std::to_string(phone);
 	user1.password = "testPassword";
 	std::vector<DBObject> users, chats, messages;
 
@@ -269,17 +270,27 @@ TEST(PGConnectionTests, MessagesDBTests) {
 	EXPECT_EQ(mes4.getChat(), chat1.getId());
 
 	//get from range test
-	request.operation = getRange;
-	request.request = std::to_string(chat1.getId()) + " 1 2";
+	messages = std::vector<DBObject>();
+	messages.push_back(Message("MessagesDBTests2", std::time(NULL), usr.Id, chat1.getId()));
+	messages.push_back(Message("MessagesDBTests3", std::time(NULL), usr.Id, chat1.getId()));
+
+	request.operation = putIt;
+	request.objectType = message;
+	messages = conn.exec(request, messages);
+	ASSERT_EQ(messages.size(), 2);
+
+	request.operation = getLast;
+	request.request = std::to_string(mes1.getId()) + " 2";
 	messages = conn.get(request);
 	ASSERT_EQ(messages.size(), 2);
-	mes1 = (iMessage) messages[0];
-	mes2 = (iMessage) messages[1];
+	Message mesL1 = (iMessage) messages[0];
+	Message mesL2 = (iMessage) messages[1];
 
-	EXPECT_EQ(mes1.getContent(), "MessagesDBTests");
-	EXPECT_EQ(mes1.getSender(), usr.Id);
-	EXPECT_EQ(mes1.getChat(), chat1.getId());
-	EXPECT_EQ(mes2.getContent(), "/Messages/DB/Tests");
-	EXPECT_EQ(mes2.getSender(), usr.Id);
-	EXPECT_EQ(mes2.getChat(), chat1.getId());
+	EXPECT_EQ(mesL1.getContent(), "MessagesDBTests2");
+	EXPECT_EQ(mesL1.getSender(), phone);
+	EXPECT_EQ(mesL1.getChat(), chat1.getId());
+	EXPECT_EQ(mesL2.getContent(), "MessagesDBTests3");
+	EXPECT_EQ(mesL2.getSender(), phone);
+	EXPECT_EQ(mesL2.getChat(), chat1.getId());
+	
 }

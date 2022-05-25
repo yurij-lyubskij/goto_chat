@@ -19,7 +19,7 @@ Response Login::Handle(Request req) {
         response.statusCode = NotFound;  //User Not Found
         return response;
     }
-    response.cookie = auth->SetCookie(user) ;
+    response.cookie = auth->SetCookie(userCheck) ;
     response.statusCode = OK;
 //    response.body = "json here sometimes";
     return response;

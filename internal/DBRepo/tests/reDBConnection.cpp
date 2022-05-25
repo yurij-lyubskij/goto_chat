@@ -21,6 +21,7 @@ std::vector<DBObject> MockConnection::exec(DBRequest request, std::vector<DBObje
                         usrs[i] = objects[i];
                         ++usersCount;
                         users.insert(std::make_pair(usersCount, usrs[i]));
+                        userByPhone.insert(std::make_pair(usrs[i].PhoneNumber, usrs[i]));
                         res.push_back(User(usersCount));   
                     }
                     }
@@ -81,21 +82,20 @@ std::vector<DBObject> MockConnection::exec(DBRequest request, std::vector<DBObje
             break;
         case addMembers:
         {   
-            ChatRoom cht = objects[0].operator ChatRoom();
+            ChatRoom cht = ChatRoom(objects[0]);
             std::vector<User> usrs;
             if ( ! chats.contains(cht.getId()) ) { return res; }
             --len;
+            /*
             for( int i = 0; i < len; ++i ) {
-                usrs.push_back(User(objects[i+1]));
                 if ( users_chats.contains(usrs[i].Id) ) { return res; }
-            }
+            }*/
             for( int i = 0; i < len; ++i ) {
                 users_chats.insert(std::make_pair(User(objects[i+1]).Id, cht.getId()));
-                res.push_back(ChatRoom(chatsCount));
+                res.push_back(ChatRoom());
             }
         }
         break;
-        
     }
     if ( res.empty() ) res.push_back(DBObject());
     return res;
@@ -143,14 +143,19 @@ std::vector<DBObject> MockConnection::get(DBRequest request){
             }
             }
             break;
-        case getRange:
+        case getLast:/*
+            {
             int chtId = std::stoi(attrs[0]);
             int start = std::stoi(attrs[1]) - 1;
             int end = std::stoi(attrs[2]);
             std::vector<int> mess = chats_messages.at(chtId);
             for ( int i = start; i < end; ++i )
                 result.push_back(messages.at(mess[i]));
+            }*/
             break;
+        case getWithPhone:
+            result.push_back(userByPhone[request.request]);
+        break;
     }
 
     return result;

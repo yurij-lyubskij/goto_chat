@@ -5,52 +5,101 @@
 #include "UserRepo.h"
 
 
-size_t UserRepo::CreateUser(User user) {
-    user.Id = ++counter;
-    UserMap[user.Id] = user;
-    UserbyPhone[user.PhoneNumber] = user;
-    return user.Id;
+std::vector<User> UserRepo::GetManybyPhone(std::vector<std::string> phone){
+    std::shared_ptr<iConnection> conn = connection->connection();			//getting connection to DB
+
+    DBRequest request;
+    request.operation = getWithPhone;
+    request.objectType = user;
+    request.request = "";
+    for(auto i: phone) {
+        request.request += i;
+    }
+    std::vector<DBObject> objects = conn->get(request);
+
+    size_t len = objects.size();													//objects with some ids might don't exist so check size
+    std::vector<User> users;
+    for(size_t i = 0; i < len; ++i) {
+        users.push_back(objects[i]);
+    }
+
+    connection->freeConnection(conn);										//return connection to the queue
+
+    return users;
 }
 
-User UserRepo::GetbyId(size_t id) {
-    return UserMap[id];
-}
-
-User UserRepo::GetbyPhone(std::string Phone){
-    return UserbyPhone[Phone];
-}
-
-bool UserRepo::UpdateUser(User user) {
-    UserMap.erase(user.Id);
-    UserbyPhone.erase(user.PhoneNumber);
-    UserMap[user.Id] = user;
-    UserbyPhone[user.PhoneNumber] = user;
-    return true;
+User UserRepo::GetbyPhone(std::string Phone) {
+    std::vector<std::string> phone;
+    phone.push_back(Phone);
+    std::vector<User> users = GetManybyPhone(phone);
+    if (users.empty()) {
+        return User();
+    }
+    return users.front();
 }
 
 std::vector<User> UserRepo::getManyByID(std::vector<size_t> id) {
-    std::vector<User> result;
-    result.reserve(id.size());
-    for (auto i : id) {
-        result.emplace_back(UserMap[i]);
+    std::shared_ptr<iConnection> conn = connection->connection();			//getting connection to DB
+
+    DBRequest request;
+    request.operation = getFew;
+    request.objectType = user;
+    request.request = "";
+    for(auto i: id) {
+        request.request += i;
     }
-    return result;
+
+    std::vector<DBObject> objects = conn->get(request);
+
+    size_t len = objects.size();													//objects with some ids might don't exist so check size
+    std::vector<User> users;
+    for(size_t i = 0; i < len; ++i) {
+        users.push_back(objects[i]);
+    }
+
+    connection->freeConnection(conn);										//return connection to the queue
+
+    return users;
 }
 
-bool UserRepo::update(std::vector<User> users) {
-    for (const auto& user : users) {
-        UserbyPhone.erase(user.PhoneNumber);
-        UserMap.erase(user.Id);
-        UserMap[user.Id] = user;
-        UserbyPhone[user.PhoneNumber] = user;
+
+User UserRepo::GetbyId(size_t id) {
+    std::vector<size_t> ids;
+    ids.push_back(id);
+    std::vector<User> users = getManyByID(ids);
+    if (users.empty()) {
+        return User();
     }
-    return true;
+    return users.front();
 }
 
 bool UserRepo::CreateMany(std::vector<User> users) {
-    for (const auto& user : users) {
-        UserMap[user.Id] = user;
-        UserbyPhone[user.PhoneNumber] = user;
+    std::shared_ptr<iConnection> conn = connection->connection();			//getting connection to DB
+    int len = users.size();
+    std::vector<DBObject> objects;
+    for(int i = 0; i < len; ++i) {
+        objects.push_back(DBObject(users[i]));
+        if ( users[i].PhoneNumber == "" ) {
+            connection->freeConnection(conn);								//return connection to the queue
+            return false;
+        }
     }
-    return true;
+    DBRequest request;
+    request.operation =  putIt;
+    request.objectType = user;
+    request.request = "";
+
+    std::vector<DBObject> res = conn->exec( request , objects );
+    connection->freeConnection(conn);										//return connection to the queue
+
+    if( res.empty() ) return false;
+    else return true;
+}
+
+
+
+bool UserRepo::CreateUser(User user) {
+    std::vector<User> users;
+    users.push_back(user);
+    return CreateMany(users);
 }

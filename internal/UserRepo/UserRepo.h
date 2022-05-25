@@ -17,41 +17,32 @@ class iUserRepo {
 public:
     virtual ~iUserRepo() = default;
 
-    virtual size_t CreateUser(User user) = 0;
-
-    virtual bool UpdateUser(User user) = 0;
+    virtual bool CreateUser(User user) = 0;
+    virtual bool CreateMany(std::vector<User> users) = 0;
 
     virtual User GetbyId(size_t id) = 0;
-
-    virtual  User GetbyPhone(std::string Phone) = 0;
-
     virtual std::vector<User> getManyByID(std::vector<size_t> id) = 0;
 
-    virtual bool update(std::vector<User> users) = 0;
-
-    virtual bool CreateMany(std::vector<User> users) = 0;
+    virtual User GetbyPhone(std::string Phone) = 0;
+    virtual std::vector<User> GetManybyPhone(std::vector<std::string> phone)  = 0;
 };
 
 
 class UserRepo : public iUserRepo {
-    DBConnection<iConnection> *connection;
-    std::map<size_t, User> UserMap;
-    std::map<std::string, User> UserbyPhone;
-    size_t counter;
+    DBConnection<iConnection>* connection;
+    const std::string REQUESTED_TARGET = "/chat/create";
 public:
-    UserRepo(): counter(0){};
-    size_t CreateUser(User user) override;
+    explicit UserRepo(DBConnection<iConnection>* conn): connection(conn){};
 
-    bool UpdateUser(User user) override;
+    bool CreateUser(User user) override;
+    bool CreateMany(std::vector<User> users) override;
 
     User GetbyId(size_t id) override;
-    User GetbyPhone(std::string Phone) override;
-
     std::vector<User> getManyByID(std::vector<size_t> id) override;
 
-    bool update(std::vector<User> users) override;
+    User GetbyPhone(std::string Phone) override;
+    std::vector<User> GetManybyPhone(std::vector<std::string> phone) override;
 
-    bool CreateMany(std::vector<User> users) override;
 };
 
 #endif //GOTO_CHAT_USERREPO_H
