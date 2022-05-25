@@ -2,7 +2,7 @@
 
 #include <MiddleWare.h>
 #include <jsonParser.h>
-
+/*
 TEST(Middleware, CheckAuth) {
     Request req;
     req.body = "TEST_DATA";
@@ -22,3 +22,4 @@ TEST(Middleware, CheckAuth) {
     EXPECT_EQ(test_result.responseStatus, result.responseStatus);
     EXPECT_EQ(test_result.body, result.body);
 }
+*/

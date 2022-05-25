@@ -74,7 +74,7 @@ public:
         response_.set(http::field::content_type, "text/plain");
         response_.set(http::field::cookie, response.cookie);
         response_.keep_alive(false);
-        response_.body() = response_.body();
+        response_.body() = response.body;
         response_.result(response.statusCode);
         response_.set("Set-Cookie", response.cookie);
     }

@@ -106,7 +106,7 @@ Response CreateChatRoom::Handle(Request request){
         response.statusCode = BadRequest;
         return response;
     };
-    response.body = "{\"chatId\":" + std::to_string(res[0]) + "}'";
+    response.body = "{\"chatId\":" + std::to_string(res[0]) + "}";
     if ( repo.addUsersToChat(res[0], usrs) ) response.statusCode = OK;
     else response.statusCode = BadRequest;
     

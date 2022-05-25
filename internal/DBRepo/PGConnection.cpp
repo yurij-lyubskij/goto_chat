@@ -513,6 +513,40 @@ std::vector<DBObject> PGConnection::getMessagesById(std::vector<std::string> ids
 //
 //end of get by id section
 //
+std::vector<DBObject> PGConnection::getUsersByPhone(std::vector<std::string> phones){
+    //suppose to be                 SELECT * FROM users WHERE us_phone = 
+    const std::string baseRequest = " SELECT * FROM " + usersTableName + " WHERE " + userPhoneCol + " LIKE '";
+    const std::string endRequest = "';\n";
+    std::string request = "";
+
+    //making request
+    for(std::string phone: phones)
+        request += baseRequest + phone + endRequest;
+    //sending request
+    PQsendQuery( m_connection.get(), request.c_str() );
+
+    //getting ids
+    PGresult* res;
+    DBObject obj;
+    obj.type = user;
+    obj.attr = std::vector<std::string>(4);
+    std::vector<DBObject> result;
+    while ( res = PQgetResult( m_connection.get()) ) {
+        if (PQresultStatus(res) == PGRES_TUPLES_OK && PQntuples(res)) {
+
+            obj.attr[0] = PQgetvalue (res ,0, 0);
+            obj.attr[1] = PQgetvalue (res ,0, 1);
+            obj.attr[2] = PQgetvalue (res ,0, 2);
+            obj.attr[3] = PQgetvalue (res ,0, 3);
+            
+            result.push_back( obj ) ;
+
+            PQclear(res);
+        }
+    }
+    return result;
+};
+
 std::vector<DBObject> PGConnection::getChatsByName(std::string name){
     //suppose to be                 SELECT * FROM chats WHERE ch_name LIKE '%Chat%';
     const std::string baseRequest = " SELECT * FROM " + chatsTableName + " WHERE " + chatNameCol + " LIKE '%";

@@ -53,18 +53,18 @@ TEST(ChatRoomHandlersTests, CreateChatRoom) {
     testRequest.method = "POST";
     testRequest.target = "/chat/create";
     testRequest.cookie = "1";
-    testRequest.body = "testName 1 1";
+    testRequest.body = "{\"chatName\": \"someChat\" ,\"usersCount\": 2,\"users\": [1, 2]}";
 
     EXPECT_TRUE(handler.CanHandle(testRequest));
     Response result;
 
     result = handler.Handle(testRequest);
     EXPECT_EQ(result.cookie, "1");
-    EXPECT_EQ(result.body, "");
-    EXPECT_EQ(result.statusCode, 200);
+    EXPECT_EQ(result.body, "{\"chatId\":1}");
+    EXPECT_EQ(result.statusCode, OK);
 
     result = handler.Handle(testRequest);
-    EXPECT_EQ(result.statusCode, 400);
+    EXPECT_EQ(result.statusCode, BadRequest);
 }
 
 TEST(ChatRoomHandlersTests, JoinChatRoom) {

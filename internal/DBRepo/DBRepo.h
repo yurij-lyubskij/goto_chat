@@ -92,7 +92,7 @@ class PGConnection: public iConnection{
 		std::vector<DBObject> getUsersById(std::vector<std::string>);
 		std::vector<DBObject> getChatsById(std::vector<std::string>);
 		std::vector<DBObject> getMessagesById(std::vector<std::string>);
-		std::vector<DBObject> getUserByPhone(std::vector<std::string>);
+		std::vector<DBObject> getUsersByPhone(std::vector<std::string>);
 		std::vector<DBObject> getMembers(DBObject);
 		std::vector<DBObject> getUserChats(DBObject);
 		std::vector<DBObject> getMessagesFromRange(int, int, int);
