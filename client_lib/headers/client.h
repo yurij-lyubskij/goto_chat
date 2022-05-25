@@ -28,7 +28,7 @@ public:
 
     void reload_chat(const std::string &login, const std::string &chat_name);
 
-    void send_message(const std::string &chat_name, const std::string &text);
+    void send_message(const std::string &chat_name, const std::string &text, const std::string &phone);
 
     bool person_exist(const std::string &login);
 

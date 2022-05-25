@@ -1,4 +1,5 @@
 #include "client.h"
+#include "parser.h"
 
 Client::Client()
 {
@@ -18,7 +19,9 @@ void Client::send_request(http::request<http::string_body> request)
 
 void Client::send_message(const std::string &chat_name, const std::string &text, const std::string &phone)
 {
-
+    beast::http::request<http::string_body> request = /* Requestor::message(...)*/;
+    request.body() = Parser::message(chat_name, text, phone);
+    send_request(request);
 }
 
 void Client::open_chat(const std::string &chat_name)

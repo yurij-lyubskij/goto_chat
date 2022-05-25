@@ -127,7 +127,7 @@ void NetModule::Parse(beast::error_code ec, size_t bytes_transferred)
 void NetModule::Send(http::request<http::string_body> &req)
 {
     
-    ws.async_write(req, beast::bind_front_handler(&NetModule::OnWriting, shared_from_this()));
+    //ws.async_write(req, beast::bind_front_handler(&NetModule::OnWriting, shared_from_this()));
     ioc.run();
 }
 
