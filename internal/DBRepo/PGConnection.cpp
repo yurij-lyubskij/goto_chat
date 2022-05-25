@@ -407,7 +407,7 @@ std::vector<DBObject> PGConnection::get(DBRequest request){
 std::vector<DBObject> PGConnection::getUsersById(std::vector<std::string> ids){
     //suppose to be                 SELECT * FROM users WHERE us_id=32;
     const std::string baseRequest = " SELECT * FROM " + usersTableName + " WHERE " + userIdCol + " = ";
-    const std::string endRequest = ";\n";
+    const std::string endRequest = " ORDER BY us_id;\n";
     std::string request = "";
 
     //making request
@@ -441,7 +441,7 @@ std::vector<DBObject> PGConnection::getUsersById(std::vector<std::string> ids){
 std::vector<DBObject> PGConnection::getChatsById(std::vector<std::string> ids){
     //suppose to be                 SELECT * FROM users WHERE us_id = 
     const std::string baseRequest = " SELECT * FROM " + chatsTableName + " WHERE " + chatIdCol + " = ";
-    const std::string endRequest = ";\n";
+    const std::string endRequest = " ORDER BY ch_id;\n";
     std::string request = "";
 
     //making request
