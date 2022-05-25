@@ -206,7 +206,7 @@ Response JoinChatRoom::Handle(Request request){
     response.cookie = request.cookie;
     response.body = "";
     if ( repo.addUsersToChat(joinedChat, usrs) ) response.statusCode = OK;
-    else response.statusCode = BadRequest;
+    else response.statusCode = Conflict;
 
     return response;
 };

@@ -26,7 +26,7 @@ Content-Length: 0
 
 curl -i --header "Content-Type: application/json" \
   --request POST \
-  --cookie  "session=XBPssnjg3fp5YyK3KkMEzksCu"\
+  --cookie  "session=rMRFz9S0ae5LWPQ87VLsUtAtN"\
   http://localhost:8080/session/delete
 
 Server: Boost.Beast/266

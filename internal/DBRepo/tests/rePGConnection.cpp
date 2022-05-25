@@ -171,7 +171,16 @@ TEST(PGConnectionTests, ChatsDBTests) {
 	request.operation = addMembers;
 	request.objectType = chat;
 	chatAndUsers = conn.exec(request, chatAndUsers);
-	ASSERT_NE(chatAndUsers.size(), 0);
+	EXPECT_NE(chatAndUsers.size(), 0);
+
+	chatAndUsers = std::vector<DBObject>();
+	chatAndUsers.push_back(chats[0]);
+	chatAndUsers.push_back(users[0]);
+	chatAndUsers.push_back(users[1]);
+	request.operation = addMembers;
+	request.objectType = chat;
+	chatAndUsers = conn.exec(request, chatAndUsers);
+	EXPECT_EQ(chatAndUsers.size(), 0);
 
 	//get with name test
 	request.operation = findWithName;
