@@ -17,7 +17,7 @@ public:
 private:
     DBConnection<iConnection>* connections;
     const std::string REQUESTED_TARGET = "/chat/message/list";
-    std::vector<std::string> split(const std::string&);
+    std::vector<std::string> split(const std::string&, char);
 };
 
 //Is used when chat is created (first members are chosen beforehand)

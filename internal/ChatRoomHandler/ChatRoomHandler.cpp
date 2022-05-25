@@ -16,7 +16,7 @@
 
 //GetMessageFromChat
 bool GetMessageFromChat::CanHandle(Request request){
-    return request.target == REQUESTED_TARGET;
+    return boost::starts_with(request.target, REQUESTED_TARGET);
 };
 
 Response GetMessageFromChat::Handle(Request request){
@@ -26,10 +26,32 @@ Response GetMessageFromChat::Handle(Request request){
         response.statusCode = UnAuthorized;
         return response;
     }
+
+    MessageRepo repo(connections);
+    
+    std::vector<std::string> params = split(request.target.substr(REQUESTED_TARGET.size(), request.target.size() - 1), '&');
+    std::string chatId;
+    int start;
+    int end;
+    {
+        const std::string beginning = "/?from=";
+        if (! boost::starts_with(params[0], beginning))  return response;
+        chatId = params[0].substr(beginning.size(), params.size() - 1);
+    }
+    /*
+    {
+        const std::string beginning = "/?from=";
+        if (! boost::starts_with(params, beginning))  return response;
+        chatId = params[0].substr(beginning.size(), params.size() - 1);
+    }
+    */
+   
+   /*
     response.cookie = request.cookie;
     response.body = "";
     std::vector<std::string> bodySplit = split(request.body);
-    MessageRepo repo(connections);
+    
+
 
     if( bodySplit.size() != 4 ){
         response.statusCode = BadRequest;
@@ -38,21 +60,48 @@ Response GetMessageFromChat::Handle(Request request){
     int start = std::stoi(bodySplit[2]);
     int end = std::stoi(bodySplit[2]) + std::stoi(bodySplit[3]) - 1;
 
-    std::vector<iMessage> messages = repo.getFromRange(start, end, ChatRoom(std::stoi(bodySplit[0])));
 
-    for( int i = 0; i < messages.size(); ++i ) {
-        response.body += messages[i].getContent() + " " + std::to_string(messages[i].getTime()) + " " + std::to_string(messages[i].getSender()) + " " + std::to_string(messages[i].getChat()) + "\n";
+*/
+    std::vector<iMessage> messages = repo.getFromRange(start, end, ChatRoom(std::stoi(chatId)));
+    int len = messages.size();
+    response.body += "{";
+    response.body += "\"messagesCount\":\"";
+    response.body += std::to_string(len);
+    response.body += "\",";
+    response.body += "\"messages\":";
+
+    response.body += "[";
+    response.body += "{";
+    response.body += "\"id\":\"";
+    response.body += std::to_string(messages[0].getId());
+    response.body += "\",";
+    response.body += "\"text\":\"";
+    response.body += messages[0].getContent();
+    response.body += "\"time\":\"";
+    response.body += std::to_string(messages[0].getTime());
+    response.body += "\"}";
+    for( int i = 1; i < len; ++i ) {
+        response.body += ",{";
+         response.body += "\"id\":\"";
+    response.body += std::to_string(messages[i].getId());
+    response.body += "\",";
+    response.body += "\"text\":\"";
+    response.body += messages[i].getContent();
+    response.body += "\"time\":\"";
+    response.body += std::to_string(messages[i].getTime());
+    response.body += "\"}";
     }
+    response.body += "]}";
 
     response.statusCode = OK;
     return response;
 };
 
-std::vector<std::string> GetMessageFromChat::split(const std::string &s) {
+std::vector<std::string> GetMessageFromChat::split(const std::string &s, char c) {
     std::vector<std::string> elems;
     std::stringstream ss(s);
     std::string item;
-    while (std::getline(ss, item, ' ')) {
+    while (std::getline(ss, item, c)) {
         elems.push_back(item);
     }
     return elems;
@@ -204,8 +253,6 @@ Response FindChatRoom::Handle(Request request){
         return response;
     }
     response.statusCode = BadRequest;
-
-    jsonParser parser;
 
     ChatRepo repo(connections);
     ChatRoom joinedChat;
