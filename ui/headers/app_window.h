@@ -55,8 +55,8 @@ private slots:
     void on_pushButton_clicked();
 
 private:
-    QMediaPlayer player;
-    QAudioOutput audioOutput;
+    std::unique_ptr<QMediaPlayer> player;
+    std::shared_ptr<QAudioOutput> audioOutput;
     recorder rec;
     QString login;
     Ui::App_window *ui;

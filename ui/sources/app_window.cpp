@@ -7,7 +7,7 @@ App_window::App_window(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::App_window) {
     ui->setupUi(this);
-    player.setAudioOutput(&audioOutput);
+    //player.setAudioOutput(&audioOutput);
     //    ui->chat->setFixedSize(this->width()/2, this->height());
     //    ui->chats_and_profile->setFixedSize(this->width() / 3, this->height() / 2);
 }
@@ -55,8 +55,8 @@ void App_window::on_pushButton_3_clicked() {
 
 void App_window::on_toolButton_3_pressed()
 {
-    player.stop();
-    player.source().clear();
+//    player.stop();
+//    player.source().clear();
     f = true;
 
 
@@ -78,10 +78,13 @@ void App_window::on_toolButton_3_released()
 
 void App_window::on_pushButton_clicked()
 {
+    player = std::unique_ptr<QMediaPlayer>(new QMediaPlayer);
+    audioOutput = std::shared_ptr<QAudioOutput>(new QAudioOutput);
+    player->setAudioOutput(audioOutput.get());
+    player->stop();
     QString path = "voices/gay.m4a";
-    player.setSource(path);
-    audioOutput.setVolume(50);
-    player.play();
-
+    player->setSource(path);
+    player->audioOutput()->setVolume(50);
+    player->play();
 }
 
