@@ -278,7 +278,7 @@ TEST(PGConnectionTests, MessagesDBTests) {
 	EXPECT_EQ(mes4.getSender(), usr.Id);
 	EXPECT_EQ(mes4.getChat(), chat1.getId());
 
-	//get from range test
+	//get last text test
 	messages = std::vector<DBObject>();
 	messages.push_back(Message("MessagesDBTests2", std::time(NULL), usr.Id, chat1.getId()));
 	messages.push_back(Message("MessagesDBTests3", std::time(NULL), usr.Id, chat1.getId()));
@@ -302,4 +302,27 @@ TEST(PGConnectionTests, MessagesDBTests) {
 	EXPECT_EQ(mesL2.getSender(), phone);
 	EXPECT_EQ(mesL2.getChat(), chat1.getId());
 	
+	//get last text test
+	messages = std::vector<DBObject>();
+	messages.push_back(VoiceMessage("/Messages/DB/Tests2", std::time(NULL), usr.Id, chat1.getId()));
+	messages.push_back(VoiceMessage("/Messages/DB/Tests3", std::time(NULL), usr.Id, chat1.getId()));
+
+	request.operation = putIt;
+	request.objectType = message;
+	messages = conn.exec(request, messages);
+	ASSERT_EQ(messages.size(), 2);
+
+	request.operation = getLastVoice;
+	request.request = std::to_string(mes2.getId()) + " 2";
+	messages = conn.get(request);
+	ASSERT_EQ(messages.size(), 2);
+	VoiceMessage mesL3 = (iMessage) messages[0];
+	VoiceMessage mesL4 = (iMessage) messages[1];
+
+	EXPECT_EQ(mesL3.getContent(), "/Messages/DB/Tests2");
+	EXPECT_EQ(mesL3.getSender(), phone);
+	EXPECT_EQ(mesL3.getChat(), chat1.getId());
+	EXPECT_EQ(mesL4.getContent(), "/Messages/DB/Tests3");
+	EXPECT_EQ(mesL4.getSender(), phone);
+	EXPECT_EQ(mesL4.getChat(), chat1.getId());
 }

@@ -43,7 +43,7 @@ enum DBObjectType { user, chat, message, input };
 enum DBOperation { checkIt, putIt, deleteIt, updateIt, getFew,
 					getWithPhone,																			//user spec operations
 					addMembers, removeMembers/*, getMessageOrigin*/, getChatsofUser, findWithName,	//chat spec operations
-					getLast																	//message spec operations
+					getLast, getLastVoice																	//message spec operations
 };
 
 typedef struct{
@@ -96,6 +96,7 @@ class PGConnection: public iConnection{
 		std::vector<DBObject> getMembers(DBObject);
 		std::vector<DBObject> getUserChats(DBObject);
 		std::vector<DBObject> getLastMessages(std::string, std::string);
+		std::vector<DBObject> getLastVoiceMessages(std::string, std::string);
 		std::vector<DBObject> getChatsByName(std::string);
         //void establish_connection();
 		//actual connections settings
