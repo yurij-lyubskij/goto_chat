@@ -5,7 +5,6 @@
 
 #include "DBRepo.h"
 
-#include <iostream>
 //
 //PGConnection Section
 //
@@ -346,7 +345,7 @@ std::vector<DBObject> PGConnection::addMembersToChat(std::vector<DBObject> chatA
     if(len < 2) return result;
     for( int i = 1; i < len; ++i)
         request += baseRequest + "'" + chatAndUsers[i].attr[0] + "', '" + chatId + "'" + endRequest;
-    std::cout << request << std::endl;
+
     //sending request
     PQsendQuery( m_connection.get(), request.c_str() );
 
@@ -579,17 +578,7 @@ std::vector<DBObject> PGConnection::getChatsByName(std::string name){
 };
 
 std::vector<DBObject> PGConnection::getLastMessages(std::string mesId, std::string number){
-    /*
-    //suppose to be                 SELECT ms_id, ms_sendTime, ip_type, tip_content, vip_content, us_id, ch_id FROM (SELECT * FROM messages WHERE ch_id = 
-    const std::string baseRequest = "SELECT " + messageIdCol + ", " + messageTimeCol + ", " + inputTypeCol + "," +
-                                        textInputContentCol + ", " + voiceInputContentCol + ", " + userIdCol + ", " + chatIdCol +
-                                        " FROM (SELECT * FROM " + messagesTableName + " WHERE " + chatIdCol + " = ";
-    //suppose to be                 ) AS MESSAGE join inputs using(ms_id) left join textinputs using(tip_id) left join voiceinputs using(vip_id);
-    const std::string endRequest = ") AS MESSAGE join " + inputsTableName + " using(" + messageIdCol + ") left join " + textInputsTableName + " using(" +
-                                    textInputIdCol + ") left join " + voiceInputsTableName + " using(" + voiceInputIdCol + ") join " + usersTableName +
-                                    " using(" + userIdCol + ") join " + chatsTableName + " using(" + chatIdCol + ") ORDER BY ms_id;\n";
-    std::string request = "";
-*/
+
     //suppose to be                SELECT ms_id, ms_sendTime, tip_content, us_phone FROM (SELECT * FROM messages WHERE ch_id = 
     const std::string baseRequest = "SELECT " + messageIdCol + ", " + messageTimeCol + ", " + textInputContentCol + ", " + userPhoneCol + ", " + chatIdCol +
                                     " FROM (SELECT * FROM " + messagesTableName + " WHERE " + chatIdCol + " = " +
@@ -634,17 +623,7 @@ std::vector<DBObject> PGConnection::getLastMessages(std::string mesId, std::stri
 };
 
 std::vector<DBObject> PGConnection::getLastVoiceMessages(std::string mesId, std::string number){
-    /*
-    //suppose to be                 SELECT ms_id, ms_sendTime, ip_type, tip_content, vip_content, us_id, ch_id FROM (SELECT * FROM messages WHERE ch_id = 
-    const std::string baseRequest = "SELECT " + messageIdCol + ", " + messageTimeCol + ", " + inputTypeCol + "," +
-                                        textInputContentCol + ", " + voiceInputContentCol + ", " + userIdCol + ", " + chatIdCol +
-                                        " FROM (SELECT * FROM " + messagesTableName + " WHERE " + chatIdCol + " = ";
-    //suppose to be                 ) AS MESSAGE join inputs using(ms_id) left join textinputs using(tip_id) left join voiceinputs using(vip_id);
-    const std::string endRequest = ") AS MESSAGE join " + inputsTableName + " using(" + messageIdCol + ") left join " + textInputsTableName + " using(" +
-                                    textInputIdCol + ") left join " + voiceInputsTableName + " using(" + voiceInputIdCol + ") join " + usersTableName +
-                                    " using(" + userIdCol + ") join " + chatsTableName + " using(" + chatIdCol + ") ORDER BY ms_id;\n";
-    std::string request = "";
-*/
+
     //suppose to be                SELECT ms_id, ms_sendTime, tip_content, us_phone FROM (SELECT * FROM messages WHERE ch_id = 
     const std::string baseRequest = "SELECT " + messageIdCol + ", " + messageTimeCol + ", " + voiceInputContentCol + ", " + userPhoneCol + ", " + chatIdCol +
                                     " FROM (SELECT * FROM " + messagesTableName + " WHERE " + chatIdCol + " = " +
@@ -658,7 +637,6 @@ std::vector<DBObject> PGConnection::getLastVoiceMessages(std::string mesId, std:
     request = baseRequest + mesId + endRequest;
     //sending request
     PQsendQuery( m_connection.get(), request.c_str() );
-    std::cout << request;
     DBObject obj;
     obj.type = message;
     obj.attr = std::vector<std::string>(6);

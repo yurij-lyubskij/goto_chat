@@ -141,7 +141,7 @@ TEST(PGConnectionTests, ChatsDBTests) {
 	EXPECT_EQ(chat2.getName(), "ChatsDBTests2");
 
 	//addMembers test
-	time_t num2 = time(NULL)%10000;
+	time_t num2 = time(NULL)%100000;
 	time_t num1 = num2 + 1;
 	User user1(0), user2(0);
 	user1.Name = "ChatsDBTests1";
