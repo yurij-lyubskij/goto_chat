@@ -76,6 +76,7 @@ Response CreateChatRoom::Handle(Request request){
     jsonParser parser;
 
     ChatRepo repo(connections);
+    UserRepo usRepo/*(connections)*/;
     ChatRoom newChat;
 
     rapidjson::Document d;
@@ -83,18 +84,28 @@ Response CreateChatRoom::Handle(Request request){
     d.Parse(json);
     if(! d.HasMember("chatName")) return response;
     newChat = ChatRoom(d["chatName"].GetString());
-
+    /*
     int usersCount = 0;
     if(! d.HasMember("usersCount")) return response;
     usersCount = d["usersCount"].GetInt();
-
+    */
     if(! d.HasMember("users")) return response;
     if(! d["users"].IsArray()) return response;
+    std::vector<std::string> usersPhones;
+    const rapidjson::Value& usersPh = d["users"];
+    User usr;
+    usr.Id = 0;
+    usr.Name = "";
+    usr.password = "";
     std::vector<User> usrs;
-    const rapidjson::Value& usersId = d["users"];
-    for (rapidjson::SizeType i = 0; i < usersId.Size(); i++)
-        usrs.push_back(User(usersId[i].GetInt()));
-
+    for (rapidjson::SizeType i = 0; i < usersPh.Size(); i++){
+        usersPhones.push_back(usersPh[i].GetString());
+        usrs.push_back(usRepo.GetbyPhone(usersPh[i].GetString()));
+    }
+    if(usrs.empty()) {
+        response.statusCode = NotFound;
+        return response;
+    }
     response.statusCode = OK;
     response.cookie = request.cookie;
     response.body = "";
@@ -131,28 +142,39 @@ bool JoinChatRoom::CanHandle(Request request){
 
 Response JoinChatRoom::Handle(Request request){
     Response response;
-    response.statusCode = OK;
+    
     if (request.responseStatus != OK) {
         response.statusCode = UnAuthorized;
         return response;
     }
+    response.statusCode = BadRequest;
+
+    jsonParser parser;
+
+    ChatRepo repo(connections);
+    UserRepo usRepo/*(connections)*/;
+    ChatRoom joinedChat;
+
+    rapidjson::Document d;
+    const char* json = request.body.c_str();
+    d.Parse(json);
+    if(! d.HasMember("chatId")) return response;
+    joinedChat = ChatRoom(std::stoi(d["chatId"].GetString()));
+
+    if(! d.HasMember("user")) return response;
+    std::vector<User> usrs;
+    usrs.push_back(usRepo.GetbyPhone(d["user"].GetString()));
+    std::cout << "Until join\n";
+    if (! repo.doesExist(joinedChat.getId())){
+        response.statusCode = NotFound;
+        return response;
+    }
+
+    response.statusCode = OK;
     response.cookie = request.cookie;
     response.body = "";
-
-    std::vector<std::string> bodySplit = split(request.body);
-    ChatRepo repo(connections);
-
-    ChatRoom chat(std::stoi(bodySplit[0]));
-    User usr(std::stoi(bodySplit[1]));
-    if( chat.getId() < 1 || usr.Id < 1 ){
-        response.statusCode = BadRequest;
-        return response;
-    };
-
-    std::vector<User> usrs;
-    usrs.push_back(usr);
-
-    if ( repo.addUsersToChat(chat, usrs) ) response.statusCode = OK;
+    
+    if ( repo.addUsersToChat(joinedChat, usrs) ) response.statusCode = OK;
     else response.statusCode = BadRequest;
 
     return response;

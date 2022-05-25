@@ -308,7 +308,7 @@ bool ChatRepo::addUsersToChat(const ChatRoom &updatedChat, std::vector<User> use
 	objects.push_back(updatedChat);
 	for(int i = 0; i < len; ++i) {
 		objects.push_back(DBObject(users[i]));
-		if ( users[i].Id < 1 ) {
+		if ( users[i].PhoneNumber == "" ) {
 			connection->freeConnection(conn);								//return connection to the queue
 			return false;
 		}
