@@ -53,7 +53,7 @@ TEST(ChatRoomHandlersTests, CreateChatRoom) {
     testRequest.method = "POST";
     testRequest.target = "/chat/create";
     testRequest.cookie = "1";
-    testRequest.body = "{\"chatName\": \"someChat\" ,\"usersCount\": 2,\"users\": [1, 2]}";
+    testRequest.body = "{\"chatName\": \"someChat\" ,\"usersCount\": 2,\"users\": [\"12345\"]}";
 
     EXPECT_TRUE(handler.CanHandle(testRequest));
     Response result;
@@ -84,7 +84,7 @@ TEST(ChatRoomHandlersTests, JoinChatRoom) {
     testRequest.method = "POST";
     testRequest.target = "/chat/join";
     testRequest.cookie = "1";
-    testRequest.body = "1 1";
+    testRequest.body = "{\"chatName\": \"1\" ,\"user\": \"12345\"}";
     EXPECT_TRUE(handler.CanHandle(testRequest));
     
     Response result;
@@ -115,14 +115,13 @@ TEST(ChatRoomHandlersTests, FindChatRoom) {
 
 
     testRequest.method = "GET";
-    testRequest.target = "/chat/find";
+    testRequest.target = "/chat/find/?name=test";
     testRequest.cookie = "1";
-    testRequest.body = "test";
     EXPECT_TRUE(handler.CanHandle(testRequest));
     Response result;
     result = handler.Handle(testRequest);   
     EXPECT_EQ(result.cookie, "1");
-    EXPECT_EQ(result.body, "1 test\n3 testing\n");
+    EXPECT_EQ(result.body, "{\"chatCount\":\"2\",\"chats\":\"\"[{\"id\":\"1\",\"chatName\":\"test\"},{\"id\":\"3\",\"chatName\":\"testing\"}]}");
     EXPECT_EQ(result.statusCode, 200);
       
 }

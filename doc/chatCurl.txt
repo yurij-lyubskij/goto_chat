@@ -9,3 +9,8 @@ curl -i --header "Content-Type: application/json" \
   --cookie  "session=4kiHxV3kDJkwlrjI1qnhfeiVj"\
   --data '{"chatId": "3" ,"user": "475789"}' \
   http://localhost:8080/chat/join
+
+  curl -i --header "Content-Type: application/json" \
+  --request GET \
+  --cookie  "session=4kiHxV3kDJkwlrjI1qnhfeiVj"\
+  http://localhost:8080/chat/find/?name=tsDB
