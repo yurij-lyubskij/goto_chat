@@ -5,6 +5,7 @@ set(INCLUDES
         ${CMAKE_CURRENT_SOURCE_DIR}/headers/
         ${CMAKE_CURRENT_SOURCE_DIR}/client_net_module_lib/
         ${CMAKE_CURRENT_SOURCE_DIR}/parser_lib/
+        ${CMAKE_CURRENT_SOURCE_DIR}/session_lib/
         )
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -19,6 +20,8 @@ add_library(${PROJECT_NAME} STATIC
     ${CMAKE_CURRENT_SOURCE_DIR}/sources/client.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/parser_lib/parser.h
     ${CMAKE_CURRENT_SOURCE_DIR}/parser_lib/parser.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/session_lib/session.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/session_lib/session.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/client_net_module_lib/client_net_module.h
     ${CMAKE_CURRENT_SOURCE_DIR}/client_net_module_lib/client_net_module.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/client_net_module_lib/server_address.h

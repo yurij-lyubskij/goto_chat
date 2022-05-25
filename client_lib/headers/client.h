@@ -1,13 +1,18 @@
 #include <boost/asio.hpp>
 #include <boost/beast.hpp>
+#include <iostream>
+#include <string>
+
+#include "session.h"
 
 #ifndef CLIENT_H
 #define CLIENT_H
 
-#include <iostream>
-#include <string>
+
 
 namespace asio = boost::asio;
+namespace beast = boost::beast;
+namespace http = beast::http;
 
 class Client
 {
@@ -37,7 +42,13 @@ public:
     bool sign_in(const std::string &login, const std::string &password);
 
 private:
+    void send_request(http::request<http::string_body> request) {
+        std::make_shared<session>(ioc)->run(request);
+        ioc.run();
+    }
+
     asio::io_context ioc;
 };
+
 
 #endif // CLIENT_H
