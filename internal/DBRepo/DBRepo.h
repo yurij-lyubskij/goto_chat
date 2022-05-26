@@ -42,7 +42,7 @@ enum DBObjectType { user, chat, message, input };
 
 enum DBOperation { checkIt, putIt, deleteIt, updateIt, getFew,
 					getWithPhone,																//user spec operations
-					addMembers, removeMembers/*, getMessageOrigin*/, getChatsofUser, findWithName,	//chat spec operations
+					addMembers, removeMembers/*, getMessageOrigin*/, getChatsOfUser, findWithName,	//chat spec operations
 					getLastMessagesFromChat, getLast, getNext																	//message spec operations
 };
 
@@ -94,7 +94,7 @@ class PGConnection: public iConnection{
 		std::vector<DBObject> getMessagesById(std::vector<std::string>);
 		std::vector<DBObject> getUsersByPhone(std::vector<std::string>);
 		std::vector<DBObject> getMembers(DBObject);
-		std::vector<DBObject> getUserChats(DBObject);
+		std::vector<DBObject> getUserChats(std::string);
 		std::vector<DBObject> getLastChatMessages(std::string, std::string);
 		std::vector<DBObject> getLastMessages(std::string, std::string);
 		std::vector<DBObject> getNextMessages(std::string, std::string);

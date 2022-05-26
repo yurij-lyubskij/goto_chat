@@ -328,7 +328,7 @@ std::vector<ChatRoom> ChatRepo::getUserChats(const User& user){
 	std::shared_ptr<iConnection> conn = connection->connection();			//getting connection to DB
 
 	DBRequest request;
-	request.operation = getChatsofUser;
+	request.operation = getChatsOfUser;
 	request.objectType = chat;
 	request.request = std::to_string(user.Id);
 	

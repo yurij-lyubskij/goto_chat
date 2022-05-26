@@ -385,6 +385,9 @@ std::vector<DBObject> PGConnection::get(DBRequest request){
         case findWithName:
             return getChatsByName(request.request);
             break;
+        case getChatsOfUser:
+            return getUserChats(request.request);
+            break;
         case getWithPhone:
             return getUsersByPhone(attrs);
             break;
@@ -575,6 +578,38 @@ std::vector<DBObject> PGConnection::getChatsByName(std::string name){
             }
            
 
+            PQclear(res);
+        }
+    }
+    return result;
+};
+
+std::vector<DBObject> PGConnection::getUserChats(std::string userId){
+    //Example                       SELECT ch_id, ch_name FROM (SELECT * FROM users_chats WHERE us_id = 37) AS CH join chats using(ch_id);
+    const std::string baseRequest = " SELECT " + chatIdCol + ", " + chatNameCol + " FROM (SELECT * FROM " + usersChatsTableName + " WHERE " + userIdCol + " = ";
+    const std::string endRequest = ") AS CH join " + chatsTableName + " using(" + chatIdCol + ");\n";
+    std::string request = "";
+
+    //making request
+    request += baseRequest + userId + endRequest;
+    //sending request
+    PQsendQuery( m_connection.get(), request.c_str() );
+
+    //getting ids
+    PGresult* res;
+    DBObject obj;
+    obj.type = chat;
+    obj.attr = std::vector<std::string>(3);
+    std::vector<DBObject> result;
+    while ( res = PQgetResult( m_connection.get()) ) {
+        if (PQresultStatus(res) == PGRES_TUPLES_OK && PQntuples(res)) {
+            int len = PQntuples(res);
+            for(int i = 0; i < len; ++i){
+                obj.attr[0] = PQgetvalue (res ,i , 0);
+                obj.attr[1] = PQgetvalue (res ,i , 1);
+                result.push_back( obj ) ;
+            }
+           
             PQclear(res);
         }
     }
