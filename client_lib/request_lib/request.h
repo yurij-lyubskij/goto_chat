@@ -9,6 +9,7 @@ namespace http = beast::http;
 class Request
 {
 public:
+    Request() {}
     Request(const std::string& c) : cookie(c) {}
 
     http::request<http::file_body> message()

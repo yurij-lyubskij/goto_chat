@@ -10,7 +10,7 @@ Client::~Client()
 {
 }
 
-void Client::send_request(http::request<http::string_body> request)
+void Client::send_request(http::request<http::file_body>&& request)
 {
 //    std::shared_ptr<session> ptr = std::make_shared<session>(ioc);
 //    ptr->run(request);
