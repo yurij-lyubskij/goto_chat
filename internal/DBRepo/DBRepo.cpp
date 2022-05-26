@@ -10,8 +10,6 @@
 #include <stdexcept>
 #include <algorithm>
 
-#include <iostream>
-
 #include "DBRepo.h"
 #include "User.h"
 #include "Message.h"
@@ -455,18 +453,39 @@ std::vector<int> MessageRepo::put(std::vector<iMessage> mes){
 
 	std::shared_ptr<iConnection> conn = connection->connection();			//getting connection to DB
 
+	//check if sender and chat exist
+	
+
+
+
+
 	int len = mes.size();
 	std::vector<DBObject> objects(len);
 
+	DBRequest request;
+	request.operation = checkIt;
+	request.request = "";
+	std::vector<DBObject> checking(1);
 	for(int i = 0; i < len; ++i) {
 		objects[i] = DBObject(mes[i]);
 		if ( mes[i].getId() != 0 ) {
 			connection->freeConnection(conn);								//return connection to the queue
 			return ids;
 		}
+		request.objectType = user;
+		checking[0] = User(mes[i].getSender());
+		if(conn->exec(request, checking).size() == 0){
+			connection->freeConnection(conn);								//return connection to the queue
+			return ids;
+		}
+		request.objectType = chat;
+		checking[0] = ChatRoom(mes[i].getChat());
+		if(conn->exec(request, checking).size() == 0){
+			connection->freeConnection(conn);								//return connection to the queue
+			return ids;
+		}
 	};
 	
-	DBRequest request;
 	request.operation = putIt;
 	request.objectType = message;
 	request.request = "";
@@ -474,7 +493,6 @@ std::vector<int> MessageRepo::put(std::vector<iMessage> mes){
 	connection->freeConnection(conn);										//return connection to the queue
 
 	if ( res.empty() ) return ids;
-	std::cout << res.size() << std::endl;
 	len = res.size();
 	for( int i = 0; i < len; ++i) ids.push_back(((iMessage) res[i]).getId());
 

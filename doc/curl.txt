@@ -93,6 +93,6 @@ curl -i \
 
     curl -i --header "Content-Type: application/json" \
       --request POST \
-      --cookie  "session=nsvYLCW3OpeajNx4SBQOOujdE"\
-      --data '{"chatId": 1, "message": {"userPhone": 123, "text": "string3"}}' \
+      --cookie  "session=Ag2iHUYCUwC5DIirmCN6rHjpw"\
+      --data '{"chatId": 2, "message": {"userPhone": 34, "text": "string4"}}' \
       http://localhost:8080/chat/message/send
