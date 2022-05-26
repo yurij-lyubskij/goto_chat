@@ -22,7 +22,7 @@ std::string Parser::message(const std::string &chat_name, const std::string &tex
 }
 
 std::string
-create_chat(const std::string &chat_name, const std::string &phone1, const std::string &phone2){
+create_chat(const std::string &chat_name, const std::string &phone1, const std::string &phone2) {
     std::string filename = "./new_chat.json";
     nlohmann::json json;
     json["chat_name"] = chat_name;
@@ -35,7 +35,7 @@ create_chat(const std::string &chat_name, const std::string &phone1, const std::
     return filename;
 }
 
-std::string chat_join(const std::string &chatId, const std::string &phone){
+std::string chat_join(const std::string &chatId, const std::string &phone) {
     std::string filename = "./add_person.json";
     nlohmann::json json;
     json["chatId"] = chatId;
@@ -46,7 +46,7 @@ std::string chat_join(const std::string &chatId, const std::string &phone){
     return filename;
 }
 
-std::string create_session(const std::string& login, const std::string& password){
+std::string create_session(const std::string &login, const std::string &password) {
     std::string filename = "./sign_in.json";
     nlohmann::json json;
     json["login"] = login;
@@ -57,7 +57,7 @@ std::string create_session(const std::string& login, const std::string& password
     return filename;
 }
 
-std::string create_user(const std::string& username, const std::string& phone, const std::string& password){
+std::string create_user(const std::string &username, const std::string &phone, const std::string &password) {
     std::string filename = "./new_user.json";
     nlohmann::json json;
     json["username"] = username;
@@ -67,4 +67,15 @@ std::string create_user(const std::string& username, const std::string& phone, c
     std::ofstream stream(filename);
     stream << json;
     return filename;
+}
+
+std::vector <std::string> chats(const std::string &chats_file) {
+    std::ifstream stream(chats_file);
+    nlohmann::json json;
+    stream >> json;
+    std::vector<std::string> res;
+    for(auto it : json["chats"]){
+        res.push_back(it["chatName"]);
+    }
+    return res;
 }
