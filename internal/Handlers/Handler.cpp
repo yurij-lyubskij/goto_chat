@@ -115,10 +115,10 @@ bool GetVoice::CanHandle(Request request) {
 Response GetVoice::Handle(Request request) {
     Response response;
 
-//    if (request.responseStatus != OK) {
-//        response.statusCode = UnAuthorized;
-//        return response;
-//    }
+    if (request.responseStatus != OK) {
+        response.statusCode = UnAuthorized;
+        return response;
+    }
     response.statusCode = OK;
     response.isFile = true;
     std::string fileName  = request.target.substr(REQUESTED_TARGET.size(), request.target.size() - 1);
@@ -141,18 +141,17 @@ bool SendVoice::CanHandle(Request request) {
 
 Response SendVoice::Handle(Request req) {
     Response response;
-
-//    if (request.responseStatus != OK) {
-//        response.statusCode = UnAuthorized;
-//        return response;
-//    }
+    if (req.responseStatus != OK) {
+        response.statusCode = UnAuthorized;
+        return response;
+    }
     int pos = req.body.find("Content-Length:");
     req.body.erase(0, pos);
     pos = req.body.find("\n");
     req.body.erase(0, pos);
-    std::string fName = "test1.mp3";
-    fName = staticPath + fName;
-    std::ofstream fout(fName, std::ios::binary);
+    std::string fileName  = req.target.substr(REQUESTED_TARGET.size(), req.target.size() - 1);
+    fileName = staticPath + fileName;
+    std::ofstream fout(fileName, std::ios::binary);
     fout.write(req.body.c_str(), req.body.size());
     fout.close();
     response.statusCode = OK;

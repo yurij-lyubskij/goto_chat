@@ -78,21 +78,21 @@ curl -i \
 
   curl -i \
     --request GET \
-    --cookie  "session=8Jinh2jUPBZ4kknOiOOj7r1wZ"\
-    --output faded.mp3\
-    http://localhost:8080/chat/message/getfile?name=Faded.mp3
+    --cookie  "session=U1NBraBIc7tGrhcQwqe588ixM"\
+    --output aded.mp3\
+    http://localhost:8080/chat/message/getfile?name=voice.mp3
 
 
 
   curl -i \
     --request POST \
-    --cookie  "session=8Jinh2jUPBZ4kknOiOOj7r1wZ"\
+    --cookie  "session=7z6Y44IkPaKo8mwy8OFMawGqA"\
     -F "file=@faded.mp3;type=audio/mpeg" \
     http://localhost:8080/chat/message/send_voice?name=voice.mp3
 
 
     curl -i --header "Content-Type: application/json" \
       --request POST \
-      --cookie  "session=byLTSmsfnJMHVb24xtByQwhgW"\
+      --cookie  "session=U1NBraBIc7tGrhcQwqe588ixM"\
       --data '{"chatId": 1, "message": {"userPhone": "12345", "text": "string3"}}' \
       http://localhost:8080/chat/message/send
