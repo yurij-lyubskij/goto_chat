@@ -61,7 +61,11 @@ Response CreateNewUser::Handle(Request req) {
         response.statusCode = BadRequest;
         return response;
     }
-    users->CreateUser(user);
+    bool success = users->CreateUser(user);
+    if (!success){
+        response.statusCode = BadRequest;
+        return response;
+    }
     user = users->GetbyPhone(user.PhoneNumber);
     response.cookie = auth->SetCookie(user) ;
     response.statusCode = OK;

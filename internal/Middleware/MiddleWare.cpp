@@ -10,7 +10,7 @@ Request &CheckAuth::operator()(Request &request) {
     if (!request.cookie.empty()) {
         user = auth->GetUser(cookie);
     }
-    if (request.cookie.empty()|| user.Name.empty()) {
+    if (request.cookie.empty()|| user.PhoneNumber.empty()) {
         request.responseStatus = UnAuthorized;
     }
     return request;
