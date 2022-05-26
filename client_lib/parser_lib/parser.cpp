@@ -38,7 +38,7 @@ create_chat(const std::string &chat_name, const std::string &phone1, const std::
 std::string chat_join(const std::string &chatId, const std::string &phone){
     std::string filename = "./add_person.json";
     nlohmann::json json;
-    json["chatId"] = chat_name;
+    json["chatId"] = chatId;
     json["user"] = phone;
 
     std::ofstream stream(filename);
