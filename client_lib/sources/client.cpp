@@ -1,6 +1,6 @@
 #include "client.h"
 #include "parser.h"
-#include "request.h"
+//#include "request.h"
 
 Client::Client()
 {
@@ -12,18 +12,18 @@ Client::~Client()
 
 void Client::send_request(http::request<http::string_body> request)
 {
-    std::shared_ptr<session> ptr = std::make_shared<session>(ioc);
-    ptr->run(request);
-    ioc.run();
-    handle_response(ptr->get_response());
+//    std::shared_ptr<session> ptr = std::make_shared<session>(ioc);
+//    ptr->run(request);
+//    ioc.run();
+//    handle_response(ptr->get_response());
 }
 
 void Client::send_message(const std::string &chat_name, const std::string &text, const std::string &phone)
 {
-    beast::http::request<http::string_body> request = Request::message();
+    /*beast::http::request<http::string_body> request = Request::message();
     request.body() = Parser::message(chat_name, text, phone);
     request.prepare_payload();
-    send_request(request);
+    send_request(request);*/
 }
 
 void Client::open_chat(const std::string &chat_name)

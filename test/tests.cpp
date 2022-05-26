@@ -12,7 +12,7 @@ TEST(Client, Empty){
     cl.open_chat(str);
     cl.registrate(str, str, str, str, str);
     cl.reload_chat(str, str);
-    cl.send_message(str, str);
+    //cl.send_message(str, str);
 
     EXPECT_TRUE(true);
 }

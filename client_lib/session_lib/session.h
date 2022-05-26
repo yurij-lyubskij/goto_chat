@@ -1,3 +1,6 @@
+#ifndef SESSION_H_
+#define SESSION_H_
+
 #include <boost/beast/core.hpp>
 #include <boost/beast/http.hpp>
 #include <boost/beast/version.hpp>
@@ -135,3 +138,5 @@ public:
         // If we get here then the connection is closed gracefully
     }
 };
+
+#endif // SESSION_H_

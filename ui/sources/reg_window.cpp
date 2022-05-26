@@ -12,13 +12,13 @@ Reg_window::~Reg_window() {
 }
 
 void Reg_window::registrate() {
-
+    Client cl;
     std::string name = ui->lineEdit->text().toStdString();
     std::string second_name = ui->lineEdit_2->text().toStdString();
     std::string email = ui->lineEdit_3->text().toStdString();
     std::string login = ui->lineEdit_4->text().toStdString();
     std::string password = ui->lineEdit_5->text().toStdString();
-    Client::registrate(name, second_name, login,password, email);
+    cl.registrate(name, second_name, login,password, email);
 }
 
 bool Reg_window::check_data() {
@@ -26,7 +26,8 @@ bool Reg_window::check_data() {
 }
 
 void Reg_window::on_pushButton_clicked() {
-    if(!Client::person_exist(ui->lineEdit_4->text().toStdString())){
+    Client cl;
+    if(cl.person_exist(ui->lineEdit_4->text().toStdString())){
         registrate();
         clear_lines();
         this->close();
