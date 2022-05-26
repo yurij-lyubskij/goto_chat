@@ -3,10 +3,11 @@
 #include "ChatRoomHandler.h"
 #include "DBRepo.h"
 
+const std::string addr = "127.0.0.1";
+const unsigned short port = 8080;
 
 int main() {
-    auto const address = net::ip::make_address("127.0.0.1");
-    auto const port = static_cast<unsigned short>(8080);
+    auto const address = net::ip::make_address(addr);
     net::io_context ioc{1};
     tcp::socket mysock {ioc};
     std::shared_ptr<DBConnection<PGConnection>> connections(new DBConnection<PGConnection>(4));
@@ -33,6 +34,12 @@ int main() {
     router->AddHandler(joinChat);
     std::shared_ptr<iHandler> findChat(new FindChatRoom((DBConnection<iConnection>*) connections.get()));
     router->AddHandler(findChat);
+    std::shared_ptr<iHandler> send(new SendMessage((DBConnection<iConnection>*) connections.get()));
+    router->AddHandler(send);
+    std::shared_ptr<iHandler> voiceGet(new GetVoice((DBConnection<iConnection>*) connections.get()));
+    router->AddHandler(voiceGet);
+    std::shared_ptr<iHandler> voiceSend(new SendVoice((DBConnection<iConnection>*) connections.get()));
+    router->AddHandler(voiceSend);
     
     std::shared_ptr<iBufferFabric> fabric (new BufferFabric);
     std::shared_ptr<iAcceptor> acceptor(new Acceptor(ioc, tcp::endpoint{address, port}));

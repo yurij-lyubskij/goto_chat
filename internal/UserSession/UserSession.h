@@ -49,11 +49,15 @@ private:
     // Asynchronously receive a complete request message.
     void readRequest() {
         auto self = shared_from_this();
-        std::function lamda = [self](std::error_code ec,
+        std::function lamda = [self](error_code ec,
                                      std::size_t bytes_transferred) {
             boost::ignore_unused(bytes_transferred);
-            if (!ec)
+            if (!ec) {
                 self->processRequest();
+            } else {
+                std::cout << ec.message() << "\n";
+            }
+
         };
         socket->async_read(
                 buff,
@@ -65,7 +69,11 @@ private:
         Request request = buff->createRequest();
         request = router->UseMiddle(request);
         Response res = router->Route(request);
-        buff->createResponse(res);
+        if (!res.isFile){
+            buff->createResponse(std::move(res));
+        } else {
+            buff->createFileResponse(std::move(res));
+        }
         writeResponse();
     }
 

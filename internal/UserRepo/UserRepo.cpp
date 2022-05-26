@@ -7,7 +7,6 @@
 
 std::vector<User> UserRepo::GetManybyPhone(std::vector<std::string> phone){
     std::shared_ptr<iConnection> conn = connection->connection();			//getting connection to DB
-
     DBRequest request;
     request.operation = getWithPhone;
     request.objectType = user;
@@ -103,3 +102,7 @@ bool UserRepo::CreateUser(User user) {
     users.push_back(user);
     return CreateMany(users);
 }
+
+
+
+

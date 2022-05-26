@@ -29,19 +29,29 @@ public:
 
     void async_read(std::shared_ptr<IhttpBuffer> buffer,
                     std::function<void(error_code, unsigned long)> lamda) override {
+
         http::async_read(
                 sock,
                 std::static_pointer_cast<httpBuffer>(buffer)->buff,
-                std::static_pointer_cast<httpBuffer>(buffer)->request_,
+                std::static_pointer_cast<httpBuffer>(buffer)->parser,
                 lamda);
     }
 
     void async_write(std::shared_ptr<IhttpBuffer> buffer,
                      std::function<void(error_code, unsigned long)> lamda) override {
-        http::async_write(
-                sock,
-                std::static_pointer_cast<httpBuffer>(buffer)->response_,
-                lamda);
+        auto size = std::static_pointer_cast<httpBuffer>(buffer)->fileResponse.body().size();
+        if (size != 0) {
+            http::async_write(
+                    sock,
+                    std::static_pointer_cast<httpBuffer>(buffer)->fileResponse,
+                    lamda);
+        } else {
+            http::async_write(
+                    sock,
+                    std::static_pointer_cast<httpBuffer>(buffer)->response_,
+                    lamda);
+        }
+
     }
 
     void shutdown(error_code ec) override {

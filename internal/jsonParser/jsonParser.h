@@ -12,17 +12,20 @@
 #include "rapidjson/document.h"
 
 #include "rapidjson/stringbuffer.h"
+#include "Message.h"
 
 class IjsonParser {
 public:
     virtual ~IjsonParser() = default;
     virtual User parseUser (std::string body) = 0;
+    virtual Message parseMSG (std::string body) = 0;
     virtual std::string serializeUser (User user) = 0;
 };
 
 class jsonParser: public IjsonParser {
 public:
     User parseUser (std::string body) override;
+    Message parseMSG (std::string body) override;
     std::string serializeUser (User user) override;
 };
 
