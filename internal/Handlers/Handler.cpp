@@ -45,12 +45,18 @@ Response Logout::Handle(Request req) {
     return response;
 }
 
-bool SendMessage::CanHandle(Request) {
-    return false;
+bool SendMessage::CanHandle(Request req ) {
+    return req.target == "/chat/message/send";
 }
 
-Response SendMessage::Handle(Request) {
-    return Response();
+Response SendMessage::Handle(Request req) {
+    Response response;
+    response.statusCode = OK;
+    if (req.responseStatus != OK) {
+        response.statusCode = UnAuthorized;
+        return response;
+    }
+    return response;
 }
 
 bool CreateNewUser::CanHandle(Request req) {

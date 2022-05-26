@@ -140,54 +140,6 @@ std::vector<std::string> iConnection::split(const std::string &s) {
 }
 
 
-/*
-//
-//UserRepo Section
-//
-bool UserRepo::doesExist(int id){
-	return false;
-};
-
-std::vector<User> UserRepo::getByID(std::vector<int> id){
-	std::vector<User> usrs;
-	return usrs;
-};
-
-bool UserRepo::update(std::vector<User> users){
-	return false;
-};
-
-bool UserRepo::put(std::vector<User> users){
-	if ( users.empty() ) return false;
-
-	std::shared_ptr<iConnection> conn = connection->connection();
-
-	int len = users.size();
-	std::vector<DBObject> objects(len);
-	UserDB tempUser;
-
-	for(int i = 0; i < len; ++i) {
-		tempUser = { (int) users[i].Id, users[i].Name, users[i].PhoneNumber };
-		objects[i] = DBObject(tempUser);
-	};
-	return conn->exec(putIt, objects);
-};
-
-std::vector<User> UserRepo::getChatMembers(ChatRoom chat){
-	std::vector<User> usrs;
-	return usrs;
-};
-
-std::vector<User> UserRepo::getSender(Message mes){
-	std::vector<User> usrs;
-	return usrs;
-};
-
-//
-//end of UserRepo Section
-//
-*/
-
 //
 //ChatRepo Section
 //
