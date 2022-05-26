@@ -6,7 +6,7 @@ curl -i --header "Content-Type: application/json" \
 
 curl -i --header "Content-Type: application/json" \
   --request POST \
-  --cookie  "session=6XbpKmYWOVeCKfDuplrTuplZg"\
+  --cookie  "session=LyWFfYlOZe358fGSc3dpwF17U"\
   --data '{"chatName": "someChat" ,"usersCount": 1,"users": ["12345"]}' \
   http://localhost:8080/chat/create
 
@@ -18,10 +18,15 @@ curl -i --header "Content-Type: application/json" \
 
   curl -i --header "Content-Type: application/json" \
   --request GET \
-  --cookie  "session=8Jinh2jUPBZ4kknOiOOj7r1wZ"\
+  --cookie  "session=91zYxT6C1UyAI21k4xX7VBqv7"\
   http://localhost:8080/chat/find/?name=tsDB
 
   curl -i --header "Content-Type: application/json" \
   --request GET \
-  --cookie  "session=ouldKDALkhoXsn65C05QHf6jI"\
-  http://localhost:8080/chat/message/list/?mes=1
+  --cookie  "session=49u4PAlYo6RKjG7UBeVoY2uGx"\
+  'http://localhost:8080/chat/message/list/?mes=40&mode=0'
+
+    curl -i --header "Content-Type: application/json" \
+  --request GET \
+  --cookie  "session=chtbntexclt44px3QyCf7FhCs"\
+  'http://localhost:8080/chat/message/list/?mes=40&mode=1'
