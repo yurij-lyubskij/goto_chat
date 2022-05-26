@@ -93,4 +93,13 @@ private:
     const std::string REQUESTED_TARGET = "/chat/message/getfile?name=";
 };
 
+class SendVoice : public iHandler {
+public:
+    bool CanHandle(Request) override;
+
+    Response Handle(Request) override;
+private:
+    const std::string REQUESTED_TARGET = "/chat/message/send_voice";
+};
+
 #endif //GOTO_CHAT_HANDLER_H

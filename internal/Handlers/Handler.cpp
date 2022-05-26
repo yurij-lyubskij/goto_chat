@@ -1,7 +1,8 @@
-#include <iostream>
 #include <boost/algorithm/string/predicate.hpp>
 #include "httpBuffer.h"
 #include "Handler.h"
+#include <fstream>
+#include <iostream>
 
 //
 // Created by yura11011 on 14.04.2022.
@@ -113,5 +114,28 @@ Response GetVoice::Handle(Request request) {
         return response;
     }
     response.file_body = std::move(body);
+    return response;
+}
+
+bool SendVoice::CanHandle(Request req) {
+    return  req.target == REQUESTED_TARGET;
+}
+
+Response SendVoice::Handle(Request request) {
+    Response response;
+
+//    if (request.responseStatus != OK) {
+//        response.statusCode = UnAuthorized;
+//        return response;
+//    }
+    std::string fName = "test1.mp3";
+    int pos = request.body.find("Content-Length:");
+    request.body.erase(0, pos);
+    pos = request.body.find("\n");
+    request.body.erase(0, pos);
+    std::ofstream fout(fName, std::ios::binary);
+    fout.write(request.body.c_str(), request.body.size());
+    fout.close();
+    response.statusCode = OK;
     return response;
 }

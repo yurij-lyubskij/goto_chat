@@ -22,27 +22,30 @@ public:
 class httpBuffer : public IhttpBuffer  {
 
 public:
+    httpBuffer(){
+        parser.body_limit(std::numeric_limits<std::uint64_t>::max());
+    }
     // The buffer for performing reads.
     beast::flat_buffer buff{8192};
     // The request message.
-    http::request<http::string_body> request_;
-
+//    http::request<http::dynamic_body> request_;
+    http::request_parser<http::dynamic_body>parser;
     // The response message.
     http::response<http::string_body> response_;
 
     http::response<http::file_body> fileResponse;
     Request createRequest() override {
         Request req;
-        req.parameters["<field_name>"] = static_cast<std::string> (request_["<field_name>"]);
-        req.method = static_cast<std::string>(request_.method_string());
+        req.parameters["<field_name>"] = static_cast<std::string> (parser.get()["<field_name>"]);
+        req.method = static_cast<std::string>(parser.get().method_string());
 //        auto cookies = http::param_list(request_[http::field::cookie]);
 //        for(auto param : http::param_list(request_[http::field::cookie])) {
 //            std::cout << "Cookie " << param.first << " has value " << param.second << "\n";
 //        }
-        auto cookies = request_[http::field::cookie];
+        auto cookies = parser.get()[http::field::cookie];
         req.cookie = static_cast<std::string>(cookies.substr(cookies.find("=") + 1));
-        req.target = static_cast<std::string>(request_.target());
-        req.body = static_cast<std::string>(request_.body());
+        req.target = static_cast<std::string>(parser.get().target());
+        req.body = beast::buffers_to_string(parser.get().body().data());
         return req;
     }
     void contentLength() override{
@@ -64,7 +67,7 @@ public:
         http::response<http::file_body> res{
                 std::piecewise_construct,
                 std::make_tuple(std::move(response.file_body)),
-                std::make_tuple(http::status::ok, request_.version())};
+                std::make_tuple(http::status::ok, parser.get().version())};
         fileResponse = std::move(res);
         fileResponse.set(http::field::server, BOOST_BEAST_VERSION_STRING);
         fileResponse.set(http::field::content_type, "audio/mpeg");

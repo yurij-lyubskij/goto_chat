@@ -29,10 +29,11 @@ public:
 
     void async_read(std::shared_ptr<IhttpBuffer> buffer,
                     std::function<void(error_code, unsigned long)> lamda) override {
+
         http::async_read(
                 sock,
                 std::static_pointer_cast<httpBuffer>(buffer)->buff,
-                std::static_pointer_cast<httpBuffer>(buffer)->request_,
+                std::static_pointer_cast<httpBuffer>(buffer)->parser,
                 lamda);
     }
 
