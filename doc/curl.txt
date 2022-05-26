@@ -86,9 +86,9 @@ curl -i \
 
   curl -i \
     --request POST \
-    --cookie  "session=7z6Y44IkPaKo8mwy8OFMawGqA"\
+    --cookie  "session=PqkblDsuzmPGDfG8ytlnn5S0y" \
     -F "file=@faded.mp3;type=audio/mpeg" \
-    http://localhost:8080/chat/message/send_voice?name=voice.mp3
+    http://localhost:8080/chat/message/send_voice?name=noice.mp3
 
 
     curl -i --header "Content-Type: application/json" \

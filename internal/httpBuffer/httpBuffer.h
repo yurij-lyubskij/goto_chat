@@ -28,7 +28,7 @@ public:
     // The buffer for performing reads.
     beast::flat_buffer buff{8192};
     // The request message.
-//    http::request<http::dynamic_body> request_;
+    http::request<http::dynamic_body> request_;
     http::request_parser<http::dynamic_body>parser;
     // The response message.
     http::response<http::string_body> response_;
@@ -38,10 +38,6 @@ public:
         Request req;
         req.parameters["<field_name>"] = static_cast<std::string> (parser.get()["<field_name>"]);
         req.method = static_cast<std::string>(parser.get().method_string());
-//        auto cookies = http::param_list(request_[http::field::cookie]);
-//        for(auto param : http::param_list(request_[http::field::cookie])) {
-//            std::cout << "Cookie " << param.first << " has value " << param.second << "\n";
-//        }
         auto cookies = parser.get()[http::field::cookie];
         req.cookie = static_cast<std::string>(cookies.substr(cookies.find("=") + 1));
         req.target = static_cast<std::string>(parser.get().target());

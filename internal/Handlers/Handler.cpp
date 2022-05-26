@@ -145,8 +145,10 @@ Response SendVoice::Handle(Request req) {
         response.statusCode = UnAuthorized;
         return response;
     }
-    int pos = req.body.find("Content-Length:");
-    req.body.erase(0, pos);
+    int pos = req.body.find("Content-Type:");
+    if (pos > 0) {
+        req.body.erase(0, pos);
+    }
     pos = req.body.find("\n");
     req.body.erase(0, pos);
     std::string fileName  = req.target.substr(REQUESTED_TARGET.size(), req.target.size() - 1);
