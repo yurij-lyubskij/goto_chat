@@ -8,6 +8,7 @@
 #include <boost/beast.hpp>
 #include <boost/noncopyable.hpp>
 
+
 #ifndef CLIENT_NET_MODULE_H
 #define CLIENT_NET_MODULE_H
 

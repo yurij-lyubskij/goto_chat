@@ -7,10 +7,12 @@
 #include <string>
 
 #include "session.h"
+#include "request.h"
 
 namespace asio = boost::asio;
 namespace beast = boost::beast;
 namespace http = beast::http;
+
 
 class Client
 {
@@ -40,13 +42,14 @@ public:
     bool sign_in(const std::string &login, const std::string &password);
 
 private:
-    void send_request(http::request<http::string_body> request);
+    void send_request(http::request<http::file_body>&& request);
 
-    void handle_response(http::response<http::string_body> response) {
+    void handle_response(http::response<http::string_body> response)
+    {
     }
 
+    Request requestor;
     asio::io_context ioc;
 };
-
 
 #endif // CLIENT_H

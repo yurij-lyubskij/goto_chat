@@ -10,20 +10,30 @@ Client::~Client()
 {
 }
 
-void Client::send_request(http::request<http::string_body> request)
+void Client::send_request(http::request<http::file_body>&& request)
 {
-    std::shared_ptr<session> ptr = std::make_shared<session>(ioc);
-    ptr->run(request);
+    std::shared_ptr<session> ptr = std::move(std::make_shared<session>(ioc));
+    ptr->run(std::move(request));
     ioc.run();
     handle_response(ptr->get_response());
 }
 
 void Client::send_message(const std::string &chat_name, const std::string &text, const std::string &phone)
 {
-    beast::http::request<http::string_body> request = Request::message();
-    request.body() = Parser::message(chat_name, text, phone);
+    http::request<http::file_body> request = requestor.message();
+    std::string filename = Parser::message(chat_name, text, phone);
+
+    http::file_body::file_type file;
+    beast::error_code ec;
+    file.open(filename.c_str(), beast::file_mode::read, ec);
+
+    http::request_parser<http::file_body> parser{std::piecewise_construct,
+                                                 std::make_tuple(std::move(file))};
+
+    ?
+
     request.prepare_payload();
-    send_request(request);
+    send_request(std::move(request));
 }
 
 void Client::open_chat(const std::string &chat_name)
