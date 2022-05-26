@@ -52,13 +52,16 @@ bool SendMessage::CanHandle(Request req ) {
 Response SendMessage::Handle(Request req) {
     Response response;
     response.statusCode = OK;
-//    if (req.responseStatus != OK) {
-//        response.statusCode = UnAuthorized;
-//        return response;
-//    }
+    if (req.responseStatus != OK) {
+        response.statusCode = UnAuthorized;
+        return response;
+    }
     MessageRepo repo(connections);
     jsonParser parser;
-    Message msg = parser.parseMSG(req.body);
+    User user = auth->GetUser(req.cookie);
+    int userid = user.Id;
+    Message msg = parser.parseMSG(req.body, userid);
+
     std::vector<iMessage> message;
     message.push_back(msg);
     std::vector<int> ids = repo.put(message);
@@ -132,8 +135,8 @@ Response GetVoice::Handle(Request request) {
     return response;
 }
 
-bool SendVoice::CanHandle(Request req) {
-    return  req.target == REQUESTED_TARGET;
+bool SendVoice::CanHandle(Request request) {
+    return  boost::starts_with(request.target, REQUESTED_TARGET);
 }
 
 Response SendVoice::Handle(Request req) {

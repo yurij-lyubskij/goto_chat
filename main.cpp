@@ -34,7 +34,7 @@ int main() {
     router->AddHandler(joinChat);
     std::shared_ptr<iHandler> findChat(new FindChatRoom((DBConnection<iConnection>*) connections.get()));
     router->AddHandler(findChat);
-    std::shared_ptr<iHandler> send(new SendMessage((DBConnection<iConnection>*) connections.get()));
+    std::shared_ptr<iHandler> send(new SendMessage((DBConnection<iConnection>*) connections.get(), auth));
     router->AddHandler(send);
     std::shared_ptr<iHandler> voiceGet(new GetVoice((DBConnection<iConnection>*) connections.get()));
     router->AddHandler(voiceGet);

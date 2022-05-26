@@ -47,7 +47,7 @@ Content-Length: 0
 
 curl -i --header "Content-Type: application/json" \
   --request POST \
-  --data '{"phone": "12345",   "password": "string" }' \
+  --data '{"phone": "12345", "password": "string" }' \
   http://localhost:8080/session/create
 
   curl -i --header "Content-Type: application/json" \
@@ -88,11 +88,11 @@ curl -i \
     --request POST \
     --cookie  "session=8Jinh2jUPBZ4kknOiOOj7r1wZ"\
     -F "file=@faded.mp3;type=audio/mpeg" \
-    http://localhost:8080/chat/message/send_voice
+    http://localhost:8080/chat/message/send_voice?name=voice.mp3
 
 
     curl -i --header "Content-Type: application/json" \
       --request POST \
-      --cookie  "session=8Jinh2jUPBZ4kknOiOOj7r1wZ"\
-      --data '{"chatId": 1, "message": {"userPhone": 123, "text": "string3"}}' \
+      --cookie  "session=byLTSmsfnJMHVb24xtByQwhgW"\
+      --data '{"chatId": 1, "message": {"userPhone": "12345", "text": "string3"}}' \
       http://localhost:8080/chat/message/send

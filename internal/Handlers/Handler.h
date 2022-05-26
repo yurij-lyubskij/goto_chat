@@ -72,11 +72,12 @@ public:
 
 class SendMessage : public iHandler {
 public:
-    explicit SendMessage(DBConnection<iConnection>* conn): connections(conn){};
+    explicit SendMessage(DBConnection<iConnection>* conn, std::shared_ptr<iAuthDb> auth): connections(conn), auth(auth){};
     bool CanHandle(Request) override;
 
     Response Handle(Request) override;
 private:
+    std::shared_ptr<iAuthDb> auth;
     const std::string REQUESTED_TARGET = "/chat/message/send";
     DBConnection<iConnection>* connections;
 };
@@ -107,7 +108,7 @@ public:
     Response Handle(Request) override;
 private:
     DBConnection<iConnection>* connections;
-    const std::string REQUESTED_TARGET = "/chat/message/send_voice";
+    const std::string REQUESTED_TARGET = "/chat/message/send_voice?name=";
 };
 
 #endif //GOTO_CHAT_HANDLER_H
