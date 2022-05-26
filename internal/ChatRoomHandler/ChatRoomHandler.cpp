@@ -27,18 +27,36 @@ Response GetMessageFromChat::Handle(Request request){
     }
     response.statusCode = BadRequest;
 
-    MessageRepo repo(connections);
+    MessageRepo mesRepo(connections);
+    UserRepo usRepo(connections);
     std::string params = request.target.substr(REQUESTED_TARGET.size(), request.target.size() - 1);
-    const std::string beginning = "/?mes=";
-    if (! boost::starts_with(params, beginning))  return response;
-    std::string mesId = params.substr(beginning.size(), params.size() - 1);
+    std::string beginning = "/?mes=";
+    std::vector<iMessage> messages;
 
-    std::vector<iMessage> messages = repo.getLastFew(std::stoi(mesId), 20);
+    if ( boost::starts_with(params, beginning)){
+        std::vector<std::string> parametrs = split(params, '&');
+        if(parametrs.size() != 2) return response;
+
+        std::string mesId = parametrs[0].substr(beginning.size(), parametrs[0].size() - 1);
+
+        beginning = "mode=";
+        if (! boost::starts_with(parametrs[1], beginning)) return response;
+        if (parametrs[1].substr(beginning.size(), parametrs[1].size() - 1)[0] == '0') messages = mesRepo.getNextFew(std::stoi(mesId), 20);
+        else messages = mesRepo.getLastFew(std::stoi(mesId), 20);
+    }else{
+        beginning = "/?chat=";
+        if(! boost::starts_with(params, beginning)) return response;
+        std::string chatId = params.substr(beginning.size(), params.size() - 1);
+        messages  = mesRepo.getLastFromChat(std::stoi(chatId), 20);
+    }
+
     int len = messages.size();
     if ( len == 0) {
         response.statusCode = NotFound;
         return response;
     }
+
+    jsonParser parser;
     response.body += "{";
     response.body += "\"messagesCount\":\"";
     response.body += std::to_string(len);
@@ -46,34 +64,10 @@ Response GetMessageFromChat::Handle(Request request){
     response.body += "\"messages\":";
 
     response.body += "[";
-    response.body += "{";
-    response.body += "\"id\":\"";
-    response.body += std::to_string(messages[0].getId());
-    response.body += "\",";
-    response.body += "\"text\":\"";
-    response.body += messages[0].getContent();
-    response.body += "\",";
-    response.body += "\"time\":\"";
-    response.body += std::to_string(messages[0].getTime());
-    response.body += "\",";
-    response.body += "\"userPhone\":\"";
-    response.body += std::to_string(messages[0].getSender());
-    response.body += "\"}";
+    response.body +=  parser.serializeMessage(messages[0], usRepo.GetbyId(messages[0].getSender()));
     for( int i = 1; i < len; ++i ) {
-        response.body += ",{";
-        response.body += "{";
-        response.body += "\"id\":\"";
-        response.body += std::to_string(messages[0].getId());
-        response.body += "\",";
-        response.body += "\"text\":\"";
-        response.body += messages[0].getContent();
-        response.body += "\",";
-        response.body += "\"time\":\"";
-        response.body += std::to_string(messages[0].getTime());
-        response.body += "\",";
-        response.body += "\"userPhone\":\"";
-        response.body += std::to_string(messages[0].getSender());
-        response.body += "\"}";
+        response.body += ",";
+        response.body += parser.serializeMessage(messages[i], usRepo.GetbyId(messages[i].getSender()));
     }
     response.body += "]}";
 
@@ -126,19 +120,22 @@ Response CreateChatRoom::Handle(Request request){
     if(! d["users"].IsArray()) return response;
     std::vector<std::string> usersPhones;
     const rapidjson::Value& usersPh = d["users"];
+
+    response.statusCode = NotFound;
     User usr;
     usr.Id = 0;
     usr.Name = "";
     usr.password = "";
     std::vector<User> usrs;
-    for (rapidjson::SizeType i = 0; i < usersPh.Size(); i++){
+    for (rapidjson::SizeType i = 0; i < usersPh.Size(); ++i){
         usersPhones.push_back(usersPh[i].GetString());
+        usr = usRepo.GetbyPhone(usersPh[i].GetString());
+
+        if (usr.Id == 0) return response;
+
         usrs.push_back(usRepo.GetbyPhone(usersPh[i].GetString()));
     }
-    if(usrs.empty()) {
-        response.statusCode = NotFound;
-        return response;
-    }
+    
     response.statusCode = OK;
     response.cookie = request.cookie;
     response.body = "";
@@ -146,10 +143,8 @@ Response CreateChatRoom::Handle(Request request){
     std::vector<ChatRoom> chats;
     chats.push_back(newChat);
     std::vector<int> res = repo.put(chats);
-    if( res.empty() ){
-        response.statusCode = BadRequest;
-        return response;
-    };
+    if( res.empty() ) return response;
+
     response.body = "{\"chatId\":" + std::to_string(res[0]) + "}";
     if ( repo.addUsersToChat(res[0], usrs) ) response.statusCode = OK;
     else response.statusCode = BadRequest;
@@ -193,15 +188,15 @@ Response JoinChatRoom::Handle(Request request){
     d.Parse(json);
     if(! d.HasMember("chatId")) return response;
     joinedChat = ChatRoom(std::stoi(d["chatId"].GetString()));
-
     if(! d.HasMember("user")) return response;
+
+    response.statusCode = NotFound;
     std::vector<User> usrs;
-    usrs.push_back(usRepo.GetbyPhone(d["user"].GetString()));
+    User usr = usRepo.GetbyPhone(d["user"].GetString());
+    if (usr.Id == 0) return response;
+    usrs.push_back(usr);
     
-    if (! repo.doesExist(joinedChat.getId())){
-        response.statusCode = NotFound;
-        return response;
-    }
+    if (! repo.doesExist(joinedChat.getId()))return response;
     response.statusCode = OK;
     response.cookie = request.cookie;
     response.body = "";
@@ -259,7 +254,7 @@ Response FindChatRoom::Handle(Request request){
     response.statusCode = OK;
     response.cookie = request.cookie;
     response.body = "";
-
+    jsonParser parser;
     response.body += "{";
     response.body += "\"chatCount\":\"";
     response.body += std::to_string(len);
@@ -267,21 +262,10 @@ Response FindChatRoom::Handle(Request request){
     response.body += "\"chats\":";
 
     response.body += "[";
-    response.body += "{";
-    response.body += "\"id\":\"";
-    response.body += std::to_string(chats[0].getId());
-    response.body += "\",";
-    response.body += "\"chatName\":\"";
-    response.body += chats[0].getName();
-     response.body += "\"}";
+    response.body += parser.serializeChat(chats[0]);
     for( int i = 1; i < len; ++i ) {
-        response.body += ",{";
-        response.body += "\"id\":\"";
-        response.body += std::to_string(chats[i].getId());
-        response.body += "\",";
-        response.body += "\"chatName\":\"";
-        response.body += chats[i].getName();
-        response.body += "\"}";
+        response.body += ",";
+        response.body += parser.serializeChat(chats[i]);
     }
     response.body += "]}";
 
@@ -298,3 +282,60 @@ std::vector<std::string> FindChatRoom::split(const std::string &s) {
     }
     return elems;
 }
+//end of FindChatRoom
+
+//GetUserChats
+bool GetUserChats::CanHandle(Request request){
+    return boost::starts_with(request.target, REQUESTED_TARGET);
+};
+
+Response GetUserChats::Handle(Request request){
+    Response response;
+    
+    if (request.responseStatus != OK) {
+        response.statusCode = UnAuthorized;
+        return response;
+    }
+    response.statusCode = BadRequest;
+
+    ChatRepo chRepo(connections);
+    UserRepo usRepo(connections);
+    ChatRoom joinedChat;
+
+    std::string params = request.target.substr(REQUESTED_TARGET.size(), request.target.size() - 1);
+
+    const std::string beginning = "/?user=";
+
+    if (! boost::starts_with(params, beginning))  return response;
+    response.statusCode = NotFound;
+
+    std::string usPhone = params.substr(beginning.size(), params.size() - 1);
+    User user = usRepo.GetbyPhone(usPhone);
+    if(user.Id == 0) return response;
+
+    std::vector<ChatRoom> chats = chRepo.getUserChats(user);
+    int len = chats.size();
+    if ( len == 0)  return response;
+
+    response.statusCode = OK;
+    response.cookie = request.cookie;
+    response.body = "";
+    jsonParser parser;
+    response.body += "{";
+    response.body += "\"chatCount\":\"";
+    response.body += std::to_string(len);
+    response.body += "\",";
+    response.body += "\"chats\":";
+
+    response.body += "[";
+    response.body += parser.serializeChat(chats[0]);
+    for( int i = 1; i < len; ++i ) {
+        response.body += ",";
+        response.body += parser.serializeChat(chats[i]);
+    }
+    response.body += "]}";
+
+    response.statusCode = OK;
+    return response;
+};
+//end of GetUserChats

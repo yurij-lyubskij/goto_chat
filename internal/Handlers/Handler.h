@@ -72,9 +72,13 @@ public:
 
 class SendMessage : public iHandler {
 public:
+    explicit SendMessage(DBConnection<iConnection>* conn): connections(conn){};
     bool CanHandle(Request) override;
 
-    Response Handle(Request) override;;
+    Response Handle(Request) override;
+private:
+    const std::string REQUESTED_TARGET = "/chat/message/send";
+    DBConnection<iConnection>* connections;
 };
 
 class Example : public iHandler {
@@ -82,6 +86,28 @@ public:
     bool CanHandle(Request) override;
 
     Response Handle(Request) override;;
+};
+
+class GetVoice : public iHandler {
+public:
+    GetVoice(DBConnection<iConnection>* conn): connections(conn){};
+    bool CanHandle(Request) override;
+
+    Response Handle(Request) override;
+private:
+    DBConnection<iConnection>* connections;
+    const std::string REQUESTED_TARGET = "/chat/message/getfile?name=";
+};
+
+class SendVoice : public iHandler {
+public:
+    SendVoice(DBConnection<iConnection>* conn): connections(conn){};
+    bool CanHandle(Request) override;
+
+    Response Handle(Request) override;
+private:
+    DBConnection<iConnection>* connections;
+    const std::string REQUESTED_TARGET = "/chat/message/send_voice";
 };
 
 #endif //GOTO_CHAT_HANDLER_H

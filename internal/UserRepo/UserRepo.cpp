@@ -7,7 +7,6 @@
 
 std::vector<User> UserRepo::GetManybyPhone(std::vector<std::string> phone){
     std::shared_ptr<iConnection> conn = connection->connection();			//getting connection to DB
-
     DBRequest request;
     request.operation = getWithPhone;
     request.objectType = user;
@@ -40,15 +39,13 @@ User UserRepo::GetbyPhone(std::string Phone) {
 
 std::vector<User> UserRepo::getManyByID(std::vector<size_t> id) {
     std::shared_ptr<iConnection> conn = connection->connection();			//getting connection to DB
-
     DBRequest request;
     request.operation = getFew;
     request.objectType = user;
-    request.request = "";
+    request.request = "id";
     for(auto i: id) {
-        request.request += i;
+        request.request += " " + std::to_string(i);
     }
-
     std::vector<DBObject> objects = conn->get(request);
 
     size_t len = objects.size();													//objects with some ids might don't exist so check size
@@ -103,3 +100,7 @@ bool UserRepo::CreateUser(User user) {
     users.push_back(user);
     return CreateMany(users);
 }
+
+
+
+

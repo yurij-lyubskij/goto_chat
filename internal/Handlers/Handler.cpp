@@ -1,11 +1,15 @@
-#include <iostream>
+#include <boost/algorithm/string/predicate.hpp>
+#include "httpBuffer.h"
 #include "Handler.h"
+#include <fstream>
+#include <iostream>
 
 //
 // Created by yura11011 on 14.04.2022.
 //
 
 #include "Handler.h"
+const std::string staticPath = "/home/yura11011/goto_chat/static/";
 
 bool Login::CanHandle(Request req) {
     return req.target == "/session/create";
@@ -41,12 +45,27 @@ Response Logout::Handle(Request req) {
     return response;
 }
 
-bool SendMessage::CanHandle(Request) {
-    return false;
+bool SendMessage::CanHandle(Request req ) {
+    return  req.target == REQUESTED_TARGET;
 }
 
-Response SendMessage::Handle(Request) {
-    return Response();
+Response SendMessage::Handle(Request req) {
+    Response response;
+    response.statusCode = OK;
+//    if (req.responseStatus != OK) {
+//        response.statusCode = UnAuthorized;
+//        return response;
+//    }
+    MessageRepo repo(connections);
+    jsonParser parser;
+    Message msg = parser.parseMSG(req.body);
+    std::vector<iMessage> message;
+    message.push_back(msg);
+    std::vector<int> ids = repo.put(message);
+    if (ids.empty()) {
+        response.statusCode = BadRequest;
+    }
+    return response;
 }
 
 bool CreateNewUser::CanHandle(Request req) {
@@ -61,7 +80,11 @@ Response CreateNewUser::Handle(Request req) {
         response.statusCode = BadRequest;
         return response;
     }
-    users->CreateUser(user);
+    bool success = users->CreateUser(user);
+    if (!success){
+        response.statusCode = BadRequest;
+        return response;
+    }
     user = users->GetbyPhone(user.PhoneNumber);
     response.cookie = auth->SetCookie(user) ;
     response.statusCode = OK;
@@ -79,5 +102,56 @@ Response Example::Handle(Request req) {
         response.statusCode = UnAuthorized;
         return response;
     }
+    return response;
+}
+
+bool GetVoice::CanHandle(Request request) {
+    return boost::starts_with(request.target, REQUESTED_TARGET);
+}
+
+Response GetVoice::Handle(Request request) {
+    Response response;
+
+//    if (request.responseStatus != OK) {
+//        response.statusCode = UnAuthorized;
+//        return response;
+//    }
+    response.statusCode = OK;
+    response.isFile = true;
+    std::string fileName  = request.target.substr(REQUESTED_TARGET.size(), request.target.size() - 1);
+    fileName  = staticPath + fileName;
+    beast::error_code ec;
+    http::file_body::value_type body;
+    body.open(fileName.c_str(), beast::file_mode::scan, ec);
+    // Handle the case where the file doesn't exist
+    if(ec == beast::errc::no_such_file_or_directory || !body.is_open()) {
+        response.statusCode = NotFound;
+        return response;
+    }
+    response.file_body = std::move(body);
+    return response;
+}
+
+bool SendVoice::CanHandle(Request req) {
+    return  req.target == REQUESTED_TARGET;
+}
+
+Response SendVoice::Handle(Request req) {
+    Response response;
+
+//    if (request.responseStatus != OK) {
+//        response.statusCode = UnAuthorized;
+//        return response;
+//    }
+    int pos = req.body.find("Content-Length:");
+    req.body.erase(0, pos);
+    pos = req.body.find("\n");
+    req.body.erase(0, pos);
+    std::string fName = "test1.mp3";
+    fName = staticPath + fName;
+    std::ofstream fout(fName, std::ios::binary);
+    fout.write(req.body.c_str(), req.body.size());
+    fout.close();
+    response.statusCode = OK;
     return response;
 }

@@ -8,7 +8,6 @@
 #include "Response.h"
 
 //Is used when user need to download new N messages from chat
-//Is used when user need to download new N messages from chat
 class GetMessageFromChat: public iHandler{
 public:
     GetMessageFromChat(DBConnection<iConnection>* conn): connections(conn){};
@@ -56,5 +55,16 @@ private:
     std::vector<std::string> split(const std::string&);
 };
 
+//Is used when getting user's chats
+class GetUserChats: public iHandler{
+public:
+    GetUserChats(DBConnection<iConnection>* conn): connections(conn){};
+    bool CanHandle(Request) override;
+    Response Handle(Request) override;
+private:
+    DBConnection<iConnection>* connections;
+    const std::string REQUESTED_TARGET = "/user/getchat";
+    std::vector<std::string> split(const std::string&);
+};
 
 #endif

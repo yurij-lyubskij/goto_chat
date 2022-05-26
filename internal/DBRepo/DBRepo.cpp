@@ -140,54 +140,6 @@ std::vector<std::string> iConnection::split(const std::string &s) {
 }
 
 
-/*
-//
-//UserRepo Section
-//
-bool UserRepo::doesExist(int id){
-	return false;
-};
-
-std::vector<User> UserRepo::getByID(std::vector<int> id){
-	std::vector<User> usrs;
-	return usrs;
-};
-
-bool UserRepo::update(std::vector<User> users){
-	return false;
-};
-
-bool UserRepo::put(std::vector<User> users){
-	if ( users.empty() ) return false;
-
-	std::shared_ptr<iConnection> conn = connection->connection();
-
-	int len = users.size();
-	std::vector<DBObject> objects(len);
-	UserDB tempUser;
-
-	for(int i = 0; i < len; ++i) {
-		tempUser = { (int) users[i].Id, users[i].Name, users[i].PhoneNumber };
-		objects[i] = DBObject(tempUser);
-	};
-	return conn->exec(putIt, objects);
-};
-
-std::vector<User> UserRepo::getChatMembers(ChatRoom chat){
-	std::vector<User> usrs;
-	return usrs;
-};
-
-std::vector<User> UserRepo::getSender(Message mes){
-	std::vector<User> usrs;
-	return usrs;
-};
-
-//
-//end of UserRepo Section
-//
-*/
-
 //
 //ChatRepo Section
 //
@@ -376,7 +328,7 @@ std::vector<ChatRoom> ChatRepo::getUserChats(const User& user){
 	std::shared_ptr<iConnection> conn = connection->connection();			//getting connection to DB
 
 	DBRequest request;
-	request.operation = getChatsofUser;
+	request.operation = getChatsOfUser;
 	request.objectType = chat;
 	request.request = std::to_string(user.Id);
 	
@@ -501,18 +453,39 @@ std::vector<int> MessageRepo::put(std::vector<iMessage> mes){
 
 	std::shared_ptr<iConnection> conn = connection->connection();			//getting connection to DB
 
+	//check if sender and chat exist
+	
+
+
+
+
 	int len = mes.size();
 	std::vector<DBObject> objects(len);
 
+	DBRequest request;
+	request.operation = checkIt;
+	request.request = "";
+	std::vector<DBObject> checking(1);
 	for(int i = 0; i < len; ++i) {
 		objects[i] = DBObject(mes[i]);
 		if ( mes[i].getId() != 0 ) {
 			connection->freeConnection(conn);								//return connection to the queue
 			return ids;
 		}
+		request.objectType = user;
+		checking[0] = User(mes[i].getSender());
+		if(conn->exec(request, checking).size() == 0){
+			connection->freeConnection(conn);								//return connection to the queue
+			return ids;
+		}
+		request.objectType = chat;
+		checking[0] = ChatRoom(mes[i].getChat());
+		if(conn->exec(request, checking).size() == 0){
+			connection->freeConnection(conn);								//return connection to the queue
+			return ids;
+		}
 	};
 	
-	DBRequest request;
 	request.operation = putIt;
 	request.objectType = message;
 	request.request = "";
@@ -524,6 +497,26 @@ std::vector<int> MessageRepo::put(std::vector<iMessage> mes){
 	for( int i = 0; i < len; ++i) ids.push_back(((iMessage) res[i]).getId());
 
 	return ids;
+};
+
+std::vector<iMessage> MessageRepo::getLastFromChat(int chatId, int messageNumber){
+
+	std::shared_ptr<iConnection> conn = connection->connection();			//getting connection to DB
+
+	DBRequest request;
+	request.operation = getLastMessagesFromChat;
+	request.objectType = message;
+	request.request = std::to_string(chatId) + " " + std::to_string(messageNumber);
+
+	std::vector<DBObject> result = conn->get(request);
+
+	int len = result.size();													//objects with some ids might don't exist so check size
+	std::vector<iMessage> mesages = std::vector<iMessage>(len);
+
+	for( int i = 0; i < len; ++i ) mesages[i] = (iMessage) result[i];
+
+	connection->freeConnection(conn);										//return connection to the queue
+	return mesages;
 };
 
 std::vector<iMessage> MessageRepo::getLastFew(int mesId, int messageNumber){
@@ -546,12 +539,12 @@ std::vector<iMessage> MessageRepo::getLastFew(int mesId, int messageNumber){
 	return mesages;
 };
 
-std::vector<iMessage> MessageRepo::getLastFewVoice(int mesId, int messageNumber){
+std::vector<iMessage> MessageRepo::getNextFew(int mesId, int messageNumber){
 
 	std::shared_ptr<iConnection> conn = connection->connection();			//getting connection to DB
 
 	DBRequest request;
-	request.operation = getLastVoice;
+	request.operation = getNext;
 	request.objectType = message;
 	request.request = std::to_string(mesId) + " " + std::to_string(messageNumber);
 
