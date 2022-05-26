@@ -89,3 +89,10 @@ curl -i \
     --cookie  "session=8Jinh2jUPBZ4kknOiOOj7r1wZ"\
     -F "file=@faded.mp3;type=audio/mpeg" \
     http://localhost:8080/chat/message/send_voice
+
+
+    curl -i --header "Content-Type: application/json" \
+      --request POST \
+      --cookie  "session=8Jinh2jUPBZ4kknOiOOj7r1wZ"\
+      --data '{"chatId": 1, "message": {"userPhone": 123, "text": "string3"}}' \
+      http://localhost:8080/chat/message/send

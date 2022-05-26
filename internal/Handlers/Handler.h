@@ -72,7 +72,7 @@ public:
 
 class SendMessage : public iHandler {
 public:
-    SendMessage(DBConnection<iConnection>* conn): connections(conn){};
+    explicit SendMessage(DBConnection<iConnection>* conn): connections(conn){};
     bool CanHandle(Request) override;
 
     Response Handle(Request) override;

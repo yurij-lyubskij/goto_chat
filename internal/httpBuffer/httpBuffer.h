@@ -46,10 +46,6 @@ public:
         req.cookie = static_cast<std::string>(cookies.substr(cookies.find("=") + 1));
         req.target = static_cast<std::string>(parser.get().target());
         req.body = beast::buffers_to_string(parser.get().body().data());
-        int pos = req.body.find("Content-Length:");
-        req.body.erase(0, pos);
-        pos = req.body.find("\n");
-        req.body.erase(0, pos);
         return req;
     }
     void contentLength() override{

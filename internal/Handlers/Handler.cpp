@@ -46,15 +46,24 @@ Response Logout::Handle(Request req) {
 }
 
 bool SendMessage::CanHandle(Request req ) {
-    return req.target == "/chat/message/send";
+    return  req.target == REQUESTED_TARGET;
 }
 
 Response SendMessage::Handle(Request req) {
     Response response;
     response.statusCode = OK;
-    if (req.responseStatus != OK) {
-        response.statusCode = UnAuthorized;
-        return response;
+//    if (req.responseStatus != OK) {
+//        response.statusCode = UnAuthorized;
+//        return response;
+//    }
+    MessageRepo repo(connections);
+    jsonParser parser;
+    Message msg = parser.parseMSG(req.body);
+    std::vector<iMessage> message;
+    message.push_back(msg);
+    std::vector<int> ids = repo.put(message);
+    if (ids.empty()) {
+        response.statusCode = BadRequest;
     }
     return response;
 }
@@ -127,17 +136,21 @@ bool SendVoice::CanHandle(Request req) {
     return  req.target == REQUESTED_TARGET;
 }
 
-Response SendVoice::Handle(Request request) {
+Response SendVoice::Handle(Request req) {
     Response response;
 
 //    if (request.responseStatus != OK) {
 //        response.statusCode = UnAuthorized;
 //        return response;
 //    }
+    int pos = req.body.find("Content-Length:");
+    req.body.erase(0, pos);
+    pos = req.body.find("\n");
+    req.body.erase(0, pos);
     std::string fName = "test1.mp3";
     fName = staticPath + fName;
     std::ofstream fout(fName, std::ios::binary);
-    fout.write(request.body.c_str(), request.body.size());
+    fout.write(req.body.c_str(), req.body.size());
     fout.close();
     response.statusCode = OK;
     return response;
