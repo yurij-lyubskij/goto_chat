@@ -13,6 +13,7 @@ const int16_t OK = 200;
 const int16_t UnAuthorized = 401;
 const int16_t BadRequest = 400;
 const int16_t NotFound = 404;
+const int16_t Conflict = 409;
 
 class Request {
 public:

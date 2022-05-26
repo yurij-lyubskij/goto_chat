@@ -27,6 +27,7 @@ class MockConnection: public iConnection{
     public:
         int usersCount = 0;
         std::map<int, User> users;
+        std::map<std::string, User> userByPhone;
         int chatsCount = 0;
         std::map<int, ChatRoom> chats;
         int mesCount = 0;

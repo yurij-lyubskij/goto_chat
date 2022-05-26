@@ -43,7 +43,7 @@ enum DBObjectType { user, chat, message, input };
 enum DBOperation { checkIt, putIt, deleteIt, updateIt, getFew,
 					getWithPhone,																//user spec operations
 					addMembers, removeMembers/*, getMessageOrigin*/, getChatsofUser, findWithName,	//chat spec operations
-					getRange																	//message spec operations
+					getLast, getLastVoice																	//message spec operations
 };
 
 typedef struct{
@@ -95,7 +95,8 @@ class PGConnection: public iConnection{
 		std::vector<DBObject> getUsersByPhone(std::vector<std::string>);
 		std::vector<DBObject> getMembers(DBObject);
 		std::vector<DBObject> getUserChats(DBObject);
-		std::vector<DBObject> getMessagesFromRange(int, int, int);
+		std::vector<DBObject> getLastMessages(std::string, std::string);
+		std::vector<DBObject> getLastVoiceMessages(std::string, std::string);
 		std::vector<DBObject> getChatsByName(std::string);
         //void establish_connection();
 		//actual connections settings
@@ -188,7 +189,8 @@ public:
     virtual std::vector<iMessage> getByID(std::vector<int> id) = 0;
     virtual bool update(std::vector<iMessage> mes) = 0;
     virtual std::vector<int> put(std::vector<iMessage> mes) = 0;
-    virtual std::vector<iMessage> getFromRange(int start, int end,const ChatRoom &chat) = 0;
+    virtual std::vector<iMessage> getLastFew(int mesId, int messageNumber) = 0;
+	virtual std::vector<iMessage> getLastFewVoice(int mesId, int messageNumber) = 0;
 };
 
 //class UserRepo: public iUserRepo{
@@ -226,7 +228,8 @@ class MessageRepo: public iMessageRepo{
 		std::vector<iMessage> getByID(std::vector<int> id) override;
 		bool update(std::vector<iMessage> mes) override;
 		std::vector<int> put(std::vector<iMessage> mes) override;
-		std::vector<iMessage> getFromRange(int start, int end,const ChatRoom &chat) override;
+		std::vector<iMessage> getLastFew(int mesId, int messageNumber) override;
+		std::vector<iMessage> getLastFewVoice(int mesId, int messageNumber) override;
 };
 
 /*
