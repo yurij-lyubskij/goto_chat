@@ -4,6 +4,12 @@ curl -i --header "Content-Type: application/json" \
   --data '{"chatName": "someChat" ,"usersCount": 2,"users": ["12345", "475789"]}' \
   http://localhost:8080/chat/create
 
+curl -i --header "Content-Type: application/json" \
+  --request POST \
+  --cookie  "session=6XbpKmYWOVeCKfDuplrTuplZg"\
+  --data '{"chatName": "someChat" ,"usersCount": 1,"users": ["12345"]}' \
+  http://localhost:8080/chat/create
+
   curl -i --header "Content-Type: application/json" \
   --request POST \
   --cookie  "session=6XbpKmYWOVeCKfDuplrTuplZg"\

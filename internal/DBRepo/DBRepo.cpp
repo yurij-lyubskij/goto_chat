@@ -10,6 +10,8 @@
 #include <stdexcept>
 #include <algorithm>
 
+#include <iostream>
+
 #include "DBRepo.h"
 #include "User.h"
 #include "Message.h"
@@ -472,6 +474,7 @@ std::vector<int> MessageRepo::put(std::vector<iMessage> mes){
 	connection->freeConnection(conn);										//return connection to the queue
 
 	if ( res.empty() ) return ids;
+	std::cout << res.size() << std::endl;
 	len = res.size();
 	for( int i = 0; i < len; ++i) ids.push_back(((iMessage) res[i]).getId());
 

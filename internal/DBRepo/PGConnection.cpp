@@ -53,6 +53,8 @@ std::vector<DBObject> PGConnection::exec(DBRequest request, std::vector<DBObject
                 case message:
                     return checkMessages(objects);
                     break;
+                default:
+                    return res;
             }
             break;
         case addMembers:
@@ -60,7 +62,7 @@ std::vector<DBObject> PGConnection::exec(DBRequest request, std::vector<DBObject
         break;
         
     }
-    if ( res.empty() ) res.push_back(DBObject());
+
     return res;
 }
 //
