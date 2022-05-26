@@ -8,6 +8,7 @@
 //
 
 #include "Handler.h"
+const std::string staticPath = "/home/yura11011/goto_chat/static/";
 
 bool Login::CanHandle(Request req) {
     return req.target == "/session/create";
@@ -102,8 +103,7 @@ Response GetVoice::Handle(Request request) {
     response.statusCode = OK;
     response.isFile = true;
     std::string fileName  = request.target.substr(REQUESTED_TARGET.size(), request.target.size() - 1);
-    std::cout << fileName << "!\n";
-    fileName  = "../" + fileName;
+    fileName  = staticPath + fileName;
     beast::error_code ec;
     http::file_body::value_type body;
     body.open(fileName.c_str(), beast::file_mode::scan, ec);
