@@ -75,3 +75,10 @@ curl -i \
   --request GET \
   --cookie  "session=8Jinh2jUPBZ4kknOiOOj7r1wZ"\
   http://localhost:8080/chat/message/getfile?name=main.cpp
+
+  curl -i \
+    --request GET \
+    --cookie  "session=8Jinh2jUPBZ4kknOiOOj7r1wZ"\
+    --output faded.mp3\
+    http://localhost:8080/chat/message/getfile?name=Faded.mp3
+
