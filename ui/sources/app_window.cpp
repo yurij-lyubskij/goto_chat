@@ -62,7 +62,7 @@ void App_window::on_toolButton_3_pressed()
 
     QString time = QTime::currentTime().toString();
     std::replace_if(time.begin(), time.end(), [](QChar x) {return x == ':' ;}, '_');
-    rec.record_audio("voices/gay");
+    rec.record_audio("gay");
     //    rec.record_audio("voices/" + time);
     std::thread th(&App_window::refresh_timer, this);
     th.detach();
@@ -78,11 +78,11 @@ void App_window::on_toolButton_3_released()
 
 void App_window::on_pushButton_clicked()
 {
+//    player->stop();
     player = std::unique_ptr<QMediaPlayer>(new QMediaPlayer);
     audioOutput = std::shared_ptr<QAudioOutput>(new QAudioOutput);
     player->setAudioOutput(audioOutput.get());
-    player->stop();
-    QString path = "voices/gay.m4a";
+    QString path = "./gay.m4a";
     player->setSource(path);
     player->audioOutput()->setVolume(50);
     player->play();

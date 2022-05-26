@@ -5,6 +5,7 @@
 #include <boost/beast.hpp>
 #include <iostream>
 #include <string>
+#include "parser.h"
 
 //#include "session.h"
 
@@ -40,7 +41,7 @@ public:
     bool sign_in(const std::string &login, const std::string &password);
 
 private:
-    void send_request(http::request<http::string_body> request);
+    void send_request(http::request<http::file_body>&& request);
 
     void handle_response(http::response<http::string_body> response) {
     }

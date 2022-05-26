@@ -1,5 +1,4 @@
 #include "client.h"
-#include "parser.h"
 //#include "request.h"
 
 Client::Client()
@@ -63,6 +62,9 @@ bool Client::registrate(const std::string &first_name, const std::string &second
     //        reg_person(first_name, second_name, login,password, email);//функция Рината
     //    }
     //    return f;
+    std::string file_path = Parser::create_user(login, email, password);
+    // send file with path = file_path
+    // accept ok or not
     return true;
 }
 

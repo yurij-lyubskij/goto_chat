@@ -27,7 +27,7 @@ bool Reg_window::check_data() {
 
 void Reg_window::on_pushButton_clicked() {
     Client cl;
-    if(cl.person_exist(ui->lineEdit_4->text().toStdString())){
+    if(!cl.person_exist(ui->lineEdit_4->text().toStdString())){
         registrate();
         clear_lines();
         this->close();
