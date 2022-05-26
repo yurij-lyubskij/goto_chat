@@ -6,28 +6,7 @@
 #define GOTO_CHAT_HTTPBUFFER_H
 #include "Request.h"
 #include "Response.h"
-#include <boost/beast/core.hpp>
-#include <boost/beast/http.hpp>
-#include <utility>
-#include <boost/beast/version.hpp>
-#include <boost/asio/dispatch.hpp>
-#include <boost/asio/strand.hpp>
-#include <boost/config.hpp>
-#include <algorithm>
-#include <cstdlib>
-#include <functional>
-#include <iostream>
-#include <memory>
-#include <string>
-#include <thread>
-#include <vector>
 
-#include <vector>
-namespace beast = boost::beast;         // from <boost/beast.hpp>
-namespace http = beast::http;           // from <boost/beast/http.hpp>
-namespace net = boost::asio;            // from <boost/asio.hpp>
-using tcp = boost::asio::ip::tcp;       // from <boost/asio/ip/tcp.hpp>
-typedef boost::beast::error_code error_code;
 
 class IhttpBuffer  {
 
@@ -35,7 +14,7 @@ public:
     virtual Request createRequest() = 0;
 
     virtual void createResponse(Response response) = 0;
-
+    virtual void createFileResponse(Response response) = 0;
     virtual void contentLength() = 0;
     virtual ~IhttpBuffer() = default;
 };
@@ -51,6 +30,7 @@ public:
     // The response message.
     http::response<http::string_body> response_;
 
+    http::response<http::file_body> fileResponse;
     Request createRequest() override {
         Request req;
         req.parameters["<field_name>"] = static_cast<std::string> (request_["<field_name>"]);
@@ -67,6 +47,7 @@ public:
     }
     void contentLength() override{
         response_.content_length(response_.body().size());
+        fileResponse.content_length(fileResponse.body().size());
     }
 
     void createResponse(Response response) override {
@@ -77,6 +58,20 @@ public:
         response_.body() = response.body;
         response_.result(response.statusCode);
         response_.set("Set-Cookie", response.cookie);
+    }
+
+    void createFileResponse(Response response) override {
+        http::response<http::file_body> res{
+                std::piecewise_construct,
+                std::make_tuple(std::move(response.file_body)),
+                std::make_tuple(http::status::ok, request_.version())};
+        fileResponse = std::move(res);
+        fileResponse.set(http::field::server, BOOST_BEAST_VERSION_STRING);
+        fileResponse.set(http::field::content_type, "audio/mpeg");
+        fileResponse.set(http::field::cookie, response.cookie);
+        fileResponse.keep_alive(false);
+        fileResponse.result(response.statusCode);
+        fileResponse.set("Set-Cookie", response.cookie);
     }
 };
 

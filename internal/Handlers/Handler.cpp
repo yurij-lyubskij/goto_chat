@@ -1,4 +1,6 @@
 #include <iostream>
+#include <boost/algorithm/string/predicate.hpp>
+#include "httpBuffer.h"
 #include "Handler.h"
 
 //
@@ -83,5 +85,33 @@ Response Example::Handle(Request req) {
         response.statusCode = UnAuthorized;
         return response;
     }
+    return response;
+}
+
+bool GetVoice::CanHandle(Request request) {
+    return boost::starts_with(request.target, REQUESTED_TARGET);
+}
+
+Response GetVoice::Handle(Request request) {
+    Response response;
+
+//    if (request.responseStatus != OK) {
+//        response.statusCode = UnAuthorized;
+//        return response;
+//    }
+    response.statusCode = OK;
+    response.isFile = true;
+    std::string fileName  = request.target.substr(REQUESTED_TARGET.size(), request.target.size() - 1);
+    std::cout << fileName << "!\n";
+    fileName  = "../" + fileName;
+    beast::error_code ec;
+    http::file_body::value_type body;
+    body.open(fileName.c_str(), beast::file_mode::scan, ec);
+    // Handle the case where the file doesn't exist
+    if(ec == beast::errc::no_such_file_or_directory || !body.is_open()) {
+        response.statusCode = NotFound;
+        return response;
+    }
+    response.file_body = std::move(body);
     return response;
 }

@@ -84,4 +84,13 @@ public:
     Response Handle(Request) override;;
 };
 
+class GetVoice : public iHandler {
+public:
+    bool CanHandle(Request) override;
+
+    Response Handle(Request) override;
+private:
+    const std::string REQUESTED_TARGET = "/chat/message/getfile?name=";
+};
+
 #endif //GOTO_CHAT_HANDLER_H

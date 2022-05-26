@@ -65,7 +65,11 @@ private:
         Request request = buff->createRequest();
         request = router->UseMiddle(request);
         Response res = router->Route(request);
-        buff->createResponse(res);
+        if (!res.isFile){
+            buff->createResponse(std::move(res));
+        } else {
+            buff->createFileResponse(std::move(res));
+        }
         writeResponse();
     }
 
