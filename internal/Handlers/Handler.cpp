@@ -129,10 +129,7 @@ Response SendVoice::Handle(Request request) {
 //        return response;
 //    }
     std::string fName = "test1.mp3";
-    int pos = request.body.find("Content-Length:");
-    request.body.erase(0, pos);
-    pos = request.body.find("\n");
-    request.body.erase(0, pos);
+    fName = staticPath + fName;
     std::ofstream fout(fName, std::ios::binary);
     fout.write(request.body.c_str(), request.body.size());
     fout.close();
