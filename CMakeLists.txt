@@ -8,11 +8,9 @@ set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}  -pthread -lboost_thread" 
 
 
 find_package(Threads)
-add_subdirectory(client_lib)
-add_subdirectory(checker_lib)
 
 
-file(GLOB SOURCES */*.cpp)
+file(GLOB SOURCES */*/*.cpp)
 
 #one main in tests and in project
 file(GLOB SOURCES ${SOURCES} main.cpp)
