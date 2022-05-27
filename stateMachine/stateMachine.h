@@ -157,7 +157,7 @@ void inMain::handle(Machine *m) {
         case 'd': {
             std::string phone = m->user.phone;
             std::vector chats = m->client.get_users_chats(phone);
-            std::cout <<"Select chat Number: " << std::endl; //Not Id
+            std::cout << "Select chat Number: " << std::endl; //Not Id
             int i = 0;
             for (auto chat: chats) {
                 std::cout <<"chatNumber = " << i <<" chatName = " << chat.chatName << std::endl;
@@ -173,6 +173,16 @@ void inMain::handle(Machine *m) {
         }
             break;
         case 'f': {
+            std::cout << "enter chat name" << std::endl;
+            std::vector<std::string> members;
+            std::string chat_name;
+            std::cin >> chat_name;
+            members.push_back(m->user.phone);
+            Chat chat = m->client.create_chat(chat_name, members);
+            if (chat.Id != "0") {
+                m->currentChat = chat;
+                down(m);
+            }
 
         }
         case 'a': {
