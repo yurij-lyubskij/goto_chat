@@ -8,6 +8,7 @@
 #include <QScreen>
 #include <QStringListModel>
 #include <QTableView>
+#include <algorithm>
 
 #include "recorder.h"
 #include "client.h"
@@ -69,13 +70,16 @@ private slots:
 
     void on_pushButton_5_clicked();
 
+    void on_listView_2_doubleClicked(const QModelIndex &index);
+
 private:
     void show_chats();
     std::unique_ptr<QStringListModel> model;
 
 
     void show_messages(const QString& chat_name);
-//    std::unique_ptr<Q>
+    std::unique_ptr<QStringListModel> model2;
+
 
     std::unique_ptr<QMediaPlayer> player;
     std::shared_ptr<QAudioOutput> audioOutput;
@@ -84,8 +88,7 @@ private:
     Ui::App_window *ui;
     std::atomic_bool f = true;
 
-
-
+    void listen_audio(const std::string& file_name);
 };
 
 #endif // APP_WINDOW_H

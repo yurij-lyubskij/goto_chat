@@ -11,11 +11,6 @@
 #include <sstream>
 
 
-//struct Chat{
-//    std::string Id;
-//    std::string chatName;
-//};
-
 class Parser {
 public:
     //send methods
@@ -35,6 +30,11 @@ public:
     static std::vector<Chat> chats(const std::string &chats);
 
     static std::vector<Message> messages(const std::string &chats_file);
+
+    //methods for ui
+    static std::string get_text_from_message(const std::string& message);
+
+    static std::string get_message_from_Message(const Message& message);
 };
 
 #endif

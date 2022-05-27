@@ -23,7 +23,7 @@ std::string Parser::message(const std::string &chat_name, const std::string &tex
 }
 //in use
 std::string Parser::chat_create(const std::string &chat_name, std::vector<std::string> phones) {
-   std::string body = "";
+    std::string body = "";
     nlohmann::json json;
 
     json["chatName"] = chat_name;
@@ -101,11 +101,11 @@ std::vector <Chat> Parser::chats(const std::string &chats) {
 }
 //in use
 class MessageComparator{
-	public:
-		MessageComparator(){};
-		bool operator()(const Message &first, const Message &second){
-			return std::stoi(first.Id) < std::stoi(second.Id);
-		};
+public:
+    MessageComparator(){};
+    bool operator()(const Message &first, const Message &second){
+        return std::stoi(first.Id) < std::stoi(second.Id);
+    };
 };
 //in use
 std::vector <Message> Parser::messages(const std::string &messages){
@@ -116,12 +116,27 @@ std::vector <Message> Parser::messages(const std::string &messages){
     std::vector <Message> res;
     for (nlohmann::json message: json["messages"]) {
         Message mes({message["id"],
-                    message["text"],
-                    message["userPhone"],
-                    message["time"],
-                    (message["type"] == "text")? text : voice});
+                     message["text"],
+                     message["userPhone"],
+                     message["time"],
+                     (message["type"] == "text")? text : voice});
         res.push_back(mes);
     }
     std::sort(res.begin(), res.end(), MessageComparator());
     return res;
+}
+
+
+std::string Parser::get_text_from_message(const std::string &message)
+{
+    std::istringstream stream(message);
+    std::string temp;
+    stream >> temp;
+    stream >> temp;
+    return temp;
+}
+
+std::string Parser::get_message_from_Message(const Message &message)
+{
+    return message.phone + ": " + message.text + " " + message.time;
 }

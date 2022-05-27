@@ -10,6 +10,7 @@ App_window::App_window(QWidget *parent) :
     ui->chat_creation->hide();
     ui->pushButton_5->hide();
     ui->listView->setEditTriggers(QListView::NoEditTriggers);
+    ui->listView_2->setEditTriggers(QListView::NoEditTriggers);
 }
 
 App_window::~App_window() {
@@ -30,7 +31,7 @@ void App_window::set_person(const QString &Login) {
     ui->profile->show();
     ui->chat_list->hide();
     ui->login_label->setText(login);
-        show_chats();
+    show_chats();
 }
 
 
@@ -56,8 +57,8 @@ void App_window::on_pushButton_3_clicked() {
 
 void App_window::on_toolButton_3_pressed()
 {
-//    player.stop();
-//    player.source().clear();
+    //    player.stop();
+    //    player.source().clear();
     f = true;
 
 
@@ -79,13 +80,7 @@ void App_window::on_toolButton_3_released()
 
 void App_window::on_pushButton_clicked()
 {
-    player = std::unique_ptr<QMediaPlayer>(new QMediaPlayer);
-    audioOutput = std::shared_ptr<QAudioOutput>(new QAudioOutput);
-    player->setAudioOutput(audioOutput.get());
-    QString path = "./gay.m4a";
-    player->setSource(path);
-    player->audioOutput()->setVolume(50);
-    player->play();
+
 }
 
 void App_window::centrialize()
@@ -102,7 +97,9 @@ void App_window::centrialize()
 // двойное нажание на название чата
 void App_window::on_listView_doubleClicked(const QModelIndex &index)
 {
-    ui->messages->setTitle(index.data(0).toString());
+    QString chat_name = index.data(0).toString();
+    ui->messages->setTitle(chat_name);
+    show_messages(chat_name);
 }
 
 
@@ -132,10 +129,48 @@ void App_window::show_chats()
     m.push_back({"2", "rwerwg3gef"});
     m.push_back({"3", "egerwerwef"});
     QStringList chats;
-    for(const auto& mes : m){
-        chats.push_back(QString::fromStdString(mes.chatName));
+    for(const auto& chat : m){
+        chats.push_back(QString::fromStdString(chat.chatName));
     }
     model.get()->setStringList(chats);
     ui->listView->setModel(model.get());
+}
+
+void App_window::show_messages(const QString &chat_name)
+{
+    model2 = std::unique_ptr<QStringListModel>(new QStringListModel);
+    std::vector<Message> m;
+//    Client::get_last_messages(0)
+//    m = Parser::messages(...)
+    m.push_back({"1", "rwerwef", "+89034", "21:00:11"});
+    m.push_back({"2", "gay.m4a", "+94329034", "21:00:12"});
+    m.push_back({"3", "egerwerwef", "+3443", "21:00:13"});
+    QStringList messages;
+    for(const auto& mes : m){
+        std::string temp_res = Parser::get_message_from_Message(mes);
+        messages.push_back(QString::fromStdString(temp_res));
+    }
+    model2.get()->setStringList(messages);
+    ui->listView_2->setModel(model2.get());
+}
+
+void App_window::listen_audio(const std::string &file_name)
+{
+    player = std::unique_ptr<QMediaPlayer>(new QMediaPlayer);
+    audioOutput = std::shared_ptr<QAudioOutput>(new QAudioOutput);
+    player->setAudioOutput(audioOutput.get());
+    QString path = "./" + QString::fromStdString(file_name);
+    player->setSource(path);
+    player->audioOutput()->setVolume(50);
+    player->play();
+}
+
+
+void App_window::on_listView_2_doubleClicked(const QModelIndex &index)
+{
+    std::string text = Parser::get_text_from_message(index.data(0).toString().toStdString());
+    if(text.find(".m4a", 0, 1) < text.size() - 1){
+        listen_audio(text);
+    }
 }
 

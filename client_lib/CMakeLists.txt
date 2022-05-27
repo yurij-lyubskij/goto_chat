@@ -19,6 +19,7 @@ set(INCLUDES
 
 add_library(${PROJECT_NAME} STATIC
     ${CMAKE_CURRENT_SOURCE_DIR}/headers/client.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/headers/structures.h
     ${CMAKE_CURRENT_SOURCE_DIR}/headers/httpClient.h
     ${CMAKE_CURRENT_SOURCE_DIR}/headers/Response.h
     ${CMAKE_CURRENT_SOURCE_DIR}/sources/client.cpp
@@ -26,9 +27,6 @@ add_library(${PROJECT_NAME} STATIC
     ${CMAKE_CURRENT_SOURCE_DIR}/parser_lib/parser.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/request_lib/request.h
     ${CMAKE_CURRENT_SOURCE_DIR}/session_lib/session.h
-    #${CMAKE_CURRENT_SOURCE_DIR}/client_net_module_lib/client_net_module.h
-    #${CMAKE_CURRENT_SOURCE_DIR}/client_net_module_lib/client_net_module.cpp
-    #${CMAKE_CURRENT_SOURCE_DIR}/client_net_module_lib/server_address.h
     ${CMAKE_CURRENT_SOURCE_DIR}/builder/targetBuilder.h
     ${CMAKE_CURRENT_SOURCE_DIR}/builder/targetBuilder.cpp
 )
