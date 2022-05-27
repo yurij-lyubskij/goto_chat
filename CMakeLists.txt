@@ -14,7 +14,7 @@ file(GLOB SOURCES */*/*.cpp)
 
 #one main in tests and in project
 file(GLOB SOURCES ${SOURCES} main.cpp)
-file(GLOB INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR} */*/ )
+file(GLOB INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR} client_lib/*/ checker_lib/*/ )
 
 message("MAIN SOURCES\n ${SOURCES}")
 message("MAIN INCLUDE_DIRS\n ${INCLUDE_DIRS}")

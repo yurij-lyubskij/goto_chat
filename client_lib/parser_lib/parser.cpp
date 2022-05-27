@@ -21,32 +21,36 @@ std::string Parser::message(const std::string &chat_name, const std::string &tex
     stream.close();
     return filename;
 }
-
-std::string
-Parser::create_chat(const std::string &chat_name, const std::string &phone1, const std::string &phone2) {
-    std::string filename = "./new_chat.json";
+//in use
+std::string Parser::chat_create(const std::string &chat_name, std::vector<std::string> phones) {
+   std::string body = "";
     nlohmann::json json;
-    json["chat_name"] = chat_name;
-    json["users_count"] = 2;
-    json["users"].push_back(phone1);
-    json["users"].push_back(phone2);
 
-    std::ofstream stream(filename);
+    json["chatName"] = chat_name;
+    json["usersCount"] = phones.size();
+    for (std::string phone : phones)
+        json["users"].push_back(phone);
+
+    
+    std::cout << body << std::endl;
+    std::stringstream stream;
     stream << json;
-    stream.close();
-    return filename;
+    stream >> body;
+    return body;
 }
 
+//in use
 std::string Parser::chat_join(const std::string &chatId, const std::string &phone) {
-    std::string filename = "./add_person.json";
+    std::string body = "";
     nlohmann::json json;
+
     json["chatId"] = chatId;
     json["user"] = phone;
 
-    std::ofstream stream(filename);
+    std::stringstream stream;
     stream << json;
-    stream.close();
-    return filename;
+    stream >> body;
+    return body;
 }
 
 std::string Parser::create_session(const std::string &login, const std::string &password) {
@@ -74,32 +78,50 @@ std::string Parser::create_user(const std::string &username, const std::string &
     return filename;
 }
 
-std::vector <Chat> Parser::chats(const std::string &chats_file) {
-    std::ifstream stream(chats_file);
+std::string Parser::chat_id(const std::string &chat){
+    std::stringstream stream(chat);
+    
     nlohmann::json json;
     stream >> json;
-    std::vector <Chat> res;
-    for (auto it: json["chats"]) {
-        Chat ch({it["chatId"], it["chatName"]});
-        res.push_back(ch);
-    }
-    stream.close();
-    return res;
+
+    return std::to_string((int) json["chatId"]);
 }
 
-std::vector <Message> Parser::messages(const std::string &chats_file){
-    std::ifstream stream(chats_file);
+//in use
+std::vector <Chat> Parser::chats(const std::string &chats) {
+    nlohmann::json json;
+    std::stringstream stream(chats);
+    stream >> json;
+    std::vector <Chat> res;
+    for (nlohmann::json chat: json["chats"]) {
+        Chat ch({chat["id"], chat["chatName"]});
+        res.push_back(ch);
+    }
+    return res;
+}
+//in use
+class MessageComparator{
+	public:
+		MessageComparator(){};
+		bool operator()(const Message &first, const Message &second){
+			return std::stoi(first.Id) < std::stoi(second.Id);
+		};
+};
+//in use
+std::vector <Message> Parser::messages(const std::string &messages){
+    std::stringstream stream(messages);
+    
     nlohmann::json json;
     stream >> json;
     std::vector <Message> res;
-    for (auto it: json["messages"]) {
-        Message m;
-        m.Id = it["id"];
-        m.phone = it["userPhone"];
-        m.text = it["text"];
-        m.time = it["time"];
-        res.push_back(m);
+    for (nlohmann::json message: json["messages"]) {
+        Message mes({message["id"],
+                    message["text"],
+                    message["userPhone"],
+                    message["time"],
+                    (message["type"] == "text")? text : voice});
+        res.push_back(mes);
     }
-    stream.close();
+    std::sort(res.begin(), res.end(), MessageComparator());
     return res;
 }

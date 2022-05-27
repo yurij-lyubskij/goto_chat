@@ -1,5 +1,5 @@
 #include "client.h"
-
+#include "structures.h"
 
 int main()
 {
@@ -13,6 +13,11 @@ int main()
 //    phone = "456";
 //    client.registerUser(name, phone, password);
     client.sign_in(phone, password);
+    Chat chat = client.create_chat("somechat", {"12345", "5", "956"});
+    std::cout << chat.Id << " " << chat.chatName << std::endl;
+
+    //client.sign_in(phone, password);
+    client.logout();
     sleep(1);
     name = "voice.mp3";
 //    client.getVoice(name);
