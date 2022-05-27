@@ -15,6 +15,7 @@ int main()
     client.sign_in(phone, password);
     sleep(1);
     name = "voice.mp3";
-    client.getVoice(name);
+//    client.getVoice(name);
+    client.sendVoice(name, "1");
     return EXIT_SUCCESS;
 }

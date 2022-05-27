@@ -121,18 +121,10 @@ bool Client::getVoice(const std::string &name) {
 }
 
 bool Client::sendVoice(const std::string &name, const std::string &id) {
-    std::string  target = "/chat/message/getfile?name=";
-    target +=  name;
+    std::string  target = "/chat/message/voice/send";
     ioc.reset();
     Response result;
-    std::ifstream fin(name, std::ios::binary);
-    fin.seekg (0, std::ios::end);
-    int size = fin.tellg();
-    std::cout << "size =" << size << "\n";
-    char* buff = new char [size];
-    fin.read(buff, size);
-    fin.close();
-    std::make_shared<session>(ioc, result)->file_run(target.c_str(), buff, cookie.c_str());
+    std::make_shared<session>(ioc, result)->file_run(target.c_str(), name.c_str(), cookie.c_str());
     ioc.run();
     if (result.statusCode!= OK) {
         return false;
