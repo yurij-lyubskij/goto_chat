@@ -7,9 +7,6 @@ App_window::App_window(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::App_window) {
     ui->setupUi(this);
-    //player.setAudioOutput(&audioOutput);
-    //    ui->chat->setFixedSize(this->width()/2, this->height());
-    //    ui->chats_and_profile->setFixedSize(this->width() / 3, this->height() / 2);
 }
 
 App_window::~App_window() {
@@ -85,5 +82,14 @@ void App_window::on_pushButton_clicked()
     player->setSource(path);
     player->audioOutput()->setVolume(50);
     player->play();
+}
+
+void App_window::centrialize()
+{
+    QScreen *screen = QGuiApplication::primaryScreen();
+    QRect screenGeometry = screen->geometry();
+    int height = screenGeometry.height() - this->height();
+    int width = screenGeometry.width() - this->width();
+    this->setGeometry(width / 2, height / 2, this->width(), this->height());
 }
 

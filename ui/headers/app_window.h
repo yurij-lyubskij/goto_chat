@@ -6,6 +6,8 @@
 #include <QTime>
 #include <QMediaPlayer>
 #include <QAudioOutput>
+#include <QScreen>
+
 namespace Ui {
     class App_window;
 }
@@ -37,6 +39,7 @@ public:
 public slots:
     void set_person(const QString &Login);
 
+    void centrialize();
 
 signals:
     void login_window();
@@ -61,6 +64,8 @@ private:
     QString login;
     Ui::App_window *ui;
     std::atomic_bool f = true;
+
+
 };
 
 #endif // APP_WINDOW_H

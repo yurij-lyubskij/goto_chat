@@ -11,8 +11,11 @@ Login_window::Login_window(QWidget *parent)
     connect(reg_window, &Reg_window::login_window, this, &Login_window::show);
     connect(reg_window, &Reg_window::login_window, this, &Login_window::centrialize);
     connect(this, &Login_window::window_location, reg_window, &Reg_window::centrialize);
+
     connect(this, &Login_window::send_person, app_window, &App_window::set_person);
     connect(app_window, &App_window::login_window, this, &Login_window::show);
+    connect(this, &Login_window::window_location, app_window, &App_window::centrialize);
+    connect(app_window, &App_window::login_window, this, &Login_window::centrialize);
 }
 
 Login_window::~Login_window() {
@@ -47,6 +50,7 @@ void Login_window::on_enter_button_clicked() {
     Client cl;
     if (cl.sign_in(log, password)) {
         emit send_person(ui->lineEdit->text());
+        emit window_location();
         app_window->show();
         hide();
     } else {
