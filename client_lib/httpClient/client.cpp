@@ -44,14 +44,24 @@ std::vector<Message> Client::getNextMessages(const std::string& mes_id){
     std::make_shared<session>(ioc, result)->run(post, target.c_str(), "", cookie.c_str());
     ioc.run();
     std::vector<Message> messages;
-        std::cout << result.body << std::endl;
     if(result.statusCode != OK) return messages;
 
     return Parser::messages(result.body);
 };
-/*
-std::vector<Message> Client::getLastMessages(const std::string &mes_id);
 
+std::vector<Message> Client::getLastMessages(const std::string &mes_id){
+    std::string target = TargetBuilder::messageListFromMes(mes_id, last);
+    ioc.reset();
+    Response result;
+    std::make_shared<session>(ioc, result)->run(post, target.c_str(), "", cookie.c_str());
+    ioc.run();
+    std::vector<Message> messages;
+    if(result.statusCode != OK) return messages;
+
+    return Parser::messages(result.body);
+};
+
+/*
 std::vector<Message> Client::getLastChatMessages(const std::string &chat_id);
 */
 void Client::open_chat(const std::string &chat_name)
