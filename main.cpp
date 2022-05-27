@@ -7,6 +7,7 @@ int main()
 
     bool isActive = true;
     Machine chat(isActive);
+
     while (isActive) {
         chat.listActions();
         chat.handleAction();

@@ -144,6 +144,28 @@ void inMain::actionList() {
 void inMain::handle(Machine *m) {
     char key;
     std::cin >> key;
+    switch (key) {
+        case 'd': {
+
+        }
+            break;
+        case 'f': {
+
+        }
+        case 'a': {
+
+        }
+            break;
+        case 's': {
+        }
+            break;
+        case 'w': {
+            m->client.logout();
+            up(m);
+        }
+            break;
+        default:;
+    }
 }
 
 void inChat::up(Machine *m) {
@@ -166,6 +188,26 @@ void inChat::actionList() {
 void inChat::handle(Machine *m) {
     char key;
     std::cin >> key;
+    switch (key) {
+        case 'd': {
+
+        }
+            break;
+        case 'f': {
+
+        }
+        case 'a': {
+
+        }
+            break;
+        case 's': {
+        }
+            break;
+        case 'w':
+            up(m);
+            break;
+        default:;
+    }
 }
 
 #endif //GOTO_CHAT_STATEMACHINE_H
