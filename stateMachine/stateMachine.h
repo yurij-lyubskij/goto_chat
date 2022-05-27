@@ -185,8 +185,10 @@ void inMain::handle(Machine *m) {
             }
 
         }
-        case 'a': {
 
+        case 'a': {
+            
+            bool success = join_chat(const std::string &chatId, const std::string &phone);
         }
             break;
         case 's': {
