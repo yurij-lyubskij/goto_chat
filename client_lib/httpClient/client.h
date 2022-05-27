@@ -26,6 +26,7 @@ public:
 
     void logout();
     bool getVoice (const std::string &name);
+    bool sendVoice (const std::string &name);
     bool sign_in(const std::string &phone, const std::string &password);
 
 private:
