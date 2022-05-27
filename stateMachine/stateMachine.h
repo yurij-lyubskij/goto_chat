@@ -187,11 +187,35 @@ void inMain::handle(Machine *m) {
         }
 
         case 'a': {
-            
-            bool success = join_chat(const std::string &chatId, const std::string &phone);
+            std::cout << "enter chat Id" << std::endl;
+            std::string chatId;
+            std::cin >> chatId;
+            bool success = m->client.join_chat(chatId , m->user.phone);
+            if (success) {
+                std::cout << "chat joined. goto chat!\n";
+            } else {
+                std::cout << "chat does not exist\n";
+            }
         }
             break;
         case 's': {
+            std::cout << "enter chatName" << std::endl;
+            std::string chatName;
+            std::cin >> chatName;
+            std::vector<Chat> chats = m->client.find_chats(chatName);
+            std::cout << "Select chat Number: " << std::endl; //Not Id
+            int i = 0;
+            for (auto chat: chats) {
+                std::cout <<"chatNumber = " << i <<" chatName = " << chat.chatName << std::endl;
+                i++;
+            }
+            std::cin >> i;
+            if (i < chats.size()) {
+                m->currentChat = chats[i];
+                down(m);
+            } else {
+                std::cout <<"No such Chat\n";
+            }
         }
             break;
         case 'w': {
