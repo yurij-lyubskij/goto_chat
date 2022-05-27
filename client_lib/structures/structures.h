@@ -18,4 +18,10 @@ struct Chat{
     std::string chatName;
 };
 
+struct User {
+    std::string username;
+    std::string phone;
+    std::string password;
+};
+
 #endif
