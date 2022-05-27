@@ -88,6 +88,7 @@ public:
     file_run(
             char const* target,
             char const* name,
+            char const* id,
             char const* cookie
     )
     {
@@ -96,8 +97,8 @@ public:
         reqF.method(http::verb::post);
         reqF.target(target);
         reqF.set(http::field::host, host);
-        reqF.set("id", 1);
-        reqF.set("name" , "voices.mp3");
+        reqF.set("id", id);
+        reqF.set("name" , name);
         reqF.set(http::field::user_agent, BOOST_BEAST_VERSION_STRING);
         if (strlen(cookie) > 0){
             std::string session = "session=";
@@ -149,7 +150,7 @@ public:
         // Set a timeout on the operation
         stream_.expires_after(std::chrono::seconds(30));
 
-        if (!reqF.has_content_length()) {
+        if (!reqF.body().is_open()) {
             // Send the HTTP request to the remote host
             http::async_write(stream_, req_,
                               beast::bind_front_handler(

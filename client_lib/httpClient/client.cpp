@@ -124,7 +124,7 @@ bool Client::sendVoice(const std::string &name, const std::string &id) {
     std::string  target = "/chat/message/voice/send";
     ioc.reset();
     Response result;
-    std::make_shared<session>(ioc, result)->file_run(target.c_str(), name.c_str(), cookie.c_str());
+    std::make_shared<session>(ioc, result)->file_run(target.c_str(), name.c_str(), id.c_str(), cookie.c_str());
     ioc.run();
     if (result.statusCode!= OK) {
         return false;
