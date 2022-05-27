@@ -2,10 +2,6 @@
 #include "targetBuilder.h"
 #include "parser.h"
 
-#include "rapidjson/writer.h"
-#include "rapidjson/document.h"
-#include "rapidjson/stringbuffer.h"
-
 const char* get = "GET";
 const char* post = "POST";
 const size_t OK = 200;
