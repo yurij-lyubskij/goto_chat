@@ -80,6 +80,7 @@ public:
     Client client;
     bool &isActive;
     User user;
+    Chat currentChat;
 };
 
 void unAuthorised::up(Machine *m) {
@@ -104,15 +105,23 @@ void unAuthorised::handle(Machine *m) {
         case 'a': {
             std::cout << "enter phone, password\n";
             std::cin >> m->user.phone >> m->user.password;
-            m->client.sign_in(m->user.phone, m->user.password);
-            down(m);
+            bool success = m->client.sign_in(m->user.phone, m->user.password);
+            if (success) {
+                down(m);
+            } else {
+                std::cout << "wrong login or password\n";
+            }
         }
             break;
         case 'd': {
             std::cout << "enter name, phone, password\n";
             std::cin >> m->user.username >> m->user.phone >> m->user.password;
-            m->client.registerUser(m->user.username, m->user.phone, m->user.password);
-            down(m);
+            bool success = m->client.registerUser(m->user.username, m->user.phone, m->user.password);
+            if (success) {
+                down(m);
+            } else {
+                std::cout << "user already exists\n";
+            }
         }
             break;
         case 's':
@@ -146,7 +155,21 @@ void inMain::handle(Machine *m) {
     std::cin >> key;
     switch (key) {
         case 'd': {
-
+            std::string phone = m->user.phone;
+            std::vector chats = m->client.get_users_chats(phone);
+            std::cout <<"Select chat Number: " << std::endl; //Not Id
+            int i = 0;
+            for (auto chat: chats) {
+                std::cout <<"chatNumber = " << i <<" chatName = " << chat.chatName << std::endl;
+                i++;
+            }
+            std::cin >> i;
+            if (i < chats.size()) {
+                m->currentChat = chats[i];
+                down(m);
+            } else {
+                std::cout <<"No such Chat\n";
+            }
         }
             break;
         case 'f': {

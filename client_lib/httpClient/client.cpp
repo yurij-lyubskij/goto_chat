@@ -127,7 +127,6 @@ void Client::logout()
     ioc.reset();
     Response result;
     std::make_shared<session>(ioc, result)->run(post, target, "", cookie.c_str());
-    std::cout << result.statusCode << '\n';
     cookie = "";
     ioc.run();
 }
