@@ -54,7 +54,7 @@ public:
     run(    char const* method,
             char const* target,
             char const* body,
-            char const* cookie
+            const char* cookie
     )
     {
         // Set up an HTTP  request message

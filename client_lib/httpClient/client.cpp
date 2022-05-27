@@ -1,5 +1,5 @@
 #include "client.h"
-
+#include "targetBuilder.h"
 const char* get = "GET";
 const char* post = "POST";
 const size_t OK = 200;
@@ -16,6 +16,16 @@ void Client::send_message(const std::string &chat_name, const std::string &text,
     request.body() = Parser::message(chat_name, text, phone);
     request.prepare_payload();
     send_request(request);*/
+}
+
+void Client::find_chat(const std::string &chat_name){
+    std::string target = TargetBuilder::findChat(chat_name);
+    ioc.reset();
+    Response result;
+    std::make_shared<session>(ioc, result)->run(post, target.c_str(), "", cookie.c_str());
+    ioc.run();
+    std::cout << result.statusCode << " " << result.body << std::endl;
+    return;
 }
 
 void Client::open_chat(const std::string &chat_name)

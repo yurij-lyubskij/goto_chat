@@ -12,6 +12,8 @@ public:
 
     void create_chat(const std::string &owner, const std::string &chat_name);
 
+    void find_chat(const std::string &chat_name);
+
     void delete_from_chat(const std::string &person_name);
 
     void leave_chat(const std::string &chat_name);
