@@ -98,31 +98,6 @@ std::vector<Message> Client::get_last_chat_messages(const std::string &chat_id){
     return Parser::messages(result.body);
 };
 
-void Client::open_chat(const std::string &chat_name)
-{
-}
-
-
-
-void Client::delete_from_chat(const std::string &person_name)
-{
-    //    delete_person_from_chat(person_name);//функция Рината
-}
-
-void Client::leave_chat(const std::string &chat_name)
-{
-    //    leave_from_chat(chat_name);//функция Рината
-}
-
-void Client::reload_chat(const std::string &login, const std::string &chat_name)
-{
-}
-
-bool Client::person_exist(const std::string &login)
-{
-    //    return check_person(login); //функция Рината
-    return false;
-}
 
 bool Client::registerUser(const std::string &username, const std::string &phone, const std::string &password)
 {
