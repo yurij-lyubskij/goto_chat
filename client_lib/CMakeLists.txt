@@ -19,6 +19,8 @@ add_subdirectory(client_net_module_lib)
 
 add_library(${PROJECT_NAME} STATIC
     ${CMAKE_CURRENT_SOURCE_DIR}/headers/client.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/headers/httpClient.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/headers/Response.h
     ${CMAKE_CURRENT_SOURCE_DIR}/sources/client.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/parser_lib/parser.h
     ${CMAKE_CURRENT_SOURCE_DIR}/parser_lib/parser.cpp
@@ -28,7 +30,7 @@ add_library(${PROJECT_NAME} STATIC
     ${CMAKE_CURRENT_SOURCE_DIR}/client_net_module_lib/client_net_module.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/client_net_module_lib/server_address.h
 )
-#target_link_libraries(client_lib PRIVATE Qt6::Widgets)
+
 target_include_directories(client_lib PRIVATE ${INCLUDES})
 target_include_directories(client_lib INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
 

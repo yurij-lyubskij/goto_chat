@@ -13,12 +13,12 @@ Reg_window::~Reg_window() {
 
 void Reg_window::registrate() {
     Client cl;
-    std::string name = ui->lineEdit->text().toStdString();
-    std::string second_name = ui->lineEdit_2->text().toStdString();
+//    std::string name = ui->lineEdit->text().toStdString();
+//    std::string second_name = ui->lineEdit_2->text().toStdString();
     std::string email = ui->lineEdit_3->text().toStdString();
     std::string login = ui->lineEdit_4->text().toStdString();
     std::string password = ui->lineEdit_5->text().toStdString();
-    cl.registrate(name, second_name, login,password, email);
+    cl.registerUser(login, password, email);
 }
 
 bool Reg_window::check_data() {

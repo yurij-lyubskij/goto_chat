@@ -1,21 +1,15 @@
+#include <fstream>
 #include "client.h"
-//#include "request.h"
+
+const char* get = "GET";
+const char* post = "POST";
+const size_t OK = 200;
 
 Client::Client()
 {
+    ioc;
 }
 
-Client::~Client()
-{
-}
-
-void Client::send_request(http::request<http::file_body>&& request)
-{
-//    std::shared_ptr<session> ptr = std::make_shared<session>(ioc);
-//    ptr->run(request);
-//    ioc.run();
-//    handle_response(ptr->get_response());
-}
 
 void Client::send_message(const std::string &chat_name, const std::string &text, const std::string &phone)
 {
@@ -54,28 +48,78 @@ bool Client::person_exist(const std::string &login)
     return false;
 }
 
-bool Client::registrate(const std::string &first_name, const std::string &second_name, const std::string &login,
-                        const std::string &password, const std::string &email)
+bool Client::registerUser(const std::string &username, const std::string &phone, const std::string &password)
 {
-    //    bool f = person_exist(login);
-    //    if(f){
-    //        reg_person(first_name, second_name, login,password, email);//функция Рината
-    //    }
-    //    return f;
-    std::string file_path = Parser::create_user(login, email, password);
-    // send file with path = file_path
-    // accept ok or not
+    auto const target = "/user/create";
+    ioc.reset();
+    Response result;
+    std::string body = R"({"username": ")";
+    body+= username;
+    body += R"(", "phone": ")";
+    body+= phone;
+    body+= R"(", "password": ")";
+    body+= password;
+    body += R"("})";
+    std::make_shared<session>(ioc, result)->run(post, target, body.c_str(), "");
+    ioc.run();
+    if (result.statusCode!= OK) {
+        return false;
+    }
+    cookie = result.cookie;
+    std::cout << cookie <<'\n';
     return true;
 }
 
-void Client::logout(const std::string &login)
+void Client::logout()
 {
-    //    person_logout(login); //функция Рината
+    auto const target = "/session/delete";
+    ioc.reset();
+    Response result;
+    std::make_shared<session>(ioc, result)->run(post, target, "", cookie.c_str());
+    std::cout << result.statusCode << '\n';
+    cookie = "";
+    ioc.run();
 }
 
-bool Client::sign_in(const std::string &login, const std::string &password)
+bool Client::sign_in(const std::string &phone, const std::string &password)
 {
-    //    bool f = check_person(login, password); //функция Рината
-    //    return f;
+    auto const target = "/session/create";
+    ioc.reset();
+    Response result;
+    std::string body = R"({"phone": ")";
+    body += phone;
+    body += R"(", "password": ")";
+    body += password;
+    body+= R"("})";
+    std::make_shared<session>(ioc, result)->run(post, target, body.c_str(), "");
+    ioc.run();
+    if (result.statusCode!= OK) {
+        return false;
+    }
+    cookie = result.cookie;
+    std::cout << cookie <<'\n';
     return true;
+}
+
+bool Client::getVoice(const std::string &name) {
+
+    std::string  target = "/chat/message/getfile?name=";
+    target +=  name;
+    ioc.reset();
+    Response result;
+    std::string body ="";
+    std::make_shared<session>(ioc, result)->run(post, target.c_str(), body.c_str(), cookie.c_str());
+    ioc.run();
+    if (result.statusCode!= OK) {
+        return false;
+    }
+    std::ofstream fout(name, std::ios::binary);
+    fout.write(result.body.c_str(), result.body.size());
+    fout.close();
+    std::cout <<"size = "<< result.body.size() << "\n";
+    return true;
+}
+
+bool Client::sendVoice(const std::string &name) {
+
 }

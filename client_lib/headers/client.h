@@ -1,23 +1,12 @@
 #ifndef CLIENT_H
 #define CLIENT_H
-
-#include <boost/asio.hpp>
-#include <boost/beast.hpp>
-#include <iostream>
-#include <string>
-#include "parser.h"
-
-//#include "session.h"
-
-namespace asio = boost::asio;
-namespace beast = boost::beast;
-namespace http = beast::http;
+#include "httpClient.h"
 
 class Client
 {
 public:
     Client();
-    ~Client();
+    ~Client() = default;
 
     void open_chat(const std::string &chat_name);
 
@@ -33,20 +22,16 @@ public:
 
     bool person_exist(const std::string &login);
 
-    bool registrate(const std::string &first_name, const std::string &second_name,
-                    const std::string &login, const std::string &password, const std::string &email);
+    bool registerUser(const std::string &username, const std::string &phone, const std::string &password);
 
-    void logout(const std::string &user_name);
-
-    bool sign_in(const std::string &login, const std::string &password);
+    void logout();
+    bool getVoice (const std::string &name);
+    bool sendVoice (const std::string &name);
+    bool sign_in(const std::string &phone, const std::string &password);
 
 private:
-    void send_request(http::request<http::file_body>&& request);
-
-    void handle_response(http::response<http::string_body> response) {
-    }
-
-    asio::io_context ioc;
+    std::string cookie;
+    net::io_context ioc;
 };
 
 
