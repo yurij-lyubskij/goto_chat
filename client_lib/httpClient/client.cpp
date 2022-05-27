@@ -47,17 +47,25 @@ bool Client::person_exist(const std::string &login)
     return false;
 }
 
-bool Client::registrate(const std::string &first_name, const std::string &second_name, const std::string &login,
-                        const std::string &password, const std::string &email)
+bool Client::registerUser(const std::string &username, const std::string &phone, const std::string &password)
 {
-    //    bool f = person_exist(login);
-    //    if(f){
-    //        reg_person(first_name, second_name, login,password, email);//функция Рината
-    //    }
-    //    return f;
-//    std::string file_path = Parser::create_user(login, email, password);
-    // send file with path = file_path
-    // accept ok or not
+    auto const target = "/user/create";
+    ioc.reset();
+    Response result;
+    std::string body = R"({"username": ")";
+    body+= username;
+    body += R"(", "phone": ")";
+    body+= phone;
+    body+= R"(", "password": ")";
+    body+= password;
+    body += R"("})";
+    std::make_shared<session>(ioc, result)->run(post, target, body.c_str(), "");
+    ioc.run();
+    if (result.statusCode!= OK) {
+        return false;
+    }
+    cookie = result.cookie;
+    std::cout << cookie <<'\n';
     return true;
 }
 
@@ -68,6 +76,7 @@ void Client::logout()
     Response result;
     std::make_shared<session>(ioc, result)->run(post, target, "", cookie.c_str());
     std::cout << result.statusCode << '\n';
+    cookie = "";
     ioc.run();
 }
 

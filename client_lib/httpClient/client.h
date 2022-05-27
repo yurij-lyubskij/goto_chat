@@ -22,8 +22,7 @@ public:
 
     bool person_exist(const std::string &login);
 
-    bool registrate(const std::string &first_name, const std::string &second_name,
-                    const std::string &login, const std::string &password, const std::string &email);
+    bool registerUser(const std::string &username, const std::string &phone, const std::string &password);
 
     void logout();
 
