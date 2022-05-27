@@ -14,7 +14,8 @@ public:
 
     Chat create_chat(std::vector<std::string> members, const std::string &chat_name);
 
-    std::vector<Chat> find_chats(const std::string &chat_name);
+    std::vector<Chat> findChats(const std::string &chat_name);
+    std::vector<Chat> getUsersChats(const std::string &chat_name);
 
     std::vector<Message> getNextMessages(const std::string &mes_id);
 
