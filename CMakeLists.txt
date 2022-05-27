@@ -17,9 +17,9 @@ file(GLOB SOURCES ${SOURCES} main.cpp)
 file(GLOB INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR} client_lib/*/ checker_lib/*/ )
 
 message("MAIN SOURCES\n ${SOURCES}")
-message("MAIN INCLUDE_DIRS\n ${INCLUDE_DIRS}")
+message("MAIN INCLUDE_DIRS\n ${INCLUDE_DIRS} " )
 
 add_executable(${PROJECT_NAME} ${SOURCES})
-target_include_directories(${PROJECT_NAME} PUBLIC ${INCLUDE_DIRS})
+target_include_directories(${PROJECT_NAME} PUBLIC ${INCLUDE_DIRS} "stateMachine/")
 target_link_libraries(${PROJECT_NAME} PRIVATE  Threads::Threads pq)
 
