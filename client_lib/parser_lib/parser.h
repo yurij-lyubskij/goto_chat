@@ -7,6 +7,17 @@
 #include <fstream>
 #include <vector>
 
+struct Message{
+    std::string text;
+    std::string phone;
+    std::string Id;
+    std::string time;
+};
+
+struct Chat{
+    std::string Id;
+    std::string chatName;
+};
 class Parser {
 public:
     //send methods
@@ -22,7 +33,9 @@ public:
     static std::string message(const std::string &chat_name, const std::string &text, const std::string &phone);
 
     //get methods
-    static std::vector <std::string> chats(const std::string &chats_file);
+    static std::vector<Chat> chats(const std::string &chats_file);
+
+    static std::vector<Message> messages(const std::string &chats_file);
 };
 
 #endif

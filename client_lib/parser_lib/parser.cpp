@@ -74,13 +74,31 @@ std::string Parser::create_user(const std::string &username, const std::string &
     return filename;
 }
 
-std::vector<std::string> Parser::chats(const std::string &chats_file) {
+std::vector <Chat> Parser::chats(const std::string &chats_file) {
     std::ifstream stream(chats_file);
     nlohmann::json json;
     stream >> json;
-    std::vector<std::string> res;
-    for(auto it : json["chats"]){
-        res.push_back(it["chatName"]);
+    std::vector <Chat> res;
+    for (auto it: json["chats"]) {
+        Chat ch({it["chatId"], it["chatName"]});
+        res.push_back(ch);
+    }
+    stream.close();
+    return res;
+}
+
+std::vector <Message> Parser::messages(const std::string &chats_file){
+    std::ifstream stream(chats_file);
+    nlohmann::json json;
+    stream >> json;
+    std::vector <Message> res;
+    for (auto it: json["messages"]) {
+        Message m;
+        m.Id = it["id"];
+        m.phone = it["userPhone"];
+        m.text = it["text"];
+        m.time = it["time"];
+        res.push_back(m);
     }
     stream.close();
     return res;
