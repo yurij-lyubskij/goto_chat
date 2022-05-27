@@ -86,13 +86,15 @@ curl -i \
 
   curl -i \
     --request POST \
-    --cookie  "session=PqkblDsuzmPGDfG8ytlnn5S0y" \
+    --cookie  "session=ji69RvwLSQxoW7rFrmNasYq4h" \
+    --header "name:voice.mp3" \
+    --header "id:1" \
     -F "file=@faded.mp3;type=audio/mpeg" \
-    http://localhost:8080/chat/message/send_voice?name=noice.mp3
+    http://localhost:8080/chat/message/voice/send
 
 
     curl -i --header "Content-Type: application/json" \
       --request POST \
-      --cookie  "session=U1NBraBIc7tGrhcQwqe588ixM"\
+      --cookie  "session=J5YN0UgwRF4KNz22cOoZNP4hr"\
       --data '{"chatId": 1, "message": {"userPhone": "12345", "text": "string3"}}' \
       http://localhost:8080/chat/message/send

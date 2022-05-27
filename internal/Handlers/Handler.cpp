@@ -151,8 +151,20 @@ Response SendVoice::Handle(Request req) {
     }
     pos = req.body.find("\n");
     req.body.erase(0, pos);
-    std::string fileName  = req.target.substr(REQUESTED_TARGET.size(), req.target.size() - 1);
-    fileName = staticPath + fileName;
+    size_t size = req.body.size();
+    time_t time = std::time(0);
+    std::string fName = req.headers[0];
+    int chat = stoi(req.headers[1]);
+    User user = auth->GetUser(req.cookie);
+    VoiceMessage msg(fName, time, user.Id, chat);
+    std::vector<iMessage> message;
+    message.push_back(msg);
+    MessageRepo repo(connections);
+    std::vector<int> ids = repo.put(message);
+    if (ids.empty()) {
+        response.statusCode = BadRequest;
+    }
+    std::string fileName = staticPath + fName;
     std::ofstream fout(fileName, std::ios::binary);
     fout.write(req.body.c_str(), req.body.size());
     fout.close();

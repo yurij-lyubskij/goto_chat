@@ -102,13 +102,14 @@ private:
 
 class SendVoice : public iHandler {
 public:
-    SendVoice(DBConnection<iConnection>* conn): connections(conn){};
+    SendVoice(DBConnection<iConnection>* conn, std::shared_ptr<iAuthDb> auth): connections(conn), auth(auth){};
     bool CanHandle(Request) override;
 
     Response Handle(Request) override;
 private:
+    std::shared_ptr<iAuthDb> auth;
     DBConnection<iConnection>* connections;
-    const std::string REQUESTED_TARGET = "/chat/message/send_voice?name=";
+    const std::string REQUESTED_TARGET = "/chat/message/voice/send";
 };
 
 #endif //GOTO_CHAT_HANDLER_H
