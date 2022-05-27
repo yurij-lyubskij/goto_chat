@@ -11,10 +11,10 @@
 #include <sstream>
 
 
-struct Chat{
-    std::string Id;
-    std::string chatName;
-};
+//struct Chat{
+//    std::string Id;
+//    std::string chatName;
+//};
 
 class Parser {
 public:
