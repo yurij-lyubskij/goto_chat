@@ -1,6 +1,8 @@
 #ifndef CLIENT_H
 #define CLIENT_H
+
 #include "httpClient.h"
+#include "structures.h"
 
 class Client
 {
@@ -10,9 +12,9 @@ public:
 
     void open_chat(const std::string &chat_name);
 
-    void create_chat(const std::string &owner, const std::string &chat_name);
+    Chat create_chat(std::vector<std::string> members, const std::string &chat_name);
 
-    void find_chat(const std::string &chat_name);
+    std::vector<Chat> find_chats(const std::string &chat_name);
 
     void delete_from_chat(const std::string &person_name);
 

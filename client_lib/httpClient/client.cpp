@@ -1,5 +1,10 @@
 #include "client.h"
 #include "targetBuilder.h"
+
+#include "rapidjson/writer.h"
+#include "rapidjson/document.h"
+#include "rapidjson/stringbuffer.h"
+
 const char* get = "GET";
 const char* post = "POST";
 const size_t OK = 200;
@@ -18,13 +23,29 @@ void Client::send_message(const std::string &chat_name, const std::string &text,
     send_request(request);*/
 }
 
-void Client::find_chat(const std::string &chat_name){
+std::vector<Chat> Client::find_chats(const std::string &chat_name){
     std::string target = TargetBuilder::findChat(chat_name);
     ioc.reset();
     Response result;
     std::make_shared<session>(ioc, result)->run(post, target.c_str(), "", cookie.c_str());
     ioc.run();
-    std::cout << result.statusCode << " " << result.body << std::endl;
+    std::vector<Chat> chats;
+    if(result.statusCode != OK) return chats;
+
+    rapidjson::Document d;
+    const char* json = result.body.c_str();
+    d.Parse(json);
+    if(! d.HasMember("chats")) return chats;
+    if(! d["chats"].IsArray()) return chats;
+    const rapidjson::Value& chatsJson = d["chats"];
+    for (rapidjson::SizeType i = 0; i < chatsJson.Size(); ++i){/*
+        chats.push_back({chatsJson[i].GetString()});
+        usr = usRepo.GetbyPhone(usersPh[i].GetString());
+
+        if (usr.Id == 0) return response;
+
+        usrs.push_back(usRepo.GetbyPhone(usersPh[i].GetString()));*/
+    }
     return;
 }
 
@@ -32,9 +53,9 @@ void Client::open_chat(const std::string &chat_name)
 {
 }
 
-void Client::create_chat(const std::string &owner, const std::string &chat_name)
+Chat Client::create_chat(std::vector<std::string> members, const std::string &chat_name)
 {
-    //    new_chat(owner,chat_name);
+    return {0, ""};//    new_chat(members,chat_name);
 }
 
 void Client::delete_from_chat(const std::string &person_name)

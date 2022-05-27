@@ -2,22 +2,14 @@
 #ifndef PARSER_H
 #define PARSER_H
 
+#include "structures.h"
+
 #include <iostream>
 #include "json.hpp"
 #include <fstream>
 #include <vector>
 
-struct Message{
-    std::string text;
-    std::string phone;
-    std::string Id;
-    std::string time;
-};
 
-struct Chat{
-    std::string Id;
-    std::string chatName;
-};
 class Parser {
 public:
     //send methods
