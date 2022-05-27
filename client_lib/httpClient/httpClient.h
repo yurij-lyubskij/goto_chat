@@ -82,6 +82,38 @@ public:
                         shared_from_this()));
     }
 
+    // Start the asynchronous operation for file transfer
+    void
+    file_run(
+            char const* target,
+            char const* body,
+            char const* cookie
+    )
+    {
+        // Set up an HTTP  request message
+        req_.version(11);
+        req_.method(http::verb::post);
+        req_.target(target);
+        req_.set(http::field::host, host);
+        req_.set("id", 1);
+        req_.set("name" , "voices.mp3");
+        req_.set(http::field::user_agent, BOOST_BEAST_VERSION_STRING);
+        req_.body() = body;
+        if (strlen(cookie) > 0){
+            std::string session = "session=";
+            session += cookie;
+            req_.set(http::field::cookie, session);
+        }
+        req_.prepare_payload();
+        // Look up the domain name
+        resolver_.async_resolve(
+                host,
+                port,
+                beast::bind_front_handler(
+                        &session::on_resolve,
+                        shared_from_this()));
+    }
+
     void
     on_resolve(
             beast::error_code ec,

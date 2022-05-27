@@ -18,6 +18,7 @@ struct Chat{
     std::string Id;
     std::string chatName;
 };
+
 class Parser {
 public:
     //send methods
