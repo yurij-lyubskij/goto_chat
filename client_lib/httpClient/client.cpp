@@ -24,35 +24,36 @@ void Client::send_message(const std::string &chat_name, const std::string &text,
     send_request(request);*/
 }
 
-std::vector<Chat> Client::find_chats(const std::string &chat_name){
+std::vector<Chat> Client::find_chats(const std::string& chat_name){
     std::string target = TargetBuilder::findChat(chat_name);
     ioc.reset();
     Response result;
     std::make_shared<session>(ioc, result)->run(post, target.c_str(), "", cookie.c_str());
     ioc.run();
     std::vector<Chat> chats;
+std::cout << result.body << std::endl;
     if(result.statusCode != OK) return chats;
 
     return Parser::chats(result.body);
-    /*
-    rapidjson::Document d;
-    const char* json = result.body.c_str();
-    d.Parse(json);
-    if(! d.HasMember("chats")) return chats;
-    if(! d["chats"].IsArray()) return chats;
-    const rapidjson::Value& chatsJson = d["chats"];
-    for (rapidjson::SizeType i = 0; i < chatsJson.Size(); ++i){
-        chats.push_back({chatsJson[i].GetString()});
-        usr = usRepo.GetbyPhone(usersPh[i].GetString());
-
-        if (usr.Id == 0) return response;
-
-        usrs.push_back(usRepo.GetbyPhone(usersPh[i].GetString()));
-    }
-    return;
-    */
 }
 
+std::vector<Message> Client::getNextMessages(const std::string& mes_id){
+    std::string target = TargetBuilder::messageListFromMes(mes_id, next);
+    ioc.reset();
+    Response result;
+    std::make_shared<session>(ioc, result)->run(post, target.c_str(), "", cookie.c_str());
+    ioc.run();
+    std::vector<Message> messages;
+        std::cout << result.body << std::endl;
+    if(result.statusCode != OK) return messages;
+
+    return Parser::messages(result.body);
+};
+/*
+std::vector<Message> Client::getLastMessages(const std::string &mes_id);
+
+std::vector<Message> Client::getLastChatMessages(const std::string &chat_id);
+*/
 void Client::open_chat(const std::string &chat_name)
 {
 }

@@ -87,19 +87,28 @@ std::vector <Chat> Parser::chats(const std::string &chats) {
     return res;
 }
 
-std::vector <Message> Parser::messages(const std::string &chats_file){
-    std::ifstream stream(chats_file);
+class MessageComparator{
+	public:
+		MessageComparator(){};
+		bool operator()(const Message &first, const Message &second){
+			return std::stoi(first.Id) < std::stoi(second.Id);
+		};
+};
+
+std::vector <Message> Parser::messages(const std::string &messages){
+    std::stringstream stream(messages);
+    
     nlohmann::json json;
     stream >> json;
     std::vector <Message> res;
-    for (auto it: json["messages"]) {
-        Message m;
-        m.Id = it["id"];
-        m.phone = it["userPhone"];
-        m.text = it["text"];
-        m.time = it["time"];
-        res.push_back(m);
+    for (nlohmann::json message: json["messages"]) {
+        Message mes({message["id"],
+                    message["text"],
+                    message["userPhone"],
+                    message["time"],
+                    (message["type"] == "text")? text : voice});
+        res.push_back(mes);
     }
-    stream.close();
+    std::sort(res.begin(), res.end(), MessageComparator());
     return res;
 }

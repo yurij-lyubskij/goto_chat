@@ -16,6 +16,12 @@ public:
 
     std::vector<Chat> find_chats(const std::string &chat_name);
 
+    std::vector<Message> getNextMessages(const std::string &mes_id);
+
+    std::vector<Message> getLastMessages(const std::string &mes_id);
+
+    std::vector<Message> getLastChatMessages(const std::string &chat_id);
+
     void delete_from_chat(const std::string &person_name);
 
     void leave_chat(const std::string &chat_name);

@@ -6,9 +6,9 @@
 enum MessageType {text, voice};
 
 struct Message{
+    std::string Id;
     std::string text;
     std::string phone;
-    std::string Id;
     std::string time;
     MessageType type;
 };
