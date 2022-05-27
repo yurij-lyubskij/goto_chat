@@ -7,7 +7,10 @@
 #include <iostream>
 #include <memory>
 #include <string>
+
+#include "targetBuilder.h"
 #include "Response.h"
+
 namespace beast = boost::beast;         // from <boost/beast.hpp>
 namespace http = beast::http;           // from <boost/beast/http.hpp>
 namespace net = boost::asio;            // from <boost/asio.hpp>
@@ -155,21 +158,28 @@ public:
 
 const char* get = "GET";
 const char* post = "POST";
-auto const target = "/session/create";
+//auto const target = "/session/create";
 
-int main()
-{
+int main(){
 
     // The io_context is required for all I/O
     net::io_context ioc;
     Response result;
-    std::string body = R"({"phone": "12345", "password": "string" })";
+    //std::string body = R"({"phone": "12345", "password": "string" })";
     // Launch the asynchronous operation
-    std::make_shared<session>(ioc, result)->run(post, target, body.c_str(), "");
+    std::string target = "/session/create";
+    std::string body = R"({"phone": "56957", "password": "somepassword" })";
+    std::make_shared<session>(ioc, result)->run(post, target.c_str(), body.c_str(), "");
+    ioc.run();
+
+    std::string phone = "56957";
+    target = TargetBuilder::findChat("tsDB");
+    std::cout << target << std::endl;
+    std::make_shared<session>(ioc, result)->run(post, target.c_str(), "", result.cookie.c_str());
 
     // Run the I/O service. The call will return when
     // the get operation is complete.
     ioc.run();
-    std::cout << result.statusCode << " " << result.cookie;
+    std::cout << result.statusCode << " " << result.cookie << " " << result.body << std::endl;
     return EXIT_SUCCESS;
 }

@@ -8,6 +8,7 @@ set(INCLUDES
         ${CMAKE_CURRENT_SOURCE_DIR}/session_lib/
         ${CMAKE_CURRENT_SOURCE_DIR}/json_actions/
         ${CMAKE_CURRENT_SOURCE_DIR}/request_lib/
+        ${CMAKE_CURRENT_SOURCE_DIR}/builder/
         )
 #set(CMAKE_AUTOUIC ON)
 #set(CMAKE_AUTOMOC ON)
@@ -23,6 +24,7 @@ add_library(${PROJECT_NAME} STATIC
     ${CMAKE_CURRENT_SOURCE_DIR}/parser_lib/parser.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/request_lib/request.h
     ${CMAKE_CURRENT_SOURCE_DIR}/session_lib/session.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/builder/targetBuilder.h
 )
 #target_link_libraries(client_lib PRIVATE Qt6::Widgets)
 target_include_directories(client_lib PRIVATE ${INCLUDES})
