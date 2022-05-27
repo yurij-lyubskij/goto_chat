@@ -74,6 +74,7 @@ std::string Parser::create_user(const std::string &username, const std::string &
     return filename;
 }
 
+//in use
 std::vector <Chat> Parser::chats(const std::string &chats) {
     nlohmann::json json;
     std::stringstream stream(chats);
