@@ -28,13 +28,13 @@ void App_window::refresh_timer()
 void App_window::set_person(const QString &Login) {
     login = Login;
     ui->profile->show();
-    ui->profile->show();
     ui->chat_list->hide();
     ui->login_label->setText(login);
     show_chats();
 }
 
 
+// кнопка профиль -> чаты(сверху слева)
 void App_window::on_toolButton_2_clicked() {
     if (ui->toolButton_2->text() == "Профиль") {
         ui->profile->show();
@@ -48,19 +48,17 @@ void App_window::on_toolButton_2_clicked() {
 }
 
 
+// кнопка выйти из приложения
 void App_window::on_pushButton_3_clicked() {
     emit login_window();
     close();
 }
 
 
-
+// кнопка записи голосового(удерживается)
 void App_window::on_toolButton_3_pressed()
 {
-    //    player.stop();
-    //    player.source().clear();
     f = true;
-
 
     QString time = QTime::currentTime().toString();
     std::replace_if(time.begin(), time.end(), [](QChar x) {return x == ':' ;}, '_');
@@ -70,7 +68,7 @@ void App_window::on_toolButton_3_pressed()
     th.detach();
 }
 
-
+// кнопка записи голосового(отпускается)
 void App_window::on_toolButton_3_released()
 {
     f = false;
@@ -78,6 +76,7 @@ void App_window::on_toolButton_3_released()
 }
 
 
+// кнопка отправить
 void App_window::on_pushButton_clicked()
 {
 
@@ -112,7 +111,7 @@ void App_window::on_toolButton_clicked()
     ui->chat_creation->show();
 }
 
-
+// кнопка назад
 void App_window::on_pushButton_5_clicked()
 {
     ui->main_things->show();
@@ -121,6 +120,7 @@ void App_window::on_pushButton_5_clicked()
     ui->pushButton_5->hide();
 }
 
+// функция отображения чатов
 void App_window::show_chats()
 {
     model = std::unique_ptr<QStringListModel>(new QStringListModel);
@@ -136,6 +136,7 @@ void App_window::show_chats()
     ui->listView->setModel(model.get());
 }
 
+// функция отображения сообщений
 void App_window::show_messages(const QString &chat_name)
 {
     model2 = std::unique_ptr<QStringListModel>(new QStringListModel);
@@ -154,6 +155,7 @@ void App_window::show_messages(const QString &chat_name)
     ui->listView_2->setModel(model2.get());
 }
 
+// прослушать голосовое по названию файла который скачали/ есть
 void App_window::listen_audio(const std::string &file_name)
 {
     player = std::unique_ptr<QMediaPlayer>(new QMediaPlayer);
@@ -172,5 +174,12 @@ void App_window::on_listView_2_doubleClicked(const QModelIndex &index)
     if(text.find(".m4a", 0, 1) < text.size() - 1){
         listen_audio(text);
     }
+}
+
+
+// кнопка найти чат
+void App_window::on_pushButton_2_clicked()
+{
+    QString chat_name = ui->lineEdit_2->text();
 }
 

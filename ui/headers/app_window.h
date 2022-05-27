@@ -72,6 +72,8 @@ private slots:
 
     void on_listView_2_doubleClicked(const QModelIndex &index);
 
+    void on_pushButton_2_clicked();
+
 private:
     void show_chats();
     std::unique_ptr<QStringListModel> model;
