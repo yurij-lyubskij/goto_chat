@@ -23,9 +23,18 @@ void Client::send_message(const std::string &chat_name, const std::string &text,
     request.prepare_payload();
     send_request(request);*/
 }
-Chat Client::create_chat(std::vector<std::string> members, const std::string &chat_name)
+
+Chat Client::create_chat(const std::string &chat_name, std::vector<std::string> members)
 {
-    return {0, ""};//    new_chat(members,chat_name);
+    std::string target = TargetBuilder::createChat();
+    std::string body = Parser::chat_create(chat_name, members);
+    ioc.reset();
+    Response result;
+    std::make_shared<session>(ioc, result)->run(post, target.c_str(), body.c_str(), cookie.c_str());
+    ioc.run();
+
+    if(result.statusCode == OK) return {Parser::chat_id(result.body), chat_name};
+    else return Chat({"0", ""});
 }
 
 bool Client::join_chat(const std::string &chatId, const std::string &phone){

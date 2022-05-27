@@ -12,7 +12,7 @@ public:
 
     void open_chat(const std::string &chat_name);
 
-    Chat create_chat(std::vector<std::string> members, const std::string &chat_name);
+    Chat create_chat(const std::string &chat_name, std::vector<std::string> members);
     bool join_chat(const std::string &chatId, const std::string &phone);
     std::vector<Chat> find_chats(const std::string &chat_name);
     std::vector<Chat> get_users_chats(const std::string &chat_name);
