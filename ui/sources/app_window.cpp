@@ -9,6 +9,7 @@ App_window::App_window(QWidget *parent) :
     ui->setupUi(this);
     ui->chat_creation->hide();
     ui->pushButton_5->hide();
+
 }
 
 App_window::~App_window() {
@@ -29,6 +30,7 @@ void App_window::set_person(const QString &Login) {
     ui->profile->show();
     ui->chat_list->hide();
     ui->login_label->setText(login);
+        show_chats();
 }
 
 
@@ -120,5 +122,20 @@ void App_window::on_pushButton_5_clicked()
     ui->toolButton_2->show();
     ui->chat_creation->hide();
     ui->pushButton_5->hide();
+}
+
+void App_window::show_chats()
+{
+    model = std::unique_ptr<QStringListModel>(new QStringListModel);
+    std::vector<Chat> m;
+    m.push_back({"1", "rwerwef"});
+    m.push_back({"2", "rwerwg3gef"});
+    m.push_back({"3", "egerwerwef"});
+    QStringList chats;
+    for(const auto& mes : m){
+        chats.push_back(QString::fromStdString(mes.chatName));
+    }
+    model.get()->setStringList(chats);
+    ui->listView->setModel(model.get());
 }
 

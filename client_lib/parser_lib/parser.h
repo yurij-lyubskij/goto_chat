@@ -12,6 +12,7 @@ struct Message{
     std::string phone;
     std::string Id;
     std::string time;
+    std::string type;
 };
 
 struct Chat{

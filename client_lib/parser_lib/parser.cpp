@@ -98,6 +98,7 @@ std::vector <Message> Parser::messages(const std::string &chats_file){
         m.phone = it["userPhone"];
         m.text = it["text"];
         m.time = it["time"];
+        m.type = it["type"];
         res.push_back(m);
     }
     stream.close();

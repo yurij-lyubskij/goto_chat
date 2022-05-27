@@ -7,6 +7,9 @@
 #include <QMediaPlayer>
 #include <QAudioOutput>
 #include <QScreen>
+#include "client.h"
+#include "parser.h"
+#include "QStringListModel"
 
 namespace Ui {
     class App_window;
@@ -65,12 +68,17 @@ private slots:
     void on_pushButton_5_clicked();
 
 private:
+    void show_chats();
+    std::unique_ptr<QStringListModel> model;
+
+
     std::unique_ptr<QMediaPlayer> player;
     std::shared_ptr<QAudioOutput> audioOutput;
     recorder rec;
     QString login;
     Ui::App_window *ui;
     std::atomic_bool f = true;
+
 
 
 };
