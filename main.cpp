@@ -36,11 +36,11 @@ int main() {
     router->AddHandler(findChat);
     std::shared_ptr<iHandler> getChats(new GetUserChats((DBConnection<iConnection>*) connections.get()));
     router->AddHandler(getChats);
-    std::shared_ptr<iHandler> send(new SendMessage((DBConnection<iConnection>*) connections.get()));
+    std::shared_ptr<iHandler> send(new SendMessage((DBConnection<iConnection>*) connections.get(), auth));
     router->AddHandler(send);
     std::shared_ptr<iHandler> voiceGet(new GetVoice((DBConnection<iConnection>*) connections.get()));
     router->AddHandler(voiceGet);
-    std::shared_ptr<iHandler> voiceSend(new SendVoice((DBConnection<iConnection>*) connections.get()));
+    std::shared_ptr<iHandler> voiceSend(new SendVoice((DBConnection<iConnection>*) connections.get(), auth));
     router->AddHandler(voiceSend);
     
     std::shared_ptr<iBufferFabric> fabric (new BufferFabric);

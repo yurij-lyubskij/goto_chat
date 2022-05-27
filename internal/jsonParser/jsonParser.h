@@ -19,7 +19,7 @@ class IjsonParser {
 public:
     virtual ~IjsonParser() = default;
     virtual User parseUser (std::string body) = 0;
-    virtual Message parseMSG (std::string body) = 0;
+    virtual Message parseMSG (std::string body, int userid) = 0;
     virtual std::string serializeUser (User user) = 0;
     virtual std::string serializeChat (const ChatRoom& chat) = 0;
     virtual std::string serializeMessage (const iMessage& mes, const User& sender) = 0;
@@ -28,7 +28,7 @@ public:
 class jsonParser: public IjsonParser {
 public:
     User parseUser (std::string body) override;
-    Message parseMSG (std::string body) override;
+    Message parseMSG (std::string body, int userid) override;
     std::string serializeUser (User user) override;
     std::string serializeChat (const ChatRoom& chat) override;
     std::string serializeMessage (const iMessage& mes, const User& sender) override;

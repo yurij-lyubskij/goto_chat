@@ -52,13 +52,16 @@ bool SendMessage::CanHandle(Request req ) {
 Response SendMessage::Handle(Request req) {
     Response response;
     response.statusCode = OK;
-//    if (req.responseStatus != OK) {
-//        response.statusCode = UnAuthorized;
-//        return response;
-//    }
+    if (req.responseStatus != OK) {
+        response.statusCode = UnAuthorized;
+        return response;
+    }
     MessageRepo repo(connections);
     jsonParser parser;
-    Message msg = parser.parseMSG(req.body);
+    User user = auth->GetUser(req.cookie);
+    int userid = user.Id;
+    Message msg = parser.parseMSG(req.body, userid);
+
     std::vector<iMessage> message;
     message.push_back(msg);
     std::vector<int> ids = repo.put(message);
@@ -112,10 +115,10 @@ bool GetVoice::CanHandle(Request request) {
 Response GetVoice::Handle(Request request) {
     Response response;
 
-//    if (request.responseStatus != OK) {
-//        response.statusCode = UnAuthorized;
-//        return response;
-//    }
+    if (request.responseStatus != OK) {
+        response.statusCode = UnAuthorized;
+        return response;
+    }
     response.statusCode = OK;
     response.isFile = true;
     std::string fileName  = request.target.substr(REQUESTED_TARGET.size(), request.target.size() - 1);
@@ -132,24 +135,37 @@ Response GetVoice::Handle(Request request) {
     return response;
 }
 
-bool SendVoice::CanHandle(Request req) {
-    return  req.target == REQUESTED_TARGET;
+bool SendVoice::CanHandle(Request request) {
+    return  boost::starts_with(request.target, REQUESTED_TARGET);
 }
 
 Response SendVoice::Handle(Request req) {
     Response response;
-
-//    if (request.responseStatus != OK) {
-//        response.statusCode = UnAuthorized;
-//        return response;
-//    }
-    int pos = req.body.find("Content-Length:");
-    req.body.erase(0, pos);
+    if (req.responseStatus != OK) {
+        response.statusCode = UnAuthorized;
+        return response;
+    }
+    int pos = req.body.find("Content-Type:");
+    if (pos > 0) {
+        req.body.erase(0, pos);
+    }
     pos = req.body.find("\n");
     req.body.erase(0, pos);
-    std::string fName = "test1.mp3";
-    fName = staticPath + fName;
-    std::ofstream fout(fName, std::ios::binary);
+    size_t size = req.body.size();
+    time_t time = std::time(0);
+    std::string fName = req.headers[0];
+    int chat = stoi(req.headers[1]);
+    User user = auth->GetUser(req.cookie);
+    VoiceMessage msg(fName, time, user.Id, chat);
+    std::vector<iMessage> message;
+    message.push_back(msg);
+    MessageRepo repo(connections);
+    std::vector<int> ids = repo.put(message);
+    if (ids.empty()) {
+        response.statusCode = BadRequest;
+    }
+    std::string fileName = staticPath + fName;
+    std::ofstream fout(fileName, std::ios::binary);
     fout.write(req.body.c_str(), req.body.size());
     fout.close();
     response.statusCode = OK;

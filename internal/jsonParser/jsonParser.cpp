@@ -37,27 +37,26 @@ std::string jsonParser::serializeUser(User user) {
     return body;
 }
 
-Message jsonParser::parseMSG(std::string body) {
+Message jsonParser::parseMSG(std::string body, int userid) {
     Document d;
     const char* json = body.c_str();
     d.Parse(json);
     time_t time = std::time(0);
     std::string content;
-    int sender = 0;
+    std::string phone;
     if (d.HasMember("message")){
        if (d["message"].HasMember("userPhone")){
-           sender = d["message"]["userPhone"].GetInt();
+           phone = d["message"]["userPhone"].GetString();
        }
         if (d["message"].HasMember("userPhone")){
             content = d["message"]["text"].GetString();
         }
     }
-
     int chat = 0;
     if (d.HasMember("chatId")){
         chat = d["chatId"].GetInt();
     }
-    Message msg(content, time, sender, chat);
+    Message msg(content, time, userid, chat);
 
     return msg;
 }
