@@ -8,6 +8,7 @@
 #include "json.hpp"
 #include <fstream>
 #include <vector>
+#include <sstream>
 
 
 class Parser {
@@ -25,7 +26,7 @@ public:
     static std::string message(const std::string &chat_name, const std::string &text, const std::string &phone);
 
     //get methods
-    static std::vector<Chat> chats(const std::string &chats_file);
+    static std::vector<Chat> chats(const std::string &chats);
 
     static std::vector<Message> messages(const std::string &chats_file);
 };

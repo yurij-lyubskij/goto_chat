@@ -74,16 +74,15 @@ std::string Parser::create_user(const std::string &username, const std::string &
     return filename;
 }
 
-std::vector <Chat> Parser::chats(const std::string &chats_file) {
-    std::ifstream stream(chats_file);
+std::vector <Chat> Parser::chats(const std::string &chats) {
     nlohmann::json json;
+    std::stringstream stream(chats);
     stream >> json;
     std::vector <Chat> res;
-    for (auto it: json["chats"]) {
-        Chat ch({it["chatId"], it["chatName"]});
+    for (nlohmann::json chat: json["chats"]) {
+        Chat ch({chat["id"], chat["chatName"]});
         res.push_back(ch);
     }
-    stream.close();
     return res;
 }
 

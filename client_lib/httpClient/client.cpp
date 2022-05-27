@@ -1,5 +1,6 @@
 #include "client.h"
 #include "targetBuilder.h"
+#include "parser.h"
 
 #include "rapidjson/writer.h"
 #include "rapidjson/document.h"
@@ -32,21 +33,24 @@ std::vector<Chat> Client::find_chats(const std::string &chat_name){
     std::vector<Chat> chats;
     if(result.statusCode != OK) return chats;
 
+    return Parser::chats(result.body);
+    /*
     rapidjson::Document d;
     const char* json = result.body.c_str();
     d.Parse(json);
     if(! d.HasMember("chats")) return chats;
     if(! d["chats"].IsArray()) return chats;
     const rapidjson::Value& chatsJson = d["chats"];
-    for (rapidjson::SizeType i = 0; i < chatsJson.Size(); ++i){/*
+    for (rapidjson::SizeType i = 0; i < chatsJson.Size(); ++i){
         chats.push_back({chatsJson[i].GetString()});
         usr = usRepo.GetbyPhone(usersPh[i].GetString());
 
         if (usr.Id == 0) return response;
 
-        usrs.push_back(usRepo.GetbyPhone(usersPh[i].GetString()));*/
+        usrs.push_back(usRepo.GetbyPhone(usersPh[i].GetString()));
     }
     return;
+    */
 }
 
 void Client::open_chat(const std::string &chat_name)
@@ -98,7 +102,7 @@ void Client::logout()
     ioc.reset();
     Response result;
     std::make_shared<session>(ioc, result)->run(post, target, "", cookie.c_str());
-    std::cout << result.statusCode << '\n';
+
     ioc.run();
 }
 
@@ -118,6 +122,5 @@ bool Client::sign_in(const std::string &phone, const std::string &password)
         return false;
     }
     cookie = result.cookie;
-    std::cout << cookie <<'\n';
     return true;
 }
