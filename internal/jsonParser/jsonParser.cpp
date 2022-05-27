@@ -60,3 +60,36 @@ Message jsonParser::parseMSG(std::string body, int userid) {
 
     return msg;
 }
+
+std::string jsonParser::serializeChat(const ChatRoom& chat) {
+    std::string body;
+    body += "{";
+    body += "\"id\":\"";
+    body += std::to_string(chat.getId());
+    body += "\",";
+    body += "\"chatName\":\"";
+    body += chat.getName();
+    body += "\"}";
+    return body;
+}
+
+std::string jsonParser::serializeMessage(const iMessage& mes, const User& sender) {
+    std::string body;
+    body = "{";
+    body += "\"id\":\"";
+    body += std::to_string(mes.getId());
+    body += "\",";
+    body += "\"text\":\"";
+    body += mes.getContent();
+    body += "\",";
+    body += "\"time\":\"";
+    body += std::to_string(mes.getTime());
+    body += "\",";
+    body += "\"userPhone\":\"";
+    body += sender.PhoneNumber;
+    body += "\",";
+    body += "\"type\":\"";
+    body += (mes.getType() == textMessage)? "text" : "voice";
+    body += "\"}";
+    return body;
+}
