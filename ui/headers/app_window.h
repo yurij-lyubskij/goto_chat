@@ -2,17 +2,19 @@
 #define APP_WINDOW_H
 
 #include <QMainWindow>
-#include "recorder.h"
 #include <QTime>
 #include <QMediaPlayer>
 #include <QAudioOutput>
 #include <QScreen>
+#include <QStringListModel>
+#include <QTableView>
+
+#include "recorder.h"
 #include "client.h"
 #include "parser.h"
-#include "QStringListModel"
 
 namespace Ui {
-    class App_window;
+class App_window;
 }
 
 class App_window : public QMainWindow {
@@ -71,6 +73,9 @@ private:
     void show_chats();
     std::unique_ptr<QStringListModel> model;
 
+
+    void show_messages(const QString& chat_name);
+//    std::unique_ptr<Q>
 
     std::unique_ptr<QMediaPlayer> player;
     std::shared_ptr<QAudioOutput> audioOutput;
