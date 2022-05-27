@@ -1,3 +1,4 @@
+#include <fstream>
 #include "client.h"
 
 const char* get = "GET";
@@ -97,5 +98,23 @@ bool Client::sign_in(const std::string &phone, const std::string &password)
     }
     cookie = result.cookie;
     std::cout << cookie <<'\n';
+    return true;
+}
+
+bool Client::getVoice(const std::string &name) {
+
+    auto const target = "/chat/message/getfile?name=voice.mp3";
+    ioc.reset();
+    Response result;
+    std::string body ="";
+    std::make_shared<session>(ioc, result)->run(post, target, body.c_str(), cookie.c_str());
+    ioc.run();
+    if (result.statusCode!= OK) {
+        return false;
+    }
+    std::ofstream fout("voice.mp3", std::ios::binary);
+    fout.write(result.body.c_str(), result.body.size());
+    fout.close();
+    std::cout <<"size = "<< result.body.size() << "\n";
     return true;
 }
