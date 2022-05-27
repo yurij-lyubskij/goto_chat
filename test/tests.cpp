@@ -5,7 +5,7 @@
 TEST(Client, Empty){
     Client cl;
     std::string str;
-    cl.create_chat(str, str);
+//    cl.create_chat(str, str);
     cl.delete_from_chat(str);
     cl.leave_chat(str);
 //    cl.logout(str);

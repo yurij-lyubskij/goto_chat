@@ -9,7 +9,7 @@ App_window::App_window(QWidget *parent) :
     ui->setupUi(this);
     ui->chat_creation->hide();
     ui->pushButton_5->hide();
-
+    ui->listView->setEditTriggers(QListView::NoEditTriggers);
 }
 
 App_window::~App_window() {
@@ -102,7 +102,7 @@ void App_window::centrialize()
 // двойное нажание на название чата
 void App_window::on_listView_doubleClicked(const QModelIndex &index)
 {
-
+    ui->messages->setTitle(index.data(0).toString());
 }
 
 

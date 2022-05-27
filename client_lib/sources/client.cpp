@@ -1,5 +1,7 @@
 #include <fstream>
 #include "client.h"
+#include "targetBuilder.h"
+#include "parser.h"
 
 const char* get = "GET";
 const char* post = "POST";
@@ -11,22 +13,96 @@ Client::Client()
 }
 
 
-void Client::send_message(const std::string &chat_name, const std::string &text, const std::string &phone)
+Chat Client::create_chat(const std::string &chat_name, std::vector<std::string> members)
 {
-    /*beast::http::request<http::string_body> request = Request::message();
-    request.body() = Parser::message(chat_name, text, phone);
-    request.prepare_payload();
-    send_request(request);*/
+    std::string target = TargetBuilder::createChat();
+    std::string body = Parser::chat_create(chat_name, members);
+    ioc.reset();
+    Response result;
+    std::make_shared<session>(ioc, result)->run(post, target.c_str(), body.c_str(), cookie.c_str());
+    ioc.run();
+
+    if(result.statusCode == OK) return {Parser::chat_id(result.body), chat_name};
+    else return Chat({"0", ""});
 }
+
+bool Client::join_chat(const std::string &chatId, const std::string &phone){
+    std::string target = TargetBuilder::joinChat();
+    std::string body = Parser::chat_join(chatId, phone);
+    ioc.reset();
+    Response result;
+    std::make_shared<session>(ioc, result)->run(post, target.c_str(), body.c_str(), cookie.c_str());
+    ioc.run();
+
+    if(result.statusCode == OK) return true;
+    else return false;
+};
+
+std::vector<Chat> Client::find_chats(const std::string& chat_name){
+    std::string target = TargetBuilder::findChat(chat_name);
+    ioc.reset();
+    Response result;
+    std::make_shared<session>(ioc, result)->run(get, target.c_str(), "", cookie.c_str());
+    ioc.run();
+    std::vector<Chat> chats;
+    if(result.statusCode != OK) return chats;
+
+    return Parser::chats(result.body);
+}
+
+std::vector<Chat> Client::get_users_chats(const std::string& phone){
+    std::string target = TargetBuilder::getUserChats(phone);
+    ioc.reset();
+    Response result;
+    std::make_shared<session>(ioc, result)->run(get, target.c_str(), "", cookie.c_str());
+    ioc.run();
+    std::vector<Chat> chats;
+    if(result.statusCode != OK) return chats;
+
+    return Parser::chats(result.body);
+};
+
+std::vector<Message> Client::get_next_messages(const std::string& mes_id){
+    std::string target = TargetBuilder::messageListFromMes(mes_id, next);
+    ioc.reset();
+    Response result;
+    std::make_shared<session>(ioc, result)->run(get, target.c_str(), "", cookie.c_str());
+    ioc.run();
+    std::vector<Message> messages;
+    if(result.statusCode != OK) return messages;
+
+    return Parser::messages(result.body);
+};
+
+std::vector<Message> Client::get_last_messages(const std::string &mes_id){
+    std::string target = TargetBuilder::messageListFromMes(mes_id, last);
+    ioc.reset();
+    Response result;
+    std::make_shared<session>(ioc, result)->run(get, target.c_str(), "", cookie.c_str());
+    ioc.run();
+    std::vector<Message> messages;
+    if(result.statusCode != OK) return messages;
+
+    return Parser::messages(result.body);
+};
+
+std::vector<Message> Client::get_last_chat_messages(const std::string &chat_id){
+    std::string target = TargetBuilder::messageListFromEmptyChat(chat_id);
+    ioc.reset();
+    Response result;
+    std::make_shared<session>(ioc, result)->run(get, target.c_str(), "", cookie.c_str());
+    ioc.run();
+    std::vector<Message> messages;
+    if(result.statusCode != OK) return messages;
+
+    return Parser::messages(result.body);
+};
 
 void Client::open_chat(const std::string &chat_name)
 {
 }
 
-void Client::create_chat(const std::string &owner, const std::string &chat_name)
-{
-    //    new_chat(owner,chat_name);
-}
+
 
 void Client::delete_from_chat(const std::string &person_name)
 {
@@ -97,7 +173,6 @@ bool Client::sign_in(const std::string &phone, const std::string &password)
         return false;
     }
     cookie = result.cookie;
-    std::cout << cookie <<'\n';
     return true;
 }
 
@@ -120,6 +195,17 @@ bool Client::getVoice(const std::string &name) {
     return true;
 }
 
-bool Client::sendVoice(const std::string &name) {
-
+bool Client::sendVoice(const std::string &name, const std::string &id) {
+    std::string  target = "/chat/message/voice/send";
+    ioc.reset();
+    Response result;
+    std::make_shared<session>(ioc, result)->file_run(target.c_str(), name.c_str(), id.c_str(), cookie.c_str());
+    ioc.run();
+    if (result.statusCode!= OK) {
+        return false;
+    }
+    return true;
 }
+
+
+
