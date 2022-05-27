@@ -7,6 +7,8 @@ App_window::App_window(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::App_window) {
     ui->setupUi(this);
+    ui->chat_creation->hide();
+    ui->pushButton_5->hide();
 }
 
 App_window::~App_window() {
@@ -91,5 +93,32 @@ void App_window::centrialize()
     int height = screenGeometry.height() - this->height();
     int width = screenGeometry.width() - this->width();
     this->setGeometry(width / 2, height / 2, this->width(), this->height());
+}
+
+
+
+// двойное нажание на название чата
+void App_window::on_listView_doubleClicked(const QModelIndex &index)
+{
+
+}
+
+
+// кнопка создания нового чата
+void App_window::on_toolButton_clicked()
+{
+    ui->pushButton_5->show();
+    ui->main_things->hide();
+    ui->toolButton_2->hide();
+    ui->chat_creation->show();
+}
+
+
+void App_window::on_pushButton_5_clicked()
+{
+    ui->main_things->show();
+    ui->toolButton_2->show();
+    ui->chat_creation->hide();
+    ui->pushButton_5->hide();
 }
 

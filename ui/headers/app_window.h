@@ -57,6 +57,13 @@ private slots:
 
     void on_pushButton_clicked();
 
+
+    void on_listView_doubleClicked(const QModelIndex &index);
+
+    void on_toolButton_clicked();
+
+    void on_pushButton_5_clicked();
+
 private:
     std::unique_ptr<QMediaPlayer> player;
     std::shared_ptr<QAudioOutput> audioOutput;
