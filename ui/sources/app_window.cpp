@@ -78,7 +78,6 @@ void App_window::on_toolButton_3_released()
 
 void App_window::on_pushButton_clicked()
 {
-//    player->stop();
     player = std::unique_ptr<QMediaPlayer>(new QMediaPlayer);
     audioOutput = std::shared_ptr<QAudioOutput>(new QAudioOutput);
     player->setAudioOutput(audioOutput.get());
