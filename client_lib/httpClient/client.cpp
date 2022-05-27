@@ -23,12 +23,28 @@ void Client::send_message(const std::string &chat_name, const std::string &text,
     request.prepare_payload();
     send_request(request);*/
 }
+Chat Client::create_chat(std::vector<std::string> members, const std::string &chat_name)
+{
+    return {0, ""};//    new_chat(members,chat_name);
+}
 
-std::vector<Chat> Client::findChats(const std::string& chat_name){
+bool Client::join_chat(const std::string &chatId, const std::string &phone){
+    std::string target = TargetBuilder::joinChat();
+    std::string body = Parser::chat_join(chatId, phone);
+    ioc.reset();
+    Response result;
+    std::make_shared<session>(ioc, result)->run(post, target.c_str(), body.c_str(), cookie.c_str());
+    ioc.run();
+
+    if(result.statusCode == OK) return true;
+    else return false;
+};
+
+std::vector<Chat> Client::find_chats(const std::string& chat_name){
     std::string target = TargetBuilder::findChat(chat_name);
     ioc.reset();
     Response result;
-    std::make_shared<session>(ioc, result)->run(post, target.c_str(), "", cookie.c_str());
+    std::make_shared<session>(ioc, result)->run(get, target.c_str(), "", cookie.c_str());
     ioc.run();
     std::vector<Chat> chats;
     if(result.statusCode != OK) return chats;
@@ -36,11 +52,11 @@ std::vector<Chat> Client::findChats(const std::string& chat_name){
     return Parser::chats(result.body);
 }
 
-std::vector<Chat> Client::getUsersChats(const std::string& phone){
+std::vector<Chat> Client::get_users_chats(const std::string& phone){
     std::string target = TargetBuilder::getUserChats(phone);
     ioc.reset();
     Response result;
-    std::make_shared<session>(ioc, result)->run(post, target.c_str(), "", cookie.c_str());
+    std::make_shared<session>(ioc, result)->run(get, target.c_str(), "", cookie.c_str());
     ioc.run();
     std::vector<Chat> chats;
     if(result.statusCode != OK) return chats;
@@ -48,11 +64,11 @@ std::vector<Chat> Client::getUsersChats(const std::string& phone){
     return Parser::chats(result.body);
 };
 
-std::vector<Message> Client::getNextMessages(const std::string& mes_id){
+std::vector<Message> Client::get_next_messages(const std::string& mes_id){
     std::string target = TargetBuilder::messageListFromMes(mes_id, next);
     ioc.reset();
     Response result;
-    std::make_shared<session>(ioc, result)->run(post, target.c_str(), "", cookie.c_str());
+    std::make_shared<session>(ioc, result)->run(get, target.c_str(), "", cookie.c_str());
     ioc.run();
     std::vector<Message> messages;
     if(result.statusCode != OK) return messages;
@@ -60,11 +76,11 @@ std::vector<Message> Client::getNextMessages(const std::string& mes_id){
     return Parser::messages(result.body);
 };
 
-std::vector<Message> Client::getLastMessages(const std::string &mes_id){
+std::vector<Message> Client::get_last_messages(const std::string &mes_id){
     std::string target = TargetBuilder::messageListFromMes(mes_id, last);
     ioc.reset();
     Response result;
-    std::make_shared<session>(ioc, result)->run(post, target.c_str(), "", cookie.c_str());
+    std::make_shared<session>(ioc, result)->run(get, target.c_str(), "", cookie.c_str());
     ioc.run();
     std::vector<Message> messages;
     if(result.statusCode != OK) return messages;
@@ -72,11 +88,11 @@ std::vector<Message> Client::getLastMessages(const std::string &mes_id){
     return Parser::messages(result.body);
 };
 
-std::vector<Message> Client::getLastChatMessages(const std::string &chat_id){
+std::vector<Message> Client::get_last_chat_messages(const std::string &chat_id){
     std::string target = TargetBuilder::messageListFromEmptyChat(chat_id);
     ioc.reset();
     Response result;
-    std::make_shared<session>(ioc, result)->run(post, target.c_str(), "", cookie.c_str());
+    std::make_shared<session>(ioc, result)->run(get, target.c_str(), "", cookie.c_str());
     ioc.run();
     std::vector<Message> messages;
     if(result.statusCode != OK) return messages;
@@ -88,10 +104,7 @@ void Client::open_chat(const std::string &chat_name)
 {
 }
 
-Chat Client::create_chat(std::vector<std::string> members, const std::string &chat_name)
-{
-    return {0, ""};//    new_chat(members,chat_name);
-}
+
 
 void Client::delete_from_chat(const std::string &person_name)
 {

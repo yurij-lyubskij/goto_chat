@@ -13,15 +13,13 @@ public:
     void open_chat(const std::string &chat_name);
 
     Chat create_chat(std::vector<std::string> members, const std::string &chat_name);
+    bool join_chat(const std::string &chatId, const std::string &phone);
+    std::vector<Chat> find_chats(const std::string &chat_name);
+    std::vector<Chat> get_users_chats(const std::string &chat_name);
 
-    std::vector<Chat> findChats(const std::string &chat_name);
-    std::vector<Chat> getUsersChats(const std::string &chat_name);
-
-    std::vector<Message> getNextMessages(const std::string &mes_id);
-
-    std::vector<Message> getLastMessages(const std::string &mes_id);
-
-    std::vector<Message> getLastChatMessages(const std::string &chat_id);
+    std::vector<Message> get_next_messages(const std::string &mes_id);
+    std::vector<Message> get_last_messages(const std::string &mes_id);
+    std::vector<Message> get_last_chat_messages(const std::string &chat_id);
 
     void delete_from_chat(const std::string &person_name);
 

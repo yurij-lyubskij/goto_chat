@@ -20,3 +20,6 @@ std::string TargetBuilder::messageListFromMes(const std::string& mesId, const Ge
 std::string TargetBuilder::getUserChats(const std::string& phone){
     return ("/user/getchat/?user=" + phone);
 };
+
+std::string TargetBuilder::createChat() {return "/chat/create";};
+std::string TargetBuilder::joinChat() {return "/chat/join";};

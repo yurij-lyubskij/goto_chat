@@ -7,7 +7,8 @@ int main()
     std::string phone = "12345";
     std::string password = "string";
     client.sign_in(phone, password);
-    std::vector<Chat> chats = client.getUsersChats("56958");
+    std::cout << ((client.join_chat("3", "123"))? "true" : "false") << std::endl;
+    std::vector<Chat> chats = client.get_users_chats(phone);
     for (Chat chat : chats){
         std::cout << chat.Id << " " << chat.chatName << std::endl;
     }

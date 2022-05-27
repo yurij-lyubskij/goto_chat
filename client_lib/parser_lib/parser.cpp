@@ -38,15 +38,15 @@ Parser::create_chat(const std::string &chat_name, const std::string &phone1, con
 }
 
 std::string Parser::chat_join(const std::string &chatId, const std::string &phone) {
-    std::string filename = "./add_person.json";
+    std::string body = "";
     nlohmann::json json;
     json["chatId"] = chatId;
     json["user"] = phone;
 
-    std::ofstream stream(filename);
+    std::stringstream stream;
     stream << json;
-    stream.close();
-    return filename;
+    stream >> body;
+    return body;
 }
 
 std::string Parser::create_session(const std::string &login, const std::string &password) {
@@ -86,7 +86,7 @@ std::vector <Chat> Parser::chats(const std::string &chats) {
     }
     return res;
 }
-
+//in use
 class MessageComparator{
 	public:
 		MessageComparator(){};
