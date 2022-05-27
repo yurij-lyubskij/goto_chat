@@ -25,7 +25,7 @@ public:
     bool registrate(const std::string &first_name, const std::string &second_name,
                     const std::string &login, const std::string &password, const std::string &email);
 
-    void logout(const std::string &user_name);
+    void logout();
 
     bool sign_in(const std::string &phone, const std::string &password);
 

@@ -61,9 +61,14 @@ bool Client::registrate(const std::string &first_name, const std::string &second
     return true;
 }
 
-void Client::logout(const std::string &login)
+void Client::logout()
 {
-    //    person_logout(login); //функция Рината
+    auto const target = "/session/delete";
+    ioc.reset();
+    Response result;
+    std::make_shared<session>(ioc, result)->run(post, target, "", cookie.c_str());
+    std::cout << result.statusCode << '\n';
+    ioc.run();
 }
 
 bool Client::sign_in(const std::string &phone, const std::string &password)
@@ -82,6 +87,6 @@ bool Client::sign_in(const std::string &phone, const std::string &password)
         return false;
     }
     cookie = result.cookie;
-    std::cout << cookie;
+    std::cout << cookie <<'\n';
     return true;
 }
