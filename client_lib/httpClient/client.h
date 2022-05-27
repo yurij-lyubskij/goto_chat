@@ -31,11 +31,11 @@ public:
 
     bool person_exist(const std::string &login);
 
-    bool registrate(const std::string &first_name, const std::string &second_name,
-                    const std::string &login, const std::string &password, const std::string &email);
+    bool registerUser(const std::string &username, const std::string &phone, const std::string &password);
 
     void logout();
-
+    bool getVoice (const std::string &name);
+    bool sendVoice (const std::string &name, const std::string& chatid);
     bool sign_in(const std::string &phone, const std::string &password);
 
 private:

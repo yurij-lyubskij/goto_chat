@@ -30,6 +30,7 @@ class session : public std::enable_shared_from_this<session>
     beast::tcp_stream stream_;
     beast::flat_buffer buffer_; // (Must persist between reads)
     http::request<http::string_body> req_;
+    http::request<http::file_body> reqF;
     http::response<http::string_body> res_;
     Response& result;
     const char* host = "127.0.0.1";
@@ -70,9 +71,49 @@ public:
         if (strlen(cookie) > 0){
             std::string session = "session=";
             session += cookie;
-            req_.set(http::field::cookie, cookie);
+            req_.set(http::field::cookie, session);
         }
         req_.prepare_payload();
+        // Look up the domain name
+        resolver_.async_resolve(
+                host,
+                port,
+                beast::bind_front_handler(
+                        &session::on_resolve,
+                        shared_from_this()));
+    }
+
+    // Start the asynchronous operation for file transfer
+    void
+    file_run(
+            char const* target,
+            char const* name,
+            char const* id,
+            char const* cookie
+    )
+    {
+        // Set up an HTTP  request message
+        reqF.version(11);
+        reqF.method(http::verb::post);
+        reqF.target(target);
+        reqF.set(http::field::host, host);
+        reqF.set("id", id);
+        reqF.set("name" , name);
+        reqF.set(http::field::user_agent, BOOST_BEAST_VERSION_STRING);
+        if (strlen(cookie) > 0){
+            std::string session = "session=";
+            session += cookie;
+            reqF.set(http::field::cookie, session);
+        }
+        http::file_body::value_type file;
+        beast::error_code ec;
+        file.open(
+                name,
+                beast::file_mode::read,
+                ec);
+        std::cout << ec.message() << "\n";
+        reqF.body() = std::move(file);
+        reqF.prepare_payload();
         // Look up the domain name
         resolver_.async_resolve(
                 host,
@@ -109,11 +150,20 @@ public:
         // Set a timeout on the operation
         stream_.expires_after(std::chrono::seconds(30));
 
-        // Send the HTTP request to the remote host
-        http::async_write(stream_, req_,
-                          beast::bind_front_handler(
-                                  &session::on_write,
-                                  shared_from_this()));
+        if (!reqF.body().is_open()) {
+            // Send the HTTP request to the remote host
+            http::async_write(stream_, req_,
+                              beast::bind_front_handler(
+                                      &session::on_write,
+                                      shared_from_this()));
+        } else {
+
+            http::async_write(stream_, reqF,
+                              beast::bind_front_handler(
+                                      &session::on_write,
+                                      shared_from_this()));
+        }
+
     }
 
     void
