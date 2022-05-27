@@ -54,7 +54,10 @@ public:
     {
         // Set up an HTTP  request message
         req_.version(11);
-        req_.method(http::verb::get);
+        req_.method(http::verb::post);
+        if (strcmp(method, "GET") == 0) {
+            req_.method(http::verb::get);
+        }
         req_.target(target);
         req_.set(http::field::host, host);
         req_.set(http::field::user_agent, BOOST_BEAST_VERSION_STRING);
@@ -81,7 +84,7 @@ public:
             return fail(ec, "resolve");
 
         // Set a timeout on the operation
-        stream_.expires_after(std::chrono::seconds(30));
+        stream_.expires_after(std::chrono::seconds(100));
 
         // Make the connection on the IP address we get from a lookup
         stream_.async_connect(
@@ -162,14 +165,19 @@ int main()
 
     // The io_context is required for all I/O
     net::io_context ioc;
-    Response result;
+//    auto work = make_work_guard(ioc.get_executor());
+
+    Response result1, result2;
     std::string body = R"({"phone": "12345", "password": "string" })";
     // Launch the asynchronous operation
-    std::make_shared<session>(ioc, result)->run(post, target, body.c_str(), "");
-
-    // Run the I/O service. The call will return when
-    // the get operation is complete.
+    std::make_shared<session>(ioc, result1)->run(post, target, body.c_str(), "");
     ioc.run();
-    std::cout << result.statusCode << " " << result.cookie;
+    sleep(3);
+    ioc.reset();
+    std::make_shared<session>(ioc, result2)->run(post, target, body.c_str(), "");
+    ioc.run();
+    std::cout << result1.statusCode << " " << result1.cookie <<"\n";
+    std::cout << result2.statusCode << " " << result2.cookie;
+
     return EXIT_SUCCESS;
 }
