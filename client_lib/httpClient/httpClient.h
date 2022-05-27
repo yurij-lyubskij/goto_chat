@@ -68,7 +68,9 @@ public:
         req_.set(http::field::user_agent, BOOST_BEAST_VERSION_STRING);
         req_.body() = body;
         if (strlen(cookie) > 0){
-            req_.set(http::field::set_cookie, cookie);
+            std::string session = "session=";
+            session += cookie;
+            req_.set(http::field::cookie, cookie);
         }
         req_.prepare_payload();
         // Look up the domain name
