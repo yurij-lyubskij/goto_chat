@@ -160,7 +160,7 @@ void inMain::handle(Machine *m) {
             std::cout << "Select chat Number: " << std::endl; //Not Id
             int i = 0;
             for (auto chat: chats) {
-                std::cout <<"chatNumber = " << i <<" chatName = " << chat.chatName << std::endl;
+                std::cout << "chatNumber = " << i << " chatName = " << chat.chatName << std::endl;
                 i++;
             }
             std::cin >> i;
@@ -168,7 +168,7 @@ void inMain::handle(Machine *m) {
                 m->currentChat = chats[i];
                 down(m);
             } else {
-                std::cout <<"No such Chat\n";
+                std::cout << "No such Chat\n";
             }
         }
             break;
@@ -190,7 +190,7 @@ void inMain::handle(Machine *m) {
             std::cout << "enter chat Id" << std::endl;
             std::string chatId;
             std::cin >> chatId;
-            bool success = m->client.join_chat(chatId , m->user.phone);
+            bool success = m->client.join_chat(chatId, m->user.phone);
             if (success) {
                 std::cout << "chat joined. goto chat!\n";
             } else {
@@ -206,7 +206,7 @@ void inMain::handle(Machine *m) {
             std::cout << "Select chat Number: " << std::endl; //Not Id
             int i = 0;
             for (auto chat: chats) {
-                std::cout <<"chatNumber = " << i <<" chatName = " << chat.chatName << std::endl;
+                std::cout << "chatNumber = " << i << " chatName = " << chat.chatName << std::endl;
                 i++;
             }
             std::cin >> i;
@@ -214,7 +214,7 @@ void inMain::handle(Machine *m) {
                 m->currentChat = chats[i];
                 down(m);
             } else {
-                std::cout <<"No such Chat\n";
+                std::cout << "No such Chat\n";
             }
         }
             break;
@@ -246,37 +246,49 @@ void inChat::actionList() {
 
 void inChat::handle(Machine *m) {
     char key;
-    static std::string idLoaded;
+    static std::string idLoaded = "0";
     std::cin >> key;
     switch (key) {
         case 'd': {
             const std::string chat_id = m->currentChat.Id;
             std::vector<Message> messages = m->client.get_last_chat_messages(chat_id);
             for (auto msg: messages) {
-                std::cout << "Id ="<< msg.Id;
-                std::cout << " phone ="<< msg.phone;
-                std::cout << " text ="<< msg.text;
-                std::cout << " time ="<< msg.time;
-                std::cout <<" type ="<< msg.type;
+                std::cout << "Id =" << msg.Id;
+                std::cout << " phone =" << msg.phone;
+                std::cout << " text =" << msg.text;
+                std::cout << " time =" << msg.time;
+                std::cout << " type =" << msg.type;
             }
-            idLoaded = messages.back().Id;
-        }
+            if (!messages.empty()) {
+                idLoaded = messages.back().Id;
+            }
             break;
+        }
+
         case 'f': {
-            std::vector<Message> messages = m->client.get_next_messages(idLoaded);
-            for (auto msg: messages) {
-                std::cout << "Id ="<< msg.Id;
-                std::cout << " phone ="<< msg.phone;
-                std::cout << " text ="<< msg.text;
-                std::cout << " time ="<< msg.time;
-                std::cout <<" type ="<< msg.type;
+            std::vector<Message> messages;
+            if (idLoaded != "0") {
+                messages = m->client.get_next_messages(idLoaded);
+            } else {
+                messages = m->client.get_last_chat_messages(m->currentChat.Id);
             }
-            idLoaded = messages.back().Id;
+            for (auto msg: messages) {
+                std::cout << "Id =" << msg.Id;
+                std::cout << " phone =" << msg.phone;
+                std::cout << " text =" << msg.text;
+                std::cout << " time =" << msg.time;
+                std::cout << " type =" << msg.type << std::endl;
+            }
+            if (!messages.empty()) {
+                idLoaded = messages.back().Id;
+            }
+            break;
         }
         case 'a': {
-            std::cout << "enter message:"<< std::endl;
+            std::cout << "enter message:" << std::endl;
             std::string text;
-            std::cin >> text;
+            std::getline(std::cin, text);
+            std::getline(std::cin, text);
             std::string chatId = m->currentChat.Id;
             bool success = m->client.sendMessage(chatId, text, m->user.phone);
             if (success) {
@@ -284,11 +296,11 @@ void inChat::handle(Machine *m) {
             } else {
                 std::cout << "chat does not exist\n";
             }
-
-        }
             break;
+        }
+
         case 's': {
-            std::cout << "enter filename:"<< std::endl;
+            std::cout << "enter filename:" << std::endl;
             std::string name;
             std::cin >> name;
             std::string chatId = m->currentChat.Id;
