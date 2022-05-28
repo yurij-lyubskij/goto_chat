@@ -33,7 +33,7 @@ void App_window::set_person(const QString &Login) {
     login = Login;
     ui->profile->show();
     ui->chat_list->hide();
-    ui->login_label->setText(login);
+    ui->phone_label->setText(login);
     show_chats();
 }
 
@@ -92,7 +92,7 @@ void App_window::centrialize()
     QRect screenGeometry = screen->geometry();
     int height = screenGeometry.height() - this->height()/2;
     int width = screenGeometry.width() - this->width();
-    this->setGeometry(width / 2, height / 2, this->width(), this->height()/2);
+    this->setGeometry(width / 2, height / 2z, this->width(), this->height()/2);
 }
 
 
@@ -127,11 +127,9 @@ void App_window::on_pushButton_5_clicked()
 // функция отображения чатов
 void App_window::show_chats()
 {
+    Client cl;
     model = std::unique_ptr<QStringListModel>(new QStringListModel);
-    std::vector<Chat> m;
-    m.push_back({"1", "rwerwef"});
-    m.push_back({"2", "rwerwg3gef"});
-    m.push_back({"3", "egerwerwef"});
+    std::vector<Chat> m = cl.get_users_chats(ui->phone_label->text().toStdString());
     QStringList chats;
     for(const auto& chat : m){
         chats.push_back(QString::fromStdString(chat.chatName));
