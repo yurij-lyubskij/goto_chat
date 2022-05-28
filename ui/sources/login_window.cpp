@@ -6,6 +6,8 @@ Login_window::Login_window(QWidget *parent)
         : QMainWindow(parent), ui(new Ui::Login_window) {
     ui->setupUi(this);
     centrialize();
+    cl = new Client();
+
     reg_window = new Reg_window();
     app_window = new App_window();
     connect(reg_window, &Reg_window::login_window, this, &Login_window::show);
@@ -46,9 +48,8 @@ void Login_window::on_enter_button_clicked() {
         ui->error_message->setText("Некорректный формат введенных данных");
         return;
     }
-    Client cl;
-    if (cl.sign_in(log, password)) {
-        emit send_person(ui->lineEdit->text());
+    if (cl->sign_in(log, password)) {
+        emit send_person(ui->lineEdit->text(), cl);
         emit window_location();
         app_window->show();
         hide();
@@ -56,7 +57,7 @@ void Login_window::on_enter_button_clicked() {
         ui->error_message->setText("Неверный логин или пароль");
     }
     // закоментировать то что ниже когда поключение к серверу
-    emit send_person(ui->lineEdit->text());
+    emit send_person(ui->lineEdit->text(), cl);
     emit window_location();
     app_window->show();
     hide();

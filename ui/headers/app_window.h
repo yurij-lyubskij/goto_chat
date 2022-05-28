@@ -43,7 +43,7 @@ public:
     void refresh_timer();
 
 public slots:
-    void set_person(const QString &Login);
+    void set_person(const QString &Login, Client* c);
 
     void centrialize();
 
@@ -96,6 +96,9 @@ private:
     Ui::App_window *ui;
     std::atomic_bool f = true;
 
+    std::vector<Chat> person_chats;
+
+    Client* cl;
     void listen_audio(const std::string& file_name);
 };
 

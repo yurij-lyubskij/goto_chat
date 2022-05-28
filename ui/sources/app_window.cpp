@@ -29,8 +29,9 @@ void App_window::refresh_timer()
     }
 }
 
-void App_window::set_person(const QString &Login) {
+void App_window::set_person(const QString &Login, Client* c) {
     login = Login;
+    cl = c;
     ui->profile->show();
     ui->chat_list->hide();
     ui->phone_label->setText(login);
@@ -92,7 +93,7 @@ void App_window::centrialize()
     QRect screenGeometry = screen->geometry();
     int height = screenGeometry.height() - this->height()/2;
     int width = screenGeometry.width() - this->width();
-    this->setGeometry(width / 2, height / 2z, this->width(), this->height()/2);
+    this->setGeometry(width / 2, height / 2, this->width(), this->height()/2);
 }
 
 
@@ -100,9 +101,13 @@ void App_window::centrialize()
 // двойное нажание на название чата
 void App_window::on_listView_doubleClicked(const QModelIndex &index)
 {
+    int id;
+    id = ui->listView->currentIndex().row();
+    std::string temp_chat_id = person_chats[id].Id;
+
     QString chat_name = index.data(0).toString();
     ui->messages->setTitle(chat_name);
-    show_messages(chat_name);
+    show_messages(QString::fromStdString(temp_chat_id));
 }
 
 
@@ -127,11 +132,10 @@ void App_window::on_pushButton_5_clicked()
 // функция отображения чатов
 void App_window::show_chats()
 {
-    Client cl;
     model = std::unique_ptr<QStringListModel>(new QStringListModel);
-    std::vector<Chat> m = cl.get_users_chats(ui->phone_label->text().toStdString());
+    person_chats = cl->get_users_chats(ui->phone_label->text().toStdString());
     QStringList chats;
-    for(const auto& chat : m){
+    for(const auto& chat : person_chats){
         chats.push_back(QString::fromStdString(chat.chatName));
     }
     model.get()->setStringList(chats);
@@ -139,15 +143,11 @@ void App_window::show_chats()
 }
 
 // функция отображения сообщений
-void App_window::show_messages(const QString &chat_name)
+void App_window::show_messages(const QString &chat_id)
 {
     model2 = std::unique_ptr<QStringListModel>(new QStringListModel);
-    std::vector<Message> m;
-//    Client::get_last_messages(0)
-//    m = Parser::messages(...)
-    m.push_back({"1", "rwerwef", "+89034", "21:00:11"});
-    m.push_back({"2", "gay.m4a", "+94329034", "21:00:12"});
-    m.push_back({"3", "egerwerwef", "+3443", "21:00:13"});
+    std::vector<Message> m = cl->get_last_chat_messages(chat_id.toStdString());
+
     QStringList messages;
     for(const auto& mes : m){
         std::string temp_res = Parser::get_message_from_Message(mes);
