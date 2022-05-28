@@ -22,10 +22,8 @@ Login_window::~Login_window() {
     delete ui;
 }
 
-bool Login_window::local_check_person(const QString &login, const QString &password) {
-    return true;
-}
 
+// проверить логин и пароль челика
 bool Login_window::check_person(const QString &login, const QString &password) {
     return true;
 }
@@ -40,6 +38,7 @@ void Login_window::on_checkBox_stateChanged(int) {
 }
 
 
+// кнопка войти в приложение
 void Login_window::on_enter_button_clicked() {
     std::string log = ui->lineEdit->text().toStdString();
     std::string password = ui->lineEdit_2->text().toStdString();
@@ -63,6 +62,7 @@ void Login_window::on_enter_button_clicked() {
 }
 
 
+// нажатие на кнопку зарегистрироваться
 void Login_window::on_reg_button_clicked() {
     emit window_location();
     hide();

@@ -11,6 +11,7 @@ Reg_window::~Reg_window() {
     delete ui;
 }
 
+// функция зарегистрировать
 void Reg_window::registrate() {
     Client cl;
 //    std::string name = ui->lineEdit->text().toStdString();
@@ -25,16 +26,12 @@ bool Reg_window::check_data() {
     return true;
 }
 
+// кнопка назад
 void Reg_window::on_pushButton_clicked() {
-    Client cl;
-    if(!cl.person_exist(ui->lineEdit_4->text().toStdString())){
-        registrate();
-        clear_lines();
-        this->close();
-        emit login_window();
-    }else{
-        ui->error_label->setText("Пользователь с таким логином уже есть");
-    }
+
+    clear_lines();
+    this->close();
+    emit login_window();
 }
 
 
@@ -47,6 +44,7 @@ void Reg_window::on_checkBox_2_stateChanged(int) {
 }
 
 
+
 void Reg_window::on_checkBox_stateChanged(int) {
     if (ui->checkBox->isChecked()) {
         ui->lineEdit_6->setEchoMode(QLineEdit::Normal);
@@ -56,6 +54,7 @@ void Reg_window::on_checkBox_stateChanged(int) {
 }
 
 
+// кнопка зарегистрироваться
 void Reg_window::on_pushButton_2_clicked() {
     bool f_name = Checker::check_name(ui->lineEdit->text().toStdString());
     bool f_second_name = Checker::check_name(ui->lineEdit_2->text().toStdString());
@@ -88,6 +87,14 @@ void Reg_window::on_pushButton_2_clicked() {
         ui->error_label->setText("Пароли не совпадают");
         return;
     }
+    Client cl;
+    if(!cl.person_exist(ui->lineEdit_4->text().toStdString())){
+        registrate();
+
+    }else{
+        ui->error_label->setText("Пользователь с таким логином уже есть");
+    }
+    registrate();
 
     on_pushButton_clicked();
 }

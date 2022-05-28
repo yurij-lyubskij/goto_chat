@@ -27,7 +27,7 @@ public:
 
     void set_db_name(const QString &name);
 
-    bool local_check_person(const QString &login, const QString &password);
+//    bool local_check_person(const QString &login, const QString &password);
 
     bool check_person(const QString &login, const QString &password);
 
