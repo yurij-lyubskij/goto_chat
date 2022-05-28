@@ -57,10 +57,10 @@ void Login_window::on_enter_button_clicked() {
         ui->error_message->setText("Неверный телефон или пароль");
     }
     // закоментировать то что ниже когда поключение к серверу
-    emit send_person(ui->lineEdit->text(), cl);
-    emit window_location();
-    app_window->show();
-    hide();
+//    emit send_person(ui->lineEdit->text(), cl);
+//    emit window_location();
+//    app_window->show();
+//    hide();
 }
 
 

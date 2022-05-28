@@ -84,7 +84,7 @@ void Reg_window::on_pushButton_2_clicked() {
 
     if(!cl.registerUser(login, password, phone)){
         ui->error_label->setText("Пользователь с таким логином уже есть");
-//        return; // раскоментировать когда будет подключение
+        return; // раскоментировать когда будет подключение
     }
     on_pushButton_clicked();
 }
