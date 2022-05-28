@@ -252,15 +252,16 @@ void inChat::handle(Machine *m) {
         case 'd': {
             const std::string chat_id = m->currentChat.Id;
             std::vector<Message> messages = m->client.get_last_chat_messages(chat_id);
-            for (auto msg: messages) {
+            std::reverse(messages.begin(), messages.end());
+            for (const auto& msg: messages) {
                 std::cout << "Id =" << msg.Id;
                 std::cout << " phone =" << msg.phone;
                 std::cout << " text =" << msg.text;
                 std::cout << " time =" << msg.time;
-                std::cout << " type =" << msg.type;
+                std::cout << " type =" << msg.type<< std::endl;
             }
             if (!messages.empty()) {
-                idLoaded = messages.back().Id;
+                idLoaded = messages.front().Id;
             }
             break;
         }
@@ -272,6 +273,7 @@ void inChat::handle(Machine *m) {
             } else {
                 messages = m->client.get_last_chat_messages(m->currentChat.Id);
             }
+            std::reverse(messages.begin(), messages.end());
             for (auto msg: messages) {
                 std::cout << "Id =" << msg.Id;
                 std::cout << " phone =" << msg.phone;
@@ -280,7 +282,7 @@ void inChat::handle(Machine *m) {
                 std::cout << " type =" << msg.type << std::endl;
             }
             if (!messages.empty()) {
-                idLoaded = messages.back().Id;
+                idLoaded = messages.front().Id;
             }
             break;
         }
