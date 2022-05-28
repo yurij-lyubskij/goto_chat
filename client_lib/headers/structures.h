@@ -5,12 +5,9 @@
 
 enum MessageType {text, voice};
 
-class MessageComparator{
-public:
-    MessageComparator(){};
-    bool operator()(const Message &first, const Message &second){
-        return std::stoi(first.Id) < std::stoi(second.Id);
-    };
+struct Chat{
+    std::string Id;
+    std::string chatName;
 };
 
 struct Message{
@@ -21,9 +18,11 @@ struct Message{
     MessageType type;
 };
 
-struct Chat{
-    std::string Id;
-    std::string chatName;
+class MessageComparator{
+public:
+    MessageComparator(){};
+    bool operator()(const Message &first, const Message &second){
+        return std::stoi(first.Id) < std::stoi(second.Id);
+    };
 };
-
 #endif
