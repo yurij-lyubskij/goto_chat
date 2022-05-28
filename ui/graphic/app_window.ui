@@ -110,33 +110,6 @@
                      <item row="2" column="0">
                       <layout class="QVBoxLayout" name="layout">
                        <item>
-                        <layout class="QHBoxLayout" name="horizontalLayout">
-                         <item>
-                          <widget class="QLineEdit" name="lineEdit_2">
-                           <property name="minimumSize">
-                            <size>
-                             <width>0</width>
-                             <height>30</height>
-                            </size>
-                           </property>
-                           <property name="maximumSize">
-                            <size>
-                             <width>16777215</width>
-                             <height>30</height>
-                            </size>
-                           </property>
-                          </widget>
-                         </item>
-                         <item>
-                          <widget class="QPushButton" name="pushButton_2">
-                           <property name="text">
-                            <string>найти</string>
-                           </property>
-                          </widget>
-                         </item>
-                        </layout>
-                       </item>
-                       <item>
                         <widget class="QListView" name="listView"/>
                        </item>
                       </layout>

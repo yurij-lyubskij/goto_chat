@@ -192,12 +192,6 @@ void App_window::on_listView_2_doubleClicked(const QModelIndex &index)
 }
 
 
-// кнопка найти чат
-void App_window::on_pushButton_2_clicked()
-{
-    QString chat_name = ui->lineEdit_2->text();
-}
-
 // кнопка перейти к добавлению человека в чат
 void App_window::on_toolButton_4_clicked()
 {
