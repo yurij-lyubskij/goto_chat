@@ -69,8 +69,9 @@ void App_window::on_toolButton_3_pressed()
 
     QString time = QTime::currentTime().toString();
     std::replace_if(time.begin(), time.end(), [](QChar x) {return x == ':' ;}, '_');
-    rec.record_audio("gay");
-    //    rec.record_audio("voices/" + time);
+
+    rec.record_audio(time);
+    voice_file = "./" + time + ".m4a";
     std::thread th(&App_window::refresh_timer, this);
     th.detach();
 }
@@ -81,6 +82,7 @@ void App_window::on_toolButton_3_released()
     f = false;
     rec.stop_recording();
     ui->statusbar->clearMessage();
+    ui->lineEdit->setText(voice_file);
 }
 
 
@@ -89,11 +91,12 @@ void App_window::on_pushButton_clicked()
 {
     std::string text = ui->lineEdit->text().toStdString();
     if(text.find(".m4a", 0, 1) == text.size() - 4){
-
+        cl->sendVoice(voice_file.toStdString(), temp_chat_id);
     } else {
         cl->sendMessage(temp_chat_id, text, ui->phone_label->text().toStdString());
     }
     ui->lineEdit->clear();
+    show_messages(QString::fromStdString(temp_chat_id));
 }
 
 void App_window::centrialize()

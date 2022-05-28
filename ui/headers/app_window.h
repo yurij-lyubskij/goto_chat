@@ -9,7 +9,7 @@
 #include <QStringListModel>
 #include <QTableView>
 #include <algorithm>
-
+#include <QTime>
 #include "recorder.h"
 #include "client.h"
 #include "parser.h"
@@ -97,6 +97,8 @@ private:
     QString login;
     Ui::App_window *ui;
     std::atomic_bool f = true;
+
+    QString voice_file;
 
     std::vector<Chat> person_chats;
     std::string temp_chat_id;
