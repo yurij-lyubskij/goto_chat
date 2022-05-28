@@ -30,6 +30,9 @@ public:
 private:
     std::string cookie;
     net::io_context ioc;
+
+
+    bool sendMessage(const std::string &chatId, const std::string &text, const std::string &phone);
 };
 
 

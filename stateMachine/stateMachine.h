@@ -246,14 +246,32 @@ void inChat::actionList() {
 
 void inChat::handle(Machine *m) {
     char key;
+    static std::string idLoaded;
     std::cin >> key;
     switch (key) {
         case 'd': {
-
+            const std::string chat_id = m->currentChat.Id;
+            std::vector<Message> messages = m->client.get_last_chat_messages(chat_id);
+            for (auto msg: messages) {
+                std::cout << "Id ="<< msg.Id;
+                std::cout << " phone ="<< msg.phone;
+                std::cout << " text ="<< msg.text;
+                std::cout << " time ="<< msg.time;
+                std::cout <<" type ="<< msg.type;
+            }
+            idLoaded = messages.back().Id;
         }
             break;
         case 'f': {
-
+            std::vector<Message> messages = m->client.get_next_messages(idLoaded);
+            for (auto msg: messages) {
+                std::cout << "Id ="<< msg.Id;
+                std::cout << " phone ="<< msg.phone;
+                std::cout << " text ="<< msg.text;
+                std::cout << " time ="<< msg.time;
+                std::cout <<" type ="<< msg.type;
+            }
+            idLoaded = messages.back().Id;
         }
         case 'a': {
 

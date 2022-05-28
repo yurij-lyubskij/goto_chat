@@ -151,7 +151,6 @@ bool Client::sign_in(const std::string &phone, const std::string &password)
 }
 
 bool Client::getVoice(const std::string &name) {
-
     std::string  target = "/chat/message/getfile?name=";
     target +=  name;
     ioc.reset();
@@ -174,6 +173,26 @@ bool Client::sendVoice(const std::string &name, const std::string &id) {
     ioc.reset();
     Response result;
     std::make_shared<session>(ioc, result)->file_run(target.c_str(), name.c_str(), id.c_str(), cookie.c_str());
+    ioc.run();
+    if (result.statusCode!= OK) {
+        return false;
+    }
+    return true;
+}
+
+bool Client::sendMessage(const std::string &chatId, const std::string &text, const std::string &phone) {
+    std::string  target = "/chat/message/send";
+
+    ioc.reset();
+    Response result;
+    std::string body =R"("{"chatId": )";
+    body += chatId;
+    body +=R"(, "message": {"userPhone": ")";
+    body += phone;
+    body+= R"(", "text": ")";
+    body += text;
+    body += R"("}}")";
+    std::make_shared<session>(ioc, result)->run(post, target.c_str(), body.c_str(), cookie.c_str());
     ioc.run();
     if (result.statusCode!= OK) {
         return false;
