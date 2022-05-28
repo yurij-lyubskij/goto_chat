@@ -99,14 +99,7 @@ std::vector <Chat> Parser::chats(const std::string &chats) {
     }
     return res;
 }
-//in use
-class MessageComparator{
-public:
-    MessageComparator(){};
-    bool operator()(const Message &first, const Message &second){
-        return std::stoi(first.Id) < std::stoi(second.Id);
-    };
-};
+
 //in use
 std::vector <Message> Parser::messages(const std::string &messages){
     std::stringstream stream(messages);

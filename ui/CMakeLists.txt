@@ -5,8 +5,9 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC_SEARCH_PATHS ${INCLUDES})
 
-find_package(Qt6 COMPONENTS Multimedia REQUIRED)
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
+find_package(Qt6 COMPONENTS Multimedia REQUIRED)
+
 
 add_executable(goto_chat
         ${CMAKE_CURRENT_SOURCE_DIR}/graphic/reg_window.ui

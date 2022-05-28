@@ -5,6 +5,14 @@
 
 enum MessageType {text, voice};
 
+class MessageComparator{
+public:
+    MessageComparator(){};
+    bool operator()(const Message &first, const Message &second){
+        return std::stoi(first.Id) < std::stoi(second.Id);
+    };
+};
+
 struct Message{
     std::string Id;
     std::string text;

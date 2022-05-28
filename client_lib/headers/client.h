@@ -3,6 +3,7 @@
 
 #include "httpClient.h"
 #include "structures.h"
+#include "data.h"
 
 class Client
 {
@@ -39,6 +40,7 @@ public:
     bool sign_in(const std::string &phone, const std::string &password);
 
 private:
+    Data* data;
     std::string cookie;
     net::io_context ioc;
 };
