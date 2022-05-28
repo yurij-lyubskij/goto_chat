@@ -15,6 +15,7 @@ App_window::App_window(QWidget *parent) :
     ui->add_person->hide();
     ui->listView->setEditTriggers(QListView::NoEditTriggers);
     ui->listView_2->setEditTriggers(QListView::NoEditTriggers);
+    ui->messages->hide();
 }
 
 App_window::~App_window() {
@@ -46,6 +47,7 @@ void App_window::on_toolButton_2_clicked() {
         ui->chat_list->hide();
         ui->toolButton_2->setText("Чаты");
     } else {
+        ui->messages->hide();
         ui->profile->hide();
         ui->chat_list->show();
         ui->toolButton_2->setText("Профиль");
@@ -78,13 +80,20 @@ void App_window::on_toolButton_3_released()
 {
     f = false;
     rec.stop_recording();
+    ui->statusbar->clearMessage();
 }
 
 
 // кнопка отправить
 void App_window::on_pushButton_clicked()
 {
+    std::string text = ui->lineEdit->text().toStdString();
+    if(text.find(".m4a", 0, 1) == text.size() - 4){
 
+    } else {
+        cl->sendMessage(temp_chat_id, text, ui->phone_label->text().toStdString());
+    }
+    ui->lineEdit->clear();
 }
 
 void App_window::centrialize()
@@ -101,6 +110,7 @@ void App_window::centrialize()
 // двойное нажание на название чата
 void App_window::on_listView_doubleClicked(const QModelIndex &index)
 {
+    ui->messages->show();
     int id;
     id = ui->listView->currentIndex().row();
     temp_chat_id = person_chats[id].Id;

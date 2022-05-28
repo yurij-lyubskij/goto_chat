@@ -54,7 +54,7 @@ void Login_window::on_enter_button_clicked() {
         app_window->show();
         hide();
     } else {
-        ui->error_message->setText("Неверный логин или пароль");
+        ui->error_message->setText("Неверный телефон или пароль");
     }
     // закоментировать то что ниже когда поключение к серверу
     emit send_person(ui->lineEdit->text(), cl);
