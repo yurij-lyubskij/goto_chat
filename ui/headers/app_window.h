@@ -80,6 +80,8 @@ private slots:
 
     void on_pushButton_6_clicked();
 
+    void on_pushButton_4_clicked();
+
 private:
     void show_chats();
     std::unique_ptr<QStringListModel> model;
@@ -97,6 +99,7 @@ private:
     std::atomic_bool f = true;
 
     std::vector<Chat> person_chats;
+    std::string temp_chat_id;
 
     Client* cl;
     void listen_audio(const std::string& file_name);

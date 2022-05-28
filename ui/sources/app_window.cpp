@@ -103,7 +103,7 @@ void App_window::on_listView_doubleClicked(const QModelIndex &index)
 {
     int id;
     id = ui->listView->currentIndex().row();
-    std::string temp_chat_id = person_chats[id].Id;
+    temp_chat_id = person_chats[id].Id;
 
     QString chat_name = index.data(0).toString();
     ui->messages->setTitle(chat_name);
@@ -208,6 +208,20 @@ void App_window::on_pushButton_7_clicked()
 // кнопка добавить человека в чат
 void App_window::on_pushButton_6_clicked()
 {
+    cl->join_chat(temp_chat_id, ui->lineEdit_5->text().toStdString());
+    on_pushButton_7_clicked();
+}
 
+
+// создать чат
+void App_window::on_pushButton_4_clicked()
+{
+    std::vector<std::string> members;
+    std::string chat_name = ui->lineEdit_3->text().toStdString();
+    members.push_back(ui->phone_label->text().toStdString());
+    members.push_back(ui->lineEdit_4->text().toStdString());
+    cl->create_chat(chat_name, members);
+    on_pushButton_5_clicked();
+    show_chats();
 }
 
