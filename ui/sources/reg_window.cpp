@@ -2,8 +2,8 @@
 #include "ui_reg_window.h"
 
 Reg_window::Reg_window(QWidget *parent) :
-        QMainWindow(parent),
-        ui(new Ui::Reg_window) {
+    QMainWindow(parent),
+    ui(new Ui::Reg_window) {
     ui->setupUi(this);
 }
 
@@ -46,25 +46,19 @@ void Reg_window::on_checkBox_stateChanged(int) {
 
 // кнопка зарегистрироваться
 void Reg_window::on_pushButton_2_clicked() {
-    bool f_name = Checker::check_name(ui->lineEdit->text().toStdString());
-    bool f_second_name = Checker::check_name(ui->lineEdit_2->text().toStdString());
-//    bool f_email = Checker::check_email(ui->lineEdit_3->text().toStdString());
+
     bool f_login = Checker::check_login(ui->lineEdit_4->text().toStdString());
     bool f_password = Checker::check_password(ui->lineEdit_5->text().toStdString());
 
-    if (ui->lineEdit->text().isEmpty() || ui->lineEdit_2->text().isEmpty() || ui->lineEdit_3->text().isEmpty()
-        || ui->lineEdit_4->text().isEmpty() || ui->lineEdit_5->text().isEmpty() || ui->lineEdit_6->text().isEmpty()) {
+    if (ui->lineEdit_3->text().isEmpty()
+            || ui->lineEdit_4->text().isEmpty() || ui->lineEdit_5->text().isEmpty() || ui->lineEdit_6->text().isEmpty()) {
         ui->error_label->setText("Вы заполните не все поля");
         return;
     }
-    if (!f_name || !f_second_name) {
-        ui->error_label->setText("Неверный формат имени или фамилии.\nПожалуйста заполните эти поля корректно");
-        return;
-    }
-//    if (!f_email) {
-//        ui->error_label->setText("Неверный формат email");
-//        return;
-//    }
+    //    if (!f_email) {
+    //        ui->error_label->setText("Неверный формат email");
+    //        return;
+    //    }
     if (!f_login) {
         ui->error_label->setText("Неверный формат логина");
         return;
@@ -78,11 +72,11 @@ void Reg_window::on_pushButton_2_clicked() {
         return;
     }
     Client cl;
-    std::string phone = ui->lineEdit_3->text().toStdString();
-    std::string login = ui->lineEdit_4->text().toStdString();
+    std::string login = ui->lineEdit_3->text().toStdString();
+    std::string phone = ui->lineEdit_4->text().toStdString();
     std::string password = ui->lineEdit_5->text().toStdString();
 
-    if(!cl.registerUser(login, password, phone)){
+    if(!cl.registerUser(login, phone,  password)){
         ui->error_label->setText("Пользователь с таким логином уже есть");
         return; // раскоментировать когда будет подключение
     }
@@ -99,8 +93,6 @@ void Reg_window::centrialize() {
 
 void Reg_window::clear_lines() {
     ui->error_label->clear();
-    ui->lineEdit->clear();
-    ui->lineEdit_2->clear();
     ui->lineEdit_3->clear();
     ui->lineEdit_4->clear();
     ui->lineEdit_5->clear();
