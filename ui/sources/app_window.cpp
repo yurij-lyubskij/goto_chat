@@ -7,8 +7,12 @@ App_window::App_window(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::App_window) {
     ui->setupUi(this);
+    QScreen *screen = QGuiApplication::primaryScreen();
+    QRect screenGeometry = screen->geometry();
     ui->chat_creation->hide();
     ui->pushButton_5->hide();
+    ui->pushButton_7->hide();
+    ui->add_person->hide();
     ui->listView->setEditTriggers(QListView::NoEditTriggers);
     ui->listView_2->setEditTriggers(QListView::NoEditTriggers);
 }
@@ -86,9 +90,9 @@ void App_window::centrialize()
 {
     QScreen *screen = QGuiApplication::primaryScreen();
     QRect screenGeometry = screen->geometry();
-    int height = screenGeometry.height() - this->height();
+    int height = screenGeometry.height() - this->height()/2;
     int width = screenGeometry.width() - this->width();
-    this->setGeometry(width / 2, height / 2, this->width(), this->height());
+    this->setGeometry(width / 2, height / 2, this->width(), this->height()/2);
 }
 
 
@@ -111,7 +115,7 @@ void App_window::on_toolButton_clicked()
     ui->chat_creation->show();
 }
 
-// кнопка назад
+// кнопка назад из создания чата
 void App_window::on_pushButton_5_clicked()
 {
     ui->main_things->show();
@@ -181,5 +185,31 @@ void App_window::on_listView_2_doubleClicked(const QModelIndex &index)
 void App_window::on_pushButton_2_clicked()
 {
     QString chat_name = ui->lineEdit_2->text();
+}
+
+// кнопка перейти к добавлению человека в чат
+void App_window::on_toolButton_4_clicked()
+{
+    ui->main_things->hide();
+    ui->toolButton_2->hide();
+    ui->messages->hide();
+    ui->add_person->show();
+    ui->pushButton_7->show();
+}
+
+// кнопка назад из добавления человека
+void App_window::on_pushButton_7_clicked()
+{
+    ui->main_things->show();
+    ui->toolButton_2->show();
+    ui->messages->show();
+    ui->add_person->hide();
+    ui->pushButton_7->hide();
+}
+
+// кнопка добавить человека в чат
+void App_window::on_pushButton_6_clicked()
+{
+
 }
 
