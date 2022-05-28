@@ -26,13 +26,13 @@ public:
     bool getVoice (const std::string &name);
     bool sendVoice (const std::string &name, const std::string& chatid);
     bool sign_in(const std::string &phone, const std::string &password);
-
+    bool sendMessage(const std::string &chatId, const std::string &text, const std::string &phone);
 private:
     std::string cookie;
     net::io_context ioc;
 
 
-    bool sendMessage(const std::string &chatId, const std::string &text, const std::string &phone);
+
 };
 
 

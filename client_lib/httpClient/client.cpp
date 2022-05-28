@@ -182,16 +182,15 @@ bool Client::sendVoice(const std::string &name, const std::string &id) {
 
 bool Client::sendMessage(const std::string &chatId, const std::string &text, const std::string &phone) {
     std::string  target = "/chat/message/send";
-
     ioc.reset();
     Response result;
-    std::string body =R"("{"chatId": )";
+    std::string body =R"({"chatId": )";
     body += chatId;
     body +=R"(, "message": {"userPhone": ")";
     body += phone;
     body+= R"(", "text": ")";
     body += text;
-    body += R"("}}")";
+    body += R"("}})";
     std::make_shared<session>(ioc, result)->run(post, target.c_str(), body.c_str(), cookie.c_str());
     ioc.run();
     if (result.statusCode!= OK) {

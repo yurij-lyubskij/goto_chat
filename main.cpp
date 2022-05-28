@@ -15,6 +15,7 @@ int main()
 //    phone = "456";
 //    client.registerUser(name, phone, password);
     client.sign_in(phone, password);
+    client.sendMessage("1", "text", phone);
 //    bool isActive = true;
 //    Machine chat(isActive);
 //
