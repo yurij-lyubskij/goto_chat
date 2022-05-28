@@ -274,10 +274,30 @@ void inChat::handle(Machine *m) {
             idLoaded = messages.back().Id;
         }
         case 'a': {
+            std::cout << "enter message:"<< std::endl;
+            std::string text;
+            std::cin >> text;
+            std::string chatId = m->currentChat.Id;
+            bool success = m->client.sendMessage(chatId, text, m->user.phone);
+            if (success) {
+                std::cout << "message sent!\n";
+            } else {
+                std::cout << "chat does not exist\n";
+            }
 
         }
             break;
         case 's': {
+            std::cout << "enter filename:"<< std::endl;
+            std::string name;
+            std::cin >> name;
+            std::string chatId = m->currentChat.Id;
+            bool success = m->client.sendVoice(name, chatId);
+            if (success) {
+                std::cout << "message sent!\n";
+            } else {
+                std::cout << "file does not exist\n";
+            }
         }
             break;
         case 'w':
