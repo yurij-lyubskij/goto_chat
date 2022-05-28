@@ -241,6 +241,7 @@ void inChat::actionList() {
     std::cout << "to read more press f\n";
     std::cout << "to send message press a\n";
     std::cout << "to send file press s\n";
+    std::cout << "to receive voice press e\n";
     std::cout << "to goto main press w\n";
 }
 
@@ -312,8 +313,23 @@ void inChat::handle(Machine *m) {
             } else {
                 std::cout << "file does not exist\n";
             }
-        }
             break;
+        }
+
+        case 'e': {
+            std::cout << "enter filename:" << std::endl;
+            std::string name;
+            std::cin >> name;
+            std::string chatId = m->currentChat.Id;
+            bool success = m->client.getVoice(name);
+            if (success) {
+                std::cout << "message received!\n";
+            } else {
+                std::cout << "file does not exist\n";
+            }
+            break;
+        }
+
         case 'w':
             up(m);
             break;
