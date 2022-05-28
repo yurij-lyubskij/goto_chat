@@ -1,0 +1,5 @@
+#ifndef SERVER_RECHATROOM
+#define SERVER_RECHATROOM
+
+
+#endif
