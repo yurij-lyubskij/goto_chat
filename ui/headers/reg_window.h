@@ -18,8 +18,6 @@ public:
 
     ~Reg_window();
 
-    void registrate();
-
     bool check_data();
 
     void centrialize();

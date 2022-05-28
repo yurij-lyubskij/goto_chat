@@ -42,7 +42,7 @@ void Login_window::on_checkBox_stateChanged(int) {
 void Login_window::on_enter_button_clicked() {
     std::string log = ui->lineEdit->text().toStdString();
     std::string password = ui->lineEdit_2->text().toStdString();
-/*    if (!Checker::check_login(log) || !Checker::check_password(password)) {
+    if (!Checker::check_login(log) || !Checker::check_password(password)) {
         ui->error_message->setText("Некорректный формат введенных данных");
         return;
     }
@@ -54,7 +54,8 @@ void Login_window::on_enter_button_clicked() {
         hide();
     } else {
         ui->error_message->setText("Неверный логин или пароль");
-    }*/
+    }
+    // закоментировать то что ниже когда поключение к серверу
     emit send_person(ui->lineEdit->text());
     emit window_location();
     app_window->show();

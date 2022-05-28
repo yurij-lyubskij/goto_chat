@@ -11,16 +11,6 @@ Reg_window::~Reg_window() {
     delete ui;
 }
 
-// функция зарегистрировать
-void Reg_window::registrate() {
-    Client cl;
-//    std::string name = ui->lineEdit->text().toStdString();
-//    std::string second_name = ui->lineEdit_2->text().toStdString();
-    std::string email = ui->lineEdit_3->text().toStdString();
-    std::string login = ui->lineEdit_4->text().toStdString();
-    std::string password = ui->lineEdit_5->text().toStdString();
-    cl.registerUser(login, password, email);
-}
 
 bool Reg_window::check_data() {
     return true;
@@ -58,7 +48,7 @@ void Reg_window::on_checkBox_stateChanged(int) {
 void Reg_window::on_pushButton_2_clicked() {
     bool f_name = Checker::check_name(ui->lineEdit->text().toStdString());
     bool f_second_name = Checker::check_name(ui->lineEdit_2->text().toStdString());
-    bool f_email = Checker::check_email(ui->lineEdit_3->text().toStdString());
+//    bool f_email = Checker::check_email(ui->lineEdit_3->text().toStdString());
     bool f_login = Checker::check_login(ui->lineEdit_4->text().toStdString());
     bool f_password = Checker::check_password(ui->lineEdit_5->text().toStdString());
 
@@ -71,10 +61,10 @@ void Reg_window::on_pushButton_2_clicked() {
         ui->error_label->setText("Неверный формат имени или фамилии.\nПожалуйста заполните эти поля корректно");
         return;
     }
-    if (!f_email) {
-        ui->error_label->setText("Неверный формат email");
-        return;
-    }
+//    if (!f_email) {
+//        ui->error_label->setText("Неверный формат email");
+//        return;
+//    }
     if (!f_login) {
         ui->error_label->setText("Неверный формат логина");
         return;
@@ -88,14 +78,14 @@ void Reg_window::on_pushButton_2_clicked() {
         return;
     }
     Client cl;
-    if(!cl.person_exist(ui->lineEdit_4->text().toStdString())){
-        registrate();
+    std::string phone = ui->lineEdit_3->text().toStdString();
+    std::string login = ui->lineEdit_4->text().toStdString();
+    std::string password = ui->lineEdit_5->text().toStdString();
 
-    }else{
+    if(!cl.registerUser(login, password, phone)){
         ui->error_label->setText("Пользователь с таким логином уже есть");
+//        return; // раскоментировать когда будет подключение
     }
-    registrate();
-
     on_pushButton_clicked();
 }
 
