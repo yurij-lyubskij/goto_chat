@@ -131,9 +131,9 @@ void App_window::on_listView_doubleClicked(const QModelIndex &index)
     QString chat_name = index.data(0).toString();
     ui->messages->setTitle(chat_name);
 
-    std::thread th(&App_window::refresh_messages, this);
-    th.detach();
-//    show_messages(QString::fromStdString(temp_chat_id));
+//    std::thread th(&App_window::refresh_messages, this);
+//    th.detach();
+    show_messages(QString::fromStdString(temp_chat_id));
 }
 
 

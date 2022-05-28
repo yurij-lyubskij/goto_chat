@@ -130,13 +130,17 @@ std::vector <Message> Parser::messages(const std::string &messages){
 std::string Parser::get_text_from_message(const std::string &message)
 {
     std::istringstream stream(message);
-    std::string temp;
+    std::string temp, result;
     stream >> temp;
-    stream >> temp;
-    return temp;
+    while (stream >> temp) {
+        if(temp.front() != ':'){
+            result+=temp;
+        }
+    }
+    return result;
 }
 
 std::string Parser::get_message_from_Message(const Message &message)
 {
-    return message.phone + ": " + message.text + " " + message.time;
+    return message.phone + ": " + message.text + " :" + message.time;
 }
