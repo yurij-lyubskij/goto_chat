@@ -176,7 +176,7 @@ void App_window::listen_audio(const std::string &file_name)
     player = std::unique_ptr<QMediaPlayer>(new QMediaPlayer);
     audioOutput = std::shared_ptr<QAudioOutput>(new QAudioOutput);
     player->setAudioOutput(audioOutput.get());
-    QString path = "./" + QString::fromStdString(file_name);
+    QString path = QString::fromStdString(file_name);
     player->setSource(path);
     player->audioOutput()->setVolume(50);
     player->play();
