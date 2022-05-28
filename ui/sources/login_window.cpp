@@ -22,6 +22,7 @@ Login_window::Login_window(QWidget *parent)
 
 Login_window::~Login_window() {
     delete ui;
+    delete cl;
 }
 
 

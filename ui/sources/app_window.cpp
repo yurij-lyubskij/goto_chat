@@ -30,6 +30,14 @@ void App_window::refresh_timer()
     }
 }
 
+void App_window::refresh_messages(std::string chat_id)
+{
+    while(temp_chat_id == chat_id){
+        std::this_thread::sleep_for(std::chrono::seconds(2));
+        show_messages(QString::fromStdString(chat_id));
+    }
+}
+
 void App_window::set_person(const QString &Login, Client* c) {
     login = Login;
     cl = c;
@@ -46,6 +54,7 @@ void App_window::on_toolButton_2_clicked() {
         ui->profile->show();
         ui->chat_list->hide();
         ui->toolButton_2->setText("Чаты");
+        show_chats();
     } else {
         ui->messages->hide();
         ui->profile->hide();
@@ -120,7 +129,10 @@ void App_window::on_listView_doubleClicked(const QModelIndex &index)
 
     QString chat_name = index.data(0).toString();
     ui->messages->setTitle(chat_name);
-    show_messages(QString::fromStdString(temp_chat_id));
+
+    std::thread th(&App_window::refresh_messages, this, temp_chat_id);
+    th.detach();
+//    show_messages(QString::fromStdString(temp_chat_id));
 }
 
 

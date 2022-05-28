@@ -42,6 +42,8 @@ public:
 
     void refresh_timer();
 
+    void refresh_messages(std::string chat_id);
+
 public slots:
     void set_person(const QString &Login, Client* c);
 
