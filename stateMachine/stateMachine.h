@@ -183,7 +183,7 @@ void inMain::handle(Machine *m) {
                 m->currentChat = chat;
                 down(m);
             }
-
+            break;
         }
 
         case 'a': {
