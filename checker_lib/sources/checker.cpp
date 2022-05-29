@@ -39,6 +39,21 @@ bool Checker::check_password(const std::string &pass) {
     return true;
 }
 
+bool Checker::check_phone(const std::string &str)
+{
+    if(str.size() < 10 || str.size() > 13 || str[0] != '+'){
+        return false;
+    }
+    for (const auto &it: str) {
+        if ((it >= '0' && it <= '9') || (it == '+')) {
+            continue;
+        } else {
+            return false;
+        }
+    }
+    return true;
+}
+
 
 bool Checker::check_email(const std::string &email) {
     auto mail = email;

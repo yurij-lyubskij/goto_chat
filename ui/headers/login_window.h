@@ -32,7 +32,7 @@ public:
     bool check_person(const QString &login, const QString &password);
 
     signals:
-    void send_person(const QString &login, Client* c);
+    void send_person(const QString &login, std::shared_ptr<Client> c);
 
     void window_location();
 
@@ -48,7 +48,7 @@ private:
 
     void clear_lines();
 
-    Client* cl;
+    std::shared_ptr<Client> cl;
     QString local_db_name;
     Ui::Login_window *ui;
     Reg_window *reg_window;

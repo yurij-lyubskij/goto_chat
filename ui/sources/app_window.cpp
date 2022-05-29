@@ -39,7 +39,8 @@ void App_window::refresh_messages()
     }
 }
 
-void App_window::set_person(const QString &Login, Client* c) {
+// функция которая вызывается при переходе на это окно
+void App_window::set_person(const QString &Login, std::shared_ptr<Client> c) {
     login = Login;
     cl = c;
     ui->profile->show();
@@ -52,8 +53,8 @@ void App_window::set_person(const QString &Login, Client* c) {
 // кнопка профиль -> чаты(сверху слева)
 void App_window::on_toolButton_2_clicked() {
     if (ui->toolButton_2->text() == "Профиль") {
-        ui->profile->show();
         ui->chat_list->hide();
+        ui->profile->show();
         ui->toolButton_2->setText("Чаты");
         show_chats();
     } else {
@@ -131,8 +132,8 @@ void App_window::on_listView_doubleClicked(const QModelIndex &index)
     QString chat_name = index.data(0).toString();
     ui->messages->setTitle(chat_name);
 
-//    std::thread th(&App_window::refresh_messages, this);
-//    th.detach();
+    //    std::thread th(&App_window::refresh_messages, this);
+    //    th.detach();
     show_messages(QString::fromStdString(temp_chat_id));
 }
 
@@ -181,6 +182,7 @@ void App_window::show_messages(const QString &chat_id)
     }
     model2.get()->setStringList(messages);
     ui->listView_2->setModel(model2.get());
+
 }
 
 // прослушать голосовое по названию файла который скачали/ есть
@@ -238,10 +240,19 @@ void App_window::on_pushButton_4_clicked()
 {
     std::vector<std::string> members;
     std::string chat_name = ui->lineEdit_3->text().toStdString();
+    std::string member = ui->lineEdit_4->text().toStdString();
     members.push_back(ui->phone_label->text().toStdString());
-    members.push_back(ui->lineEdit_4->text().toStdString());
+    if(!member.empty()){
+        members.push_back(member);
+    }
     cl->create_chat(chat_name, members);
     on_pushButton_5_clicked();
     show_chats();
+}
+
+// кнопка присоединиться
+void App_window::on_toolButton_5_clicked()
+{
+
 }
 

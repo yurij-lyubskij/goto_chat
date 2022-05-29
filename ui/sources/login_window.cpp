@@ -6,7 +6,7 @@ Login_window::Login_window(QWidget *parent)
         : QMainWindow(parent), ui(new Ui::Login_window) {
     ui->setupUi(this);
     centrialize();
-    cl = new Client();
+    cl = std::shared_ptr<Client>(new Client());
 
     reg_window = new Reg_window();
     app_window = new App_window();
@@ -22,7 +22,6 @@ Login_window::Login_window(QWidget *parent)
 
 Login_window::~Login_window() {
     delete ui;
-    delete cl;
 }
 
 
@@ -45,7 +44,7 @@ void Login_window::on_checkBox_stateChanged(int) {
 void Login_window::on_enter_button_clicked() {
     std::string log = ui->lineEdit->text().toStdString();
     std::string password = ui->lineEdit_2->text().toStdString();
-    if (!Checker::check_login(log) || !Checker::check_password(password)) {
+    if (!Checker::check_phone(log) || !Checker::check_password(password)) {
         ui->error_message->setText("Некорректный формат введенных данных");
         return;
     }

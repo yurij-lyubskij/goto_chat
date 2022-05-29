@@ -45,7 +45,7 @@ public:
     void refresh_messages();
 
 public slots:
-    void set_person(const QString &Login, Client* c);
+    void set_person(const QString &Login, std::shared_ptr<Client> c);
 
     void centrialize();
 
@@ -82,6 +82,8 @@ private slots:
 
     void on_pushButton_4_clicked();
 
+    void on_toolButton_5_clicked();
+
 private:
     void show_chats();
     std::unique_ptr<QStringListModel> model;
@@ -103,7 +105,7 @@ private:
     std::vector<Chat> person_chats;
     std::string temp_chat_id;
 
-    Client* cl;
+    std::shared_ptr<Client> cl;
     void listen_audio(const std::string& file_name);
 };
 
