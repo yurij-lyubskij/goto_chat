@@ -13,6 +13,7 @@ App_window::App_window(QWidget *parent) :
     ui->setupUi(this);
     chat_window = new find_chat_window(this);
     connect(chat_window, &find_chat_window::back_to_app, this, &App_window::show);
+    connect(chat_window, &find_chat_window::back_to_app, this, &App_window::centrialize);
     connect(chat_window, &find_chat_window::back_to_app, this, &App_window::show_chats);
     connect(this, &App_window::send_person, chat_window, &find_chat_window::set_person);
     ui->chat_creation->hide();

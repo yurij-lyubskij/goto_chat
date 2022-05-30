@@ -6,6 +6,7 @@ find_chat_window::find_chat_window(QWidget *parent) :
     ui(new Ui::find_chat_window)
 {
     ui->setupUi(this);
+    ui->listView->setEditTriggers(QListView::NoEditTriggers);
 }
 
 find_chat_window::~find_chat_window()
