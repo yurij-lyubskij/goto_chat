@@ -48,7 +48,7 @@ void Login_window::on_enter_button_clicked() {
         ui->error_message->setText("Некорректный формат введенных данных");
         return;
     }
-    if (cl->sign_in(log, password)) {
+    if (cl.get()->sign_in(log, password)) {
         emit send_person(ui->lineEdit->text(), cl);
         emit window_location();
         app_window->show();

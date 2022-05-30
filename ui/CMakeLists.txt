@@ -21,6 +21,9 @@ add_executable(goto_chat
         ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/headers/recorder.h
         ${CMAKE_CURRENT_SOURCE_DIR}/sources/recorder.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/headers/find_chat_window.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/sources/find_chat_window.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/graphic/find_chat_window.ui
         )
 
 target_link_libraries(goto_chat PRIVATE Qt6::Widgets Qt6::Multimedia ${CLIENT_LIB_LIBRARIES} ${CHECKER_LIB_LIBRARIES})

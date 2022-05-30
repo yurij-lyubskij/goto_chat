@@ -13,6 +13,7 @@
 #include "recorder.h"
 #include "client.h"
 #include "parser.h"
+#include "find_chat_window.h"
 
 namespace Ui {
 class App_window;
@@ -52,19 +53,19 @@ public slots:
 signals:
     void login_window();
 
+    void send_person(const std::string &phone, std::shared_ptr<Client> c);
+
 private slots:
 
     void on_toolButton_2_clicked();
 
     void on_pushButton_3_clicked();
 
-
     void on_toolButton_3_pressed();
 
     void on_toolButton_3_released();
 
     void on_pushButton_clicked();
-
 
     void on_listView_doubleClicked(const QModelIndex &index);
 
@@ -88,7 +89,6 @@ private:
     void show_chats();
     std::unique_ptr<QStringListModel> model;
 
-
     void show_messages(const QString& chat_name);
     std::unique_ptr<QStringListModel> model2;
 
@@ -96,9 +96,10 @@ private:
     std::unique_ptr<QMediaPlayer> player;
     std::shared_ptr<QAudioOutput> audioOutput;
     recorder rec;
+    std::atomic_bool f = true;
+
     QString login;
     Ui::App_window *ui;
-    std::atomic_bool f = true;
 
     QString voice_file;
 
@@ -107,6 +108,8 @@ private:
 
     std::shared_ptr<Client> cl;
     void listen_audio(const std::string& file_name);
+
+    find_chat_window* chat_window;
 };
 
 #endif // APP_WINDOW_H
