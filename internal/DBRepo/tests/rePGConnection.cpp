@@ -10,11 +10,11 @@ TEST(PGConnectionTests, UsersDBTests) {
 	User user1(0), user2(0);
 	user1.Name = "UsersDBTests1";
 	user1.PhoneNumber = std::to_string(num1);
-	user1.password = "testPassword";
+	user1.Hash = "testPassword";
 
 	user2.Name = "UsersDBTests2";
 	user2.PhoneNumber = std::to_string(num2);
-	user2.password = "testPassword";
+	user2.Hash = "testPassword";
 
 	std::vector<DBObject> users;
 
@@ -34,12 +34,12 @@ TEST(PGConnectionTests, UsersDBTests) {
 	EXPECT_NE(usr1.Id, 0);
 	EXPECT_EQ(usr1.Name, "UsersDBTests1");
 	EXPECT_EQ(usr1.PhoneNumber, std::to_string(num1));
-	EXPECT_EQ(usr1.password, "testPassword");
+	EXPECT_EQ(usr1.Hash, "testPassword");
 
 	EXPECT_NE(usr2.Id, 0);
 	EXPECT_EQ(usr2.Name, "UsersDBTests2");
 	EXPECT_EQ(usr2.PhoneNumber, std::to_string(num2));
-	EXPECT_EQ(usr2.password, "testPassword");
+	EXPECT_EQ(usr2.Hash, "testPassword");
 
 	//check test
 	std::vector<DBObject> checkUsers;
@@ -66,10 +66,10 @@ TEST(PGConnectionTests, UsersDBTests) {
 	User user3(users[0]), user4(users[1]);
 	EXPECT_EQ(user3.Name, "UsersDBTests1");
 	EXPECT_EQ(user3.PhoneNumber, std::to_string(num1));
-	EXPECT_EQ(user3.password, "testPassword");
+	EXPECT_EQ(user3.Hash, "testPassword");
 	EXPECT_EQ(user4.Name, "UsersDBTests2");
 	EXPECT_EQ(user4.PhoneNumber, std::to_string(num2));
-	EXPECT_EQ(user4.password, "testPassword");
+	EXPECT_EQ(user4.Hash, "testPassword");
 
 	//get by phone test
 	request.operation = getWithPhone;
@@ -81,7 +81,7 @@ TEST(PGConnectionTests, UsersDBTests) {
 	User user5(users[0]);
 	EXPECT_EQ(user5.Name, "UsersDBTests1");
 	EXPECT_EQ(user5.PhoneNumber, std::to_string(num1));
-	EXPECT_EQ(user5.password, "testPassword");
+	EXPECT_EQ(user5.Hash, "testPassword");
 }
 
 TEST(PGConnectionTests, ChatsDBTests) {
@@ -146,11 +146,11 @@ TEST(PGConnectionTests, ChatsDBTests) {
 	User user1(0), user2(0);
 	user1.Name = "ChatsDBTests1";
 	user1.PhoneNumber = std::to_string(num1);
-	user1.password = "testPassword";
+	user1.Hash = "testPassword";
 
 	user2.Name = "ChatsDBTests2";
 	user2.PhoneNumber = std::to_string(num2);
-	user2.password = "testPassword";
+	user2.Hash = "testPassword";
 
 	std::vector<DBObject> users;
 
@@ -201,7 +201,7 @@ TEST(PGConnectionTests, MessagesDBTests) {
 	time_t phone = time(NULL)%1000000;
 	user1.Name = "MessagesDBTests";
 	user1.PhoneNumber = std::to_string(phone);
-	user1.password = "testPassword";
+	user1.Hash = "testPassword";
 	std::vector<DBObject> users, chats, messages;
 
 	users.push_back(user1);
@@ -277,7 +277,7 @@ TEST(PGConnectionTests, MessagesDBTests) {
 	EXPECT_EQ(mes4.getTime(), sendTime);
 	EXPECT_EQ(mes4.getSender(), usr.Id);
 	EXPECT_EQ(mes4.getChat(), chat1.getId());
-
+/*
 	//get last text test
 	messages = std::vector<DBObject>();
 	messages.push_back(Message("MessagesDBTests2", std::time(NULL), usr.Id, chat1.getId()));
@@ -288,20 +288,19 @@ TEST(PGConnectionTests, MessagesDBTests) {
 	messages = conn.exec(request, messages);
 	ASSERT_EQ(messages.size(), 2);
 
-	request.operation = getLast;
-	request.request = std::to_string(mes1.getId()) + " 2";
+	request.operation = getLastMessagesFromChat;
+	request.request = std::to_string(mes1.getChat()) + " 2";
 	messages = conn.get(request);
 	ASSERT_EQ(messages.size(), 2);
 	Message mesL1 = (iMessage) messages[0];
 	Message mesL2 = (iMessage) messages[1];
 
-	EXPECT_EQ(mesL1.getContent(), "MessagesDBTests2");
+	EXPECT_EQ(mesL1.getContent(), "MessagesDBTests3");
 	EXPECT_EQ(mesL1.getSender(), phone);
 	EXPECT_EQ(mesL1.getChat(), chat1.getId());
-	EXPECT_EQ(mesL2.getContent(), "MessagesDBTests3");
+	EXPECT_EQ(mesL2.getContent(), "MessagesDBTests4");
 	EXPECT_EQ(mesL2.getSender(), phone);
 	EXPECT_EQ(mesL2.getChat(), chat1.getId());
-	
 	//get last text test
 	messages = std::vector<DBObject>();
 	messages.push_back(VoiceMessage("/Messages/DB/Tests2", std::time(NULL), usr.Id, chat1.getId()));
@@ -311,7 +310,7 @@ TEST(PGConnectionTests, MessagesDBTests) {
 	request.objectType = message;
 	messages = conn.exec(request, messages);
 	ASSERT_EQ(messages.size(), 2);
-/*
+
 	request.operation = getNext;
 	request.request = std::to_string(mes2.getId()) + " 2";
 	messages = conn.get(request);
