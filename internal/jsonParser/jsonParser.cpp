@@ -42,7 +42,7 @@ User jsonParser::parseUser(std::string body) {
 
     if (d.HasMember("password")) {
         std::string password = d["password"].GetString();
-        std::string salt = genRandWithSeed(saltLen, password);
+        std::string salt = genRandWithSeed(saltLen, password + user.PhoneNumber);
         password = password + salt;
         user.Hash = std::to_string(std::hash<std::string>{}(password));
 
