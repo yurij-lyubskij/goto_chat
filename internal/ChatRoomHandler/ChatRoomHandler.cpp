@@ -291,7 +291,6 @@ bool GetUserChats::CanHandle(Request request){
 
 Response GetUserChats::Handle(Request request){
     Response response;
-    
     if (request.responseStatus != OK) {
         response.statusCode = UnAuthorized;
         return response;
@@ -335,7 +334,6 @@ Response GetUserChats::Handle(Request request){
     }
     response.body += "]}";
 
-    response.statusCode = OK;
     return response;
 };
 //end of GetUserChats
