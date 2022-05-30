@@ -86,30 +86,35 @@ private slots:
     void on_toolButton_5_clicked();
 
 private:
+    // чаты
     void show_chats();
     std::shared_ptr<QStringListModel> model;
 
+    // сообщения
     void show_messages(const QString& chat_name);
     std::shared_ptr<QStringListModel> model2;
 
-
+    // для аудио записи и воспроизведения
     std::unique_ptr<QMediaPlayer> player;
     std::shared_ptr<QAudioOutput> audioOutput;
     recorder rec;
     std::atomic_bool f = true;
-
-    QString login;
-    Ui::App_window *ui;
-
     QString voice_file;
-
-    std::shared_ptr<std::vector<Chat>> person_chats;
-    std::shared_ptr<std::string> temp_chat_id;
-
-    std::shared_ptr<Client> cl;
     void listen_audio(const std::string& file_name);
 
+    // чаты текущего пользователя
+    std::shared_ptr<std::vector<Chat>> person_chats;
+
+    // id чата в котором сейчас находится пользователь
+    std::shared_ptr<std::string> temp_chat_id;
+
+    // клиент который осуществляет связь с сервером
+    std::shared_ptr<Client> cl;
+
+    // поля этого окна
     find_chat_window* chat_window;
+    QString login;
+    Ui::App_window *ui;
 };
 
 #endif // APP_WINDOW_H

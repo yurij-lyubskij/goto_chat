@@ -6,8 +6,8 @@
 App_window::App_window(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::App_window) {
-    temp_chat_id = std::make_shared<std::string>();
-    person_chats = std::make_shared<std::vector<Chat>>();
+    temp_chat_id = std::shared_ptr<std::string>(new std::string);
+    person_chats = std::shared_ptr<std::vector<Chat>>(new std::vector<Chat>);
     model = std::shared_ptr<QStringListModel>(new QStringListModel);
     model2 = std::shared_ptr<QStringListModel>(new QStringListModel);
     ui->setupUi(this);

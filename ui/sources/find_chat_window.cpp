@@ -44,6 +44,7 @@ void find_chat_window::on_pushButton_clicked()
 }
 
 
+
 void find_chat_window::on_listView_doubleClicked(const QModelIndex &index)
 {
     int id;
@@ -54,10 +55,12 @@ void find_chat_window::on_listView_doubleClicked(const QModelIndex &index)
                                                               QMessageBox::Yes | QMessageBox::No);
     if(reply == QMessageBox::Yes){
         cl.get()->join_chat(temp_chat_id, phone);
+        hide();
         emit back_to_app();
     }
 }
 
+// выравнивание окна по центру экрана
 void find_chat_window::centrialize()
 {
     QScreen *screen = QGuiApplication::primaryScreen();
@@ -66,4 +69,3 @@ void find_chat_window::centrialize()
     int width = screenGeometry.width() - this->width();
     this->setGeometry(width / 2, height / 2, this->width(), this->height());
 }
-
