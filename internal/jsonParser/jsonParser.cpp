@@ -18,8 +18,14 @@ User jsonParser::parseUser(std::string body) {
     if (d.HasMember("username")){
         user.Name = d["username"].GetString();
     }
-    user.PhoneNumber = d["phone"].GetString();
-    user.password = d["password"].GetString();
+    if (d.HasMember("phone")) {
+        user.PhoneNumber = d["phone"].GetString();
+    }
+    if (d.HasMember("password")) {
+        std::string password = d["password"].GetString();
+        user.Hash = std::to_string(std::hash<std::string>{}(password));
+
+    }
     return user;
 }
 

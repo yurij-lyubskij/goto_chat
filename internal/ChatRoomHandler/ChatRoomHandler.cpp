@@ -125,7 +125,7 @@ Response CreateChatRoom::Handle(Request request){
     User usr;
     usr.Id = 0;
     usr.Name = "";
-    usr.password = "";
+    usr.Hash = "";
     std::vector<User> usrs;
     for (rapidjson::SizeType i = 0; i < usersPh.Size(); ++i){
         usersPhones.push_back(usersPh[i].GetString());

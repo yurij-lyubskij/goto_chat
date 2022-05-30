@@ -9,7 +9,7 @@
 //
 
 #include "Handler.h"
-const std::string staticPath = "/home/yura11011/goto_chat/static/";
+const std::string staticPath = "../static/";
 
 bool Login::CanHandle(Request req) {
     return req.target == "/session/create";
@@ -19,7 +19,7 @@ Response Login::Handle(Request req) {
     User user = parser->parseUser(req.body);
     Response response;
     auto userCheck =  users->GetbyPhone(user.PhoneNumber);
-    if (userCheck.Name.empty() || (user.password!= userCheck.password)){
+    if (userCheck.Name.empty() || (user.Hash!= userCheck.Hash)){
         response.statusCode = NotFound;  //User Not Found
         return response;
     }
