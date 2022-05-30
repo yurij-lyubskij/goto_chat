@@ -104,7 +104,8 @@ void App_window::on_toolButton_3_released()
 void App_window::on_pushButton_clicked()
 {
     std::string text = ui->lineEdit->text().toStdString();
-    if(text.find(".m4a", 0, 1) == text.size() - 4){
+    if(text == "") return;
+    if(text.find(".m4a", 0, 1) < text.size() - 1){
         cl.get()->sendVoice(voice_file.toStdString(), temp_chat_id);
     } else {
         cl.get()->sendMessage(temp_chat_id, text, ui->phone_label->text().toStdString());

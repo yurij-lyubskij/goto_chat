@@ -41,7 +41,7 @@ bool Checker::check_password(const std::string &pass) {
 
 bool Checker::check_phone(const std::string &str)
 {
-    if(str.size() < 10 || str.size() > 13 || str[0] != '+'){
+    if(str.size() < 10 || str.size() > 13){
         return false;
     }
     for (const auto &it: str) {
