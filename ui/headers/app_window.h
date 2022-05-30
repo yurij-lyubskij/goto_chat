@@ -87,10 +87,10 @@ private slots:
 
 private:
     void show_chats();
-    std::unique_ptr<QStringListModel> model;
+    std::shared_ptr<QStringListModel> model;
 
     void show_messages(const QString& chat_name);
-    std::unique_ptr<QStringListModel> model2;
+    std::shared_ptr<QStringListModel> model2;
 
 
     std::unique_ptr<QMediaPlayer> player;
@@ -103,8 +103,8 @@ private:
 
     QString voice_file;
 
-    std::vector<Chat> person_chats;
-    std::string temp_chat_id;
+    std::shared_ptr<std::vector<Chat>> person_chats;
+    std::shared_ptr<std::string> temp_chat_id;
 
     std::shared_ptr<Client> cl;
     void listen_audio(const std::string& file_name);

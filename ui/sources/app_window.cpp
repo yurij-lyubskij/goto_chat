@@ -6,6 +6,10 @@
 App_window::App_window(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::App_window) {
+    temp_chat_id = std::make_shared<std::string>();
+    person_chats = std::make_shared<std::vector<Chat>>();
+    model = std::shared_ptr<QStringListModel>(new QStringListModel);
+    model2 = std::shared_ptr<QStringListModel>(new QStringListModel);
     ui->setupUi(this);
     chat_window = new find_chat_window(this);
     connect(chat_window, &find_chat_window::back_to_app, this, &App_window::show);
@@ -35,10 +39,11 @@ void App_window::refresh_timer()
 
 void App_window::refresh_messages()
 {
-    std::string chat_id = temp_chat_id;
-    while(temp_chat_id == chat_id){
+    std::string chat_id = *temp_chat_id;
+    while(*temp_chat_id == chat_id){
         std::this_thread::sleep_for(std::chrono::seconds(2));
         show_messages(QString::fromStdString(chat_id));
+        show_chats();
     }
 }
 
@@ -106,12 +111,12 @@ void App_window::on_pushButton_clicked()
     std::string text = ui->lineEdit->text().toStdString();
     if(text == "") return;
     if(text.find(".m4a", 0, 1) < text.size() - 1){
-        cl.get()->sendVoice(voice_file.toStdString(), temp_chat_id);
+        cl.get()->sendVoice(voice_file.toStdString(), *temp_chat_id);
     } else {
-        cl.get()->sendMessage(temp_chat_id, text, ui->phone_label->text().toStdString());
+        cl.get()->sendMessage(*temp_chat_id, text, ui->phone_label->text().toStdString());
     }
     ui->lineEdit->clear();
-    show_messages(QString::fromStdString(temp_chat_id));
+    show_messages(QString::fromStdString(*temp_chat_id));
 }
 
 void App_window::centrialize()
@@ -131,14 +136,14 @@ void App_window::on_listView_doubleClicked(const QModelIndex &index)
     ui->messages->show();
     int id;
     id = ui->listView->currentIndex().row();
-    temp_chat_id = person_chats[id].Id;
+    *temp_chat_id = (*person_chats)[id].Id;
 
     QString chat_name = index.data(0).toString();
     ui->messages->setTitle(chat_name);
 
-    //    std::thread th(&App_window::refresh_messages, this);
-    //    th.detach();
-    show_messages(QString::fromStdString(temp_chat_id));
+        std::thread th(&App_window::refresh_messages, this);
+        th.detach();
+    show_messages(QString::fromStdString(*temp_chat_id));
 }
 
 
@@ -163,10 +168,9 @@ void App_window::on_pushButton_5_clicked()
 // функция отображения чатов
 void App_window::show_chats()
 {
-    model = std::unique_ptr<QStringListModel>(new QStringListModel);
-    person_chats = cl.get()->get_users_chats(ui->phone_label->text().toStdString());
+    *person_chats = cl.get()->get_users_chats(ui->phone_label->text().toStdString());
     QStringList chats;
-    for(const auto& chat : person_chats){
+    for(const auto& chat : *person_chats){
         chats.push_back(QString::fromStdString(chat.chatName));
     }
     model.get()->setStringList(chats);
@@ -176,7 +180,7 @@ void App_window::show_chats()
 // функция отображения сообщений
 void App_window::show_messages(const QString &chat_id)
 {
-    model2 = std::unique_ptr<QStringListModel>(new QStringListModel);
+
     std::vector<Message> m = cl.get()->get_last_chat_messages(chat_id.toStdString());
 
     QStringList messages;
@@ -234,7 +238,7 @@ void App_window::on_pushButton_7_clicked()
 // кнопка добавить человека в чат
 void App_window::on_pushButton_6_clicked()
 {
-    cl.get()->join_chat(temp_chat_id, ui->lineEdit_5->text().toStdString());
+    cl.get()->join_chat(*temp_chat_id, ui->lineEdit_5->text().toStdString());
     on_pushButton_7_clicked();
 }
 
