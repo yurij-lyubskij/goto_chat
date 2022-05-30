@@ -21,6 +21,7 @@ std::string gen_random(const int len) {
     return tmp_s;
 }
 
+
 const int cookieLength = 25;
 
 std::string AuthDb::SetCookie(User User) {

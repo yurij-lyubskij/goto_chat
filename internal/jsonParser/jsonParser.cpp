@@ -6,6 +6,24 @@
 #include <ctime>
 using namespace rapidjson;
 
+const int saltLen = 25;
+
+std::string genRandWithSeed(const int len,  std::string name) {
+    static const char alphanum[] =
+            "0123456789"
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            "abcdefghijklmnopqrstuvwxyz";
+    std::string tmp_s;
+    tmp_s.reserve(len);
+    size_t seed = std::hash<std::string>{}(name);
+    srand(seed);
+    for (int i = 0; i < len; ++i) {
+        tmp_s += alphanum[rand() % (sizeof(alphanum) - 1)];
+    }
+
+    return tmp_s;
+}
+
 User jsonParser::parseUser(std::string body) {
 //    std::cout << body <<"\n";
 
@@ -21,8 +39,11 @@ User jsonParser::parseUser(std::string body) {
     if (d.HasMember("phone")) {
         user.PhoneNumber = d["phone"].GetString();
     }
+    std::string salt = genRandWithSeed(saltLen, user.PhoneNumber);
+
     if (d.HasMember("password")) {
         std::string password = d["password"].GetString();
+        password = password + salt;
         user.Hash = std::to_string(std::hash<std::string>{}(password));
 
     }
