@@ -11,7 +11,7 @@ class User {
 		std::string Name;
 		size_t Id;
 		std::string PhoneNumber;
-		std::string password;
+		std::string Hash;
 		User();
 		User(int);
 };

@@ -42,7 +42,7 @@ DBObject::DBObject(const User& usr){
 	attr[1] = tempAttr;
 	tempAttr = usr.PhoneNumber;
 	attr[2] = tempAttr;
-	tempAttr = usr.password;
+	tempAttr = usr.Hash;
 	attr[3] = tempAttr;
 };
 
@@ -98,7 +98,7 @@ DBObject::operator User(){
 	usr.Id = std::stoi(attr[0]);
 	usr.Name = attr[1];
 	usr.PhoneNumber = attr[2];
-	usr.password = attr[3];
+	usr.Hash = attr[3];
 	return usr;
 };
 

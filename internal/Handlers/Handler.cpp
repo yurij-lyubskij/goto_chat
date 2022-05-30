@@ -9,7 +9,7 @@
 //
 
 #include "Handler.h"
-const std::string staticPath = "/home/yura11011/goto_chat/static/";
+const std::string staticPath = "../static/";
 
 bool Login::CanHandle(Request req) {
     return req.target == "/session/create";
@@ -19,13 +19,12 @@ Response Login::Handle(Request req) {
     User user = parser->parseUser(req.body);
     Response response;
     auto userCheck =  users->GetbyPhone(user.PhoneNumber);
-    if (userCheck.Name.empty() || (user.password!= userCheck.password)){
+    if (userCheck.Name.empty() || (user.Hash!= userCheck.Hash)){
         response.statusCode = NotFound;  //User Not Found
         return response;
     }
     response.cookie = auth->SetCookie(userCheck) ;
     response.statusCode = OK;
-//    response.body = "json here sometimes";
     return response;
 }
 
@@ -145,13 +144,14 @@ Response SendVoice::Handle(Request req) {
         response.statusCode = UnAuthorized;
         return response;
     }
+    size_t  size = req.body.size();
     int pos = req.body.find("Content-Type:");
     if (pos > 0) {
         req.body.erase(0, pos);
     }
     pos = req.body.find("\n");
     req.body.erase(0, pos);
-    size_t size = req.body.size();
+    size = req.body.size();
     time_t time = std::time(0);
     std::string fName = req.headers[0];
     int chat = stoi(req.headers[1]);
