@@ -116,9 +116,9 @@ void App_window::on_pushButton_clicked()
         return;
     }
     if(text.find(".m4a", 0, 1) < text.size() - 1){
-        cl.get()->sendVoice(voice_file.toStdString(), *temp_chat_id);
+        cl->sendVoice(voice_file.toStdString(), *temp_chat_id);
     } else {
-        cl.get()->sendMessage(*temp_chat_id, text, ui->phone_label->text().toStdString());
+        cl->sendMessage(*temp_chat_id, text, ui->phone_label->text().toStdString());
     }
     ui->lineEdit->clear();
     show_messages(QString::fromStdString(*temp_chat_id));
@@ -174,25 +174,25 @@ void App_window::on_pushButton_5_clicked()
 void App_window::show_chats()
 {
 
-    *person_chats = cl.get()->get_users_chats(ui->phone_label->text().toStdString());
+    *person_chats = cl->get_users_chats(ui->phone_label->text().toStdString());
     QStringList chats;
     for(const auto& chat : *person_chats){
         chats.push_back(QString::fromStdString(chat.chatName));
     }
-    model.get()->setStringList(chats);
+    model->setStringList(chats);
     ui->listView->setModel(model.get());
 }
 
 // функция отображения сообщений
 void App_window::show_messages(const QString &chat_id)
 {
-    std::vector<Message> m = cl.get()->get_last_chat_messages(chat_id.toStdString());
+    std::vector<Message> m = cl->get_last_chat_messages(chat_id.toStdString());
     QStringList messages;
     for(const auto& mes : m){
         std::string temp_res = Parser::get_message_from_Message(mes);
         messages.push_back(QString::fromStdString(temp_res));
     }
-    model2.get()->setStringList(messages);
+    model2->setStringList(messages);
     ui->listView_2->setModel(model2.get());
 }
 
@@ -241,7 +241,7 @@ void App_window::on_pushButton_7_clicked()
 // кнопка добавить человека в чат
 void App_window::on_pushButton_6_clicked()
 {
-    cl.get()->join_chat(*temp_chat_id, ui->lineEdit_5->text().toStdString());
+    cl->join_chat(*temp_chat_id, ui->lineEdit_5->text().toStdString());
     on_pushButton_7_clicked();
 }
 
@@ -256,7 +256,7 @@ void App_window::on_pushButton_4_clicked()
     if(!member.empty()){
         members.push_back(member);
     }
-    cl.get()->create_chat(chat_name, members);
+    cl->create_chat(chat_name, members);
     on_pushButton_5_clicked();
     show_chats();
 }
