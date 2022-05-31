@@ -110,7 +110,9 @@ void App_window::on_toolButton_3_released()
 void App_window::on_pushButton_clicked()
 {
     std::string text = ui->lineEdit->text().toStdString();
-    if(text == "") return;
+    if(text.empty()) {
+        return;
+    }
     if(text.find(".m4a", 0, 1) < text.size() - 1){
         cl.get()->sendVoice(voice_file.toStdString(), *temp_chat_id);
     } else {
@@ -169,7 +171,7 @@ void App_window::on_pushButton_5_clicked()
 // функция отображения чатов
 void App_window::show_chats()
 {
-    model = std::shared_ptr<QStringListModel>(new QStringListModel);
+
     *person_chats = cl.get()->get_users_chats(ui->phone_label->text().toStdString());
     QStringList chats;
     for(const auto& chat : *person_chats){
@@ -182,9 +184,7 @@ void App_window::show_chats()
 // функция отображения сообщений
 void App_window::show_messages(const QString &chat_id)
 {
-    model2 = std::shared_ptr<QStringListModel>(new QStringListModel);
     std::vector<Message> m = cl.get()->get_last_chat_messages(chat_id.toStdString());
-
     QStringList messages;
     for(const auto& mes : m){
         std::string temp_res = Parser::get_message_from_Message(mes);
@@ -192,7 +192,6 @@ void App_window::show_messages(const QString &chat_id)
     }
     model2.get()->setStringList(messages);
     ui->listView_2->setModel(model2.get());
-
 }
 
 // прослушать голосовое по названию файла который скачали/ есть
