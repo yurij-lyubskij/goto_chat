@@ -262,7 +262,7 @@ void App_window::on_pushButton_4_clicked()
 // кнопка присоединиться
 void App_window::on_toolButton_5_clicked()
 {
-    emit send_person(login.toStdString(), cl);
+    emit send_person(login.toStdString(), cl, person_chats);
     hide();
     chat_window->show();
 }

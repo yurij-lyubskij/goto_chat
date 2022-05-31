@@ -1,3 +1,4 @@
+#pragma once
 #ifndef STRUCTURES_H
 #define STRUCTURES_H
 
@@ -16,6 +17,9 @@ struct Message{
 struct Chat{
     std::string Id;
     std::string chatName;
+    bool operator==(const Chat& s){
+        return (Id==s.Id && chatName == s.chatName);
+    }
 };
 
 #endif

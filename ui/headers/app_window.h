@@ -53,7 +53,7 @@ public slots:
 signals:
     void login_window();
 
-    void send_person(const std::string &phone, std::shared_ptr<Client> c);
+    void send_person(const std::string &phone, std::shared_ptr<Client> c, std::shared_ptr<std::vector<Chat>> p_ch);
 
 private slots:
 

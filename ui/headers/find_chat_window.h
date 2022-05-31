@@ -5,6 +5,7 @@
 #include <QStringListModel>
 #include <QScreen>
 #include <QMessageBox>
+#include <algorithm>
 #include "client.h"
 
 namespace Ui {
@@ -20,7 +21,7 @@ public:
     ~find_chat_window();
 
 public slots:
-    void set_person(const std::string &ph, std::shared_ptr<Client> c);
+    void set_person(const std::string &ph, std::shared_ptr<Client> c, std::shared_ptr<std::vector<Chat>> p_ch);
 
 signals:
     void back_to_app();
@@ -41,6 +42,7 @@ private:
 
     std::vector<Chat> chats;
     std::string temp_chat_id;
+    std::shared_ptr<std::vector<Chat>> person_chats;
 };
 
 #endif // FIND_CHAT_WINDOW_H

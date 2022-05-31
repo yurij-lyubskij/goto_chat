@@ -14,9 +14,10 @@ find_chat_window::~find_chat_window()
     delete ui;
 }
 
-void find_chat_window::set_person(const std::string &ph, std::shared_ptr<Client> c)
+void find_chat_window::set_person(const std::string &ph, std::shared_ptr<Client> c, std::shared_ptr<std::vector<Chat>> p_ch)
 {
     centrialize();
+    person_chats = p_ch;
     cl = c;
     phone = ph;
 }
@@ -52,12 +53,19 @@ void find_chat_window::on_listView_doubleClicked(const QModelIndex &index)
     id = ui->listView->currentIndex().row();
     temp_chat_id = chats[id].Id;
     QString chat_name = QString::fromStdString(chats[id].chatName);
-    QMessageBox::StandardButton reply = QMessageBox::question(this, "Присоединение к чату", ("Хотетие присоединиться к чату\n" + chat_name + "?"),
-                                                              QMessageBox::Yes | QMessageBox::No);
-    if(reply == QMessageBox::Yes){
-        cl.get()->join_chat(temp_chat_id, phone);
-        hide();
-        emit back_to_app();
+    Chat temp;
+    temp.Id = temp_chat_id;
+    temp.chatName = chat_name.toStdString();
+    if(std::find(person_chats->begin(), person_chats->end(), temp) != person_chats->end()){
+        QMessageBox::information(this, "Присоединение к чату", "Вы уже состоите в этом чате");
+    } else {
+        QMessageBox::StandardButton reply = QMessageBox::question(this, "Присоединение к чату", ("Хотетие присоединиться к чату\n" + chat_name + "?"),
+                                                                  QMessageBox::Yes | QMessageBox::No);
+        if(reply == QMessageBox::Yes){
+            cl.get()->join_chat(temp_chat_id, phone);
+            hide();
+            emit back_to_app();
+        }
     }
 }
 
