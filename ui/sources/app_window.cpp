@@ -8,8 +8,8 @@ App_window::App_window(QWidget *parent) :
     ui(new Ui::App_window) {
     temp_chat_id = std::shared_ptr<std::string>(new std::string);
     person_chats = std::shared_ptr<std::vector<Chat>>(new std::vector<Chat>);
-
-
+    model = std::shared_ptr<QStringListModel>(new QStringListModel);
+    model2 = std::shared_ptr<QStringListModel>(new QStringListModel);
     ui->setupUi(this);
     chat_window = new find_chat_window(this);
     connect(chat_window, &find_chat_window::back_to_app, this, &App_window::show);
@@ -146,8 +146,8 @@ void App_window::on_listView_doubleClicked(const QModelIndex &index)
     QString chat_name = index.data(0).toString();
     ui->messages->setTitle(chat_name);
 
-//    std::thread th(&App_window::refresh_messages, this);
-//    th.detach();
+    std::thread th(&App_window::refresh_messages, this);
+    th.detach();
     show_messages(QString::fromStdString(*temp_chat_id));
 }
 
@@ -173,7 +173,7 @@ void App_window::on_pushButton_5_clicked()
 // функция отображения чатов
 void App_window::show_chats()
 {
-    model = std::shared_ptr<QStringListModel>(new QStringListModel);
+
     *person_chats = cl->get_users_chats(ui->phone_label->text().toStdString());
     QStringList chats;
     for(const auto& chat : *person_chats){
@@ -186,7 +186,6 @@ void App_window::show_chats()
 // функция отображения сообщений
 void App_window::show_messages(const QString &chat_id)
 {
-    model2 = std::shared_ptr<QStringListModel>(new QStringListModel);
     std::vector<Message> m = cl->get_last_chat_messages(chat_id.toStdString());
     QStringList messages;
     for(const auto& mes : m){
