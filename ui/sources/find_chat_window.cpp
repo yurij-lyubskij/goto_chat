@@ -59,7 +59,7 @@ void find_chat_window::on_listView_doubleClicked(const QModelIndex &index)
     if(std::find(person_chats->begin(), person_chats->end(), temp) != person_chats->end()){
         QMessageBox::information(this, "Присоединение к чату", "Вы уже состоите в этом чате");
     } else {
-        QMessageBox::StandardButton reply = QMessageBox::question(this, "Присоединение к чату", ("Хотетие присоединиться к чату\n" + chat_name + "?"),
+        QMessageBox::StandardButton reply = QMessageBox::question(this, "Присоединение к чату", ("Хотите присоединиться к чату\n" + chat_name + "?"),
                                                                   QMessageBox::Yes | QMessageBox::No);
         if(reply == QMessageBox::Yes){
             cl.get()->join_chat(temp_chat_id, phone);
