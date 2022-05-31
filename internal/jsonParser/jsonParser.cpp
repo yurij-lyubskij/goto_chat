@@ -8,7 +8,7 @@ using namespace rapidjson;
 
 const int saltLen = 25;
 
-std::string genRandWithSeed(const int len,  std::string name) {
+std::string genRandWithSeed(const int len,  const std::string& name) {
     static const char alphanum[] =
             "0123456789"
             "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -70,11 +70,7 @@ Message jsonParser::parseMSG(std::string body, int userid) {
     d.Parse(json);
     time_t time = std::time(0);
     std::string content;
-    std::string phone;
     if (d.HasMember("message")){
-       if (d["message"].HasMember("userPhone")){
-           phone = d["message"]["userPhone"].GetString();
-       }
         if (d["message"].HasMember("userPhone")){
             content = d["message"]["text"].GetString();
         }

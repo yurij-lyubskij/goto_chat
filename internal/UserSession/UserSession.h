@@ -47,7 +47,7 @@ private:
     std::shared_ptr<IhttpBuffer> buff;
 
     // Asynchronously receive a complete request message.
-    void readRequest() {
+    void readRequest() override{
         auto self = shared_from_this();
         std::function lamda = [self](error_code ec,
                                      std::size_t bytes_transferred) {
@@ -65,7 +65,7 @@ private:
     }
 
     // Determine what needs to be done with the request message.
-    void processRequest() {
+    void processRequest() override{
         Request request = buff->createRequest();
         request = router->UseMiddle(request);
         Response res = router->Route(request);
@@ -78,7 +78,7 @@ private:
     }
 
     // Asynchronously transmit the response message.
-    void writeResponse() {
+    void writeResponse() override{
         auto self = shared_from_this();
 
         buff->contentLength();

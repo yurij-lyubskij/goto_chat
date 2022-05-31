@@ -29,7 +29,7 @@ typedef boost::beast::error_code error_code;
 
 class Response {
 public:
-    Response():isFile(false) {};
+    Response():  isFile(false) , statusCode(200){};
     std::vector<std::string> headers;
     bool isFile;
     std::string cookie;

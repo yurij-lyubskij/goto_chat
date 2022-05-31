@@ -13,7 +13,6 @@
 //Interface Block
 
 class iUserRepo {
-    DBConnection<iConnection> *connection;
 public:
     virtual ~iUserRepo() = default;
 

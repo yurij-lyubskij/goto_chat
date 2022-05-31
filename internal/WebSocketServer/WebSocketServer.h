@@ -12,15 +12,11 @@
 
 class WebSocketSession{
 	public:
-		void write();
-		void read();
 };
 
 class iWebSocketServer {
-	private:
-		std::map<int, WebSocketSession*> connections;
-		MessageQueue *queue;
 	public:
+        virtual ~iWebSocketServer() = default;
 		virtual void addToQueue(std::shared_ptr<iMessage>) = 0;
 		virtual std::shared_ptr<iMessage> extractFromQueue() = 0;
 		virtual void addConnection(User, WebSocketSession*) = 0;
@@ -29,12 +25,16 @@ class iWebSocketServer {
 };
 
 class WebSocketServer: public iWebSocketServer{
+private:
+    std::map<int, WebSocketSession*> connections;
+    MessageQueue *queue;
 	public:
-		void addToQueue(std::shared_ptr<iMessage>);
-		std::shared_ptr<iMessage> extractFromQueue();
-		void addConnection(User, WebSocketSession*);
-		void removeConnection(User);
-		void run();
+        WebSocketServer() = default;
+		void addToQueue(std::shared_ptr<iMessage>) override;
+		std::shared_ptr<iMessage> extractFromQueue() override;
+		void addConnection(User, WebSocketSession*) override;
+		void removeConnection(User) override;
+		void run() override;
 };
 
 #endif

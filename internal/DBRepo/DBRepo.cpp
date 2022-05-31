@@ -279,49 +279,6 @@ bool ChatRepo::addUsersToChat(const ChatRoom &updatedChat, std::vector<User> use
 };
 
 
-bool ChatRepo::removeUsersFromChat(const ChatRoom &updatedChat, std::vector<User> users){
-
-	std::shared_ptr<iConnection> conn = connection->connection();			//getting connection to DB
-
-	int len = users.size()+1;
-	std::vector<DBObject> objects(len);
-	objects[0] = DBObject(updatedChat);
-
-	for(int i = 1; i < len; ++i) {
-		objects[i] = DBObject(users[i]);
-		if ( users[i].Id < 1 ) {
-			connection->freeConnection(conn);										//return connection to the queue
-			return false;
-		}
-	}
-
-	DBRequest request;
-	request.operation = removeMembers;
-	request.objectType = chat;
-	request.request = "";
-
-	std::vector<DBObject> res = conn->exec( request , objects);
-	connection->freeConnection(conn);										//return connection to the queue
-
-	if(res.empty()) return false;
-	else return true;
-};
-/*
-ChatRoom ChatRepo::getMesChat(Message mes){
-	std::shared_ptr<iConnection> conn = connection->connection();			//getting connection to DB
-
-	DBRequest request;
-	request.operation = getMessageOrigin;
-	request.objectType = chat;
-	request.request = std::to_string(mes.getId());
-	
-	std::vector<DBObject> objects = conn->get(request);
-
-	connection->freeConnection(conn);										//return connection to the queue
-
-	return (ChatRoom) objects[0];
-};
-*/
 std::vector<ChatRoom> ChatRepo::getUserChats(const User& user){
 
 	std::shared_ptr<iConnection> conn = connection->connection();			//getting connection to DB

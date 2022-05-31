@@ -25,7 +25,7 @@ PGConnection::PGConnection(){
     }
 }
 
-std::vector<DBObject> PGConnection::exec(DBRequest request, std::vector<DBObject> objects){
+std::vector<DBObject> PGConnection::exec(DBRequest request, const std::vector<DBObject>& objects){
     std::vector<DBObject> res;
     std::vector<std::string> attrs = split(request.request);
     switch(request.operation){
