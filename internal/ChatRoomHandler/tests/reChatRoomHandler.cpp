@@ -46,11 +46,11 @@ TEST(ChatRoomHandlersTests, CreateChatRoom) {
     usr1.Id = 1;
     usr1.Name = "TestName";
     usr1.PhoneNumber = "12345";
-    usr1.password = "password";
+    usr1.Hash = "password";
     usr2.Id = 2;
     usr2.Name = "TestName";
     usr2.PhoneNumber = "12346";
-    usr2.password = "password";
+    usr2.Hash = "password";
     conn->users.insert(std::make_pair(1, usr1));
     conn->users.insert(std::make_pair(1, usr2));
     conn->userByPhone.insert(std::make_pair("12345", usr1));
@@ -88,7 +88,7 @@ TEST(ChatRoomHandlersTests, JoinChatRoom) {
     usr1.Id = 1;
     usr1.Name = "TestName";
     usr1.PhoneNumber = "12345";
-    usr1.password = "password";
+    usr1.Hash = "password";
     usr2.Id = 2;
 
     conn->users.insert(std::make_pair(1, usr1));

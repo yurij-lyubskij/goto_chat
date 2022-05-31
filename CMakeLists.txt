@@ -25,5 +25,4 @@ find_package(GTest REQUIRED)
 
 add_executable(tests ${TEST_SOURCES})
 target_include_directories(tests PUBLIC ${INCLUDE_DIRS})
-#target_link_libraries(tests GTest::GTest gtest_main gmock gmock_main)
 target_link_libraries(tests GTest::GTest gtest_main gmock gmock_main PostgreSQL::PostgreSQL Threads::Threads pq)

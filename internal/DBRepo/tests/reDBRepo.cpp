@@ -148,53 +148,53 @@ TEST(MessageRepoTests, DoesExist){
 	EXPECT_FALSE(repo.doesExist(1));
 	EXPECT_TRUE(repo.doesExist(2));
 }
-
-TEST(MessageRepoTests, put){
-	std::shared_ptr<DBConnection<MockConnection>> connections = std::make_shared<DBConnection<MockConnection>>(1);
-
-	std::shared_ptr<MockConnection> conn = connections->connection();
-	connections->freeConnection(conn);
-	
-	EXPECT_CALL(*conn, reExec(::testing::_, ::testing::_)).Times(2);
-	MessageRepo repo((DBConnection<iConnection>*) connections.get());
-
-	Message message1("text1", 12, 1, 1), message2("text2", 50, 2, 1);
-	std::vector<iMessage> messages;
-	messages.push_back(message1);
-	messages.push_back(message2);
-
-	EXPECT_THAT(repo.put(messages),  testing::ElementsAre(1, 2));
-	EXPECT_THAT(repo.put(messages),  testing::ElementsAre(3, 4));
-
-	ASSERT_TRUE(conn->messages.contains(1));
-	EXPECT_EQ(conn->messages.at(1).getId(), 1);
-	EXPECT_EQ(conn->messages.at(1).getContent(), "text1");
-	EXPECT_EQ(conn->messages.at(1).getTime(), 12);
-	EXPECT_EQ(conn->messages.at(1).getSender(), 1);
-	EXPECT_EQ(conn->messages.at(1).getChat(), 1);
-
-	ASSERT_TRUE(conn->messages.contains(2));
-	EXPECT_EQ(conn->messages.at(2).getId(), 2);
-	EXPECT_EQ(conn->messages.at(2).getContent(), "text2");
-	EXPECT_EQ(conn->messages.at(2).getTime(), 50);
-	EXPECT_EQ(conn->messages.at(2).getSender(), 2);
-	EXPECT_EQ(conn->messages.at(2).getChat(), 1);
-
-	ASSERT_TRUE(conn->messages.contains(3));
-	EXPECT_EQ(conn->messages.at(3).getId(), 3);
-	EXPECT_EQ(conn->messages.at(3).getContent(), "text1");
-	EXPECT_EQ(conn->messages.at(3).getTime(), 12);
-	EXPECT_EQ(conn->messages.at(3).getSender(), 1);
-	EXPECT_EQ(conn->messages.at(3).getChat(), 1);
-
-	ASSERT_TRUE(conn->messages.contains(4));
-	EXPECT_EQ(conn->messages.at(4).getId(), 4);
-	EXPECT_EQ(conn->messages.at(4).getContent(), "text2");
-	EXPECT_EQ(conn->messages.at(4).getTime(), 50);
-	EXPECT_EQ(conn->messages.at(4).getSender(), 2);
-	EXPECT_EQ(conn->messages.at(4).getChat(), 1);
-	
-}
+//
+//TEST(MessageRepoTests, put){
+//	std::shared_ptr<DBConnection<MockConnection>> connections = std::make_shared<DBConnection<MockConnection>>(1);
+//
+//	std::shared_ptr<MockConnection> conn = connections->connection();
+//	connections->freeConnection(conn);
+//
+//	EXPECT_CALL(*conn, reExec(::testing::_, ::testing::_)).Times(2);
+//	MessageRepo repo((DBConnection<iConnection>*) connections.get());
+//
+//	Message message1("text1", 12, 1, 1), message2("text2", 50, 2, 1);
+//	std::vector<iMessage> messages;
+//	messages.push_back(message1);
+//	messages.push_back(message2);
+//
+//	EXPECT_THAT(repo.put(messages),  testing::ElementsAre(1, 2));
+//	EXPECT_THAT(repo.put(messages),  testing::ElementsAre(3, 4));
+//
+//	ASSERT_TRUE(conn->messages.contains(1));
+//	EXPECT_EQ(conn->messages.at(1).getId(), 1);
+//	EXPECT_EQ(conn->messages.at(1).getContent(), "text1");
+//	EXPECT_EQ(conn->messages.at(1).getTime(), 12);
+//	EXPECT_EQ(conn->messages.at(1).getSender(), 1);
+//	EXPECT_EQ(conn->messages.at(1).getChat(), 1);
+//
+//	ASSERT_TRUE(conn->messages.contains(2));
+//	EXPECT_EQ(conn->messages.at(2).getId(), 2);
+//	EXPECT_EQ(conn->messages.at(2).getContent(), "text2");
+//	EXPECT_EQ(conn->messages.at(2).getTime(), 50);
+//	EXPECT_EQ(conn->messages.at(2).getSender(), 2);
+//	EXPECT_EQ(conn->messages.at(2).getChat(), 1);
+//
+//	ASSERT_TRUE(conn->messages.contains(3));
+//	EXPECT_EQ(conn->messages.at(3).getId(), 3);
+//	EXPECT_EQ(conn->messages.at(3).getContent(), "text1");
+//	EXPECT_EQ(conn->messages.at(3).getTime(), 12);
+//	EXPECT_EQ(conn->messages.at(3).getSender(), 1);
+//	EXPECT_EQ(conn->messages.at(3).getChat(), 1);
+//
+//	ASSERT_TRUE(conn->messages.contains(4));
+//	EXPECT_EQ(conn->messages.at(4).getId(), 4);
+//	EXPECT_EQ(conn->messages.at(4).getContent(), "text2");
+//	EXPECT_EQ(conn->messages.at(4).getTime(), 50);
+//	EXPECT_EQ(conn->messages.at(4).getSender(), 2);
+//	EXPECT_EQ(conn->messages.at(4).getChat(), 1);
+//
+//}
 
 TEST(MessageRepoTests, getById){
 	std::shared_ptr<DBConnection<MockConnection>> connections = std::make_shared<DBConnection<MockConnection>>(1);
