@@ -551,7 +551,7 @@ std::vector<DBObject> PGConnection::getUsersByPhone(std::vector<std::string> pho
     return result;
 };
 
-std::vector<DBObject> PGConnection::getChatsByName(std::string name){
+std::vector<DBObject> PGConnection::getChatsByName(const std::string& name){
     //suppose to be                 SELECT * FROM chats WHERE ch_name LIKE '%Chat%';
     const std::string baseRequest = " SELECT * FROM " + chatsTableName + " WHERE " + chatNameCol + " LIKE '%";
     const std::string endRequest = "%';\n";
@@ -584,7 +584,7 @@ std::vector<DBObject> PGConnection::getChatsByName(std::string name){
     return result;
 };
 
-std::vector<DBObject> PGConnection::getUserChats(std::string userId){
+std::vector<DBObject> PGConnection::getUserChats(const std::string& userId){
     //Example                       SELECT ch_id, ch_name FROM (SELECT * FROM users_chats WHERE us_id = 37) AS CH join chats using(ch_id);
     const std::string baseRequest = " SELECT " + chatIdCol + ", " + chatNameCol + " FROM (SELECT * FROM " + usersChatsTableName + " WHERE " + userIdCol + " = ";
     const std::string endRequest = ") AS CH join " + chatsTableName + " using(" + chatIdCol + ");\n";
@@ -616,7 +616,7 @@ std::vector<DBObject> PGConnection::getUserChats(std::string userId){
     return result;
 };
 
-std::vector<DBObject> PGConnection::getLastChatMessages(std::string chatId, std::string number){
+std::vector<DBObject> PGConnection::getLastChatMessages(const std::string& chatId, std::string number){
 
     //suppose to be                 SELECT ms_id, ms_sendTime, ip_type, tip_content, vip_content, us_id, ch_id FROM (SELECT * FROM messages WHERE ch_id = 
     const std::string baseRequest = "SELECT " + messageIdCol + ", " + messageTimeCol + ", " + inputTypeCol + "," +
@@ -669,7 +669,7 @@ std::vector<DBObject> PGConnection::getLastChatMessages(std::string chatId, std:
     return result;
 };
 
-std::vector<DBObject> PGConnection::getLastMessages(std::string mesId, std::string number){
+std::vector<DBObject> PGConnection::getLastMessages(const std::string& mesId, std::string number){
 
     //Example                   SELECT ms_id, ms_sendTime, ip_type,tip_content, vip_content, us_id, ch_id FROM (SELECT * FROM messages WHERE ch_id = 
     //                          (SELECT ch_id FROM messages WHERE ms_id = 40)) AS MESSAGE join inputs using(ms_id) left join textinputs using(tip_id)
@@ -728,7 +728,7 @@ std::vector<DBObject> PGConnection::getLastMessages(std::string mesId, std::stri
     return result;
 };
 
-std::vector<DBObject> PGConnection::getNextMessages(std::string mesId, std::string number){
+std::vector<DBObject> PGConnection::getNextMessages(const std::string& mesId, std::string number){
 
     //Example                   SELECT ms_id, ms_sendTime, ip_type,tip_content, vip_content, us_id, ch_id FROM (SELECT * FROM messages WHERE ch_id = 
     //                          (SELECT ch_id FROM messages WHERE ms_id = 40)) AS MESSAGE join inputs using(ms_id) left join textinputs using(tip_id)

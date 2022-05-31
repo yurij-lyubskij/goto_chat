@@ -2,6 +2,7 @@
 #include <map>
 #include <utility>
 #include "reDBConnection.h"
+#include "User.h"
 
 //
 //MockConnection section
@@ -16,7 +17,6 @@ std::vector<DBObject> MockConnection::exec(DBRequest request, std::vector<DBObje
             switch(request.objectType){
                 case user:
                     {
-                    std::vector<User> usrs(len);
                     for( int i = 0; i < len; ++i ) {
                         usrs[i] = objects[i];
                         ++usersCount;
@@ -83,7 +83,6 @@ std::vector<DBObject> MockConnection::exec(DBRequest request, std::vector<DBObje
         case addMembers:
         {   
             ChatRoom cht = ChatRoom(objects[0]);
-            std::vector<User> usrs;
             if ( ! chats.contains(cht.getId()) ) { return res; }
             --len;
             /*
@@ -135,7 +134,6 @@ std::vector<DBObject> MockConnection::get(DBRequest request){
             break;
         case findWithName:
             {
-            int size = chats.size();
             std::string name = attrs[0];
             for(std::map<int, ChatRoom>::iterator it = chats.begin(); it != chats.end(); ++it) {
                 if( it->second.getName().find(name) != std::string::npos )

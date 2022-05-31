@@ -94,11 +94,11 @@ class PGConnection: public iConnection{
 		std::vector<DBObject> getMessagesById(std::vector<std::string>);
 		std::vector<DBObject> getUsersByPhone(std::vector<std::string>);
 		std::vector<DBObject> getMembers(DBObject);
-		std::vector<DBObject> getUserChats(std::string);
-		std::vector<DBObject> getLastChatMessages(std::string, std::string);
-		std::vector<DBObject> getLastMessages(std::string, std::string);
-		std::vector<DBObject> getNextMessages(std::string, std::string);
-		std::vector<DBObject> getChatsByName(std::string);
+		std::vector<DBObject> getUserChats(const std::string&);
+		std::vector<DBObject> getLastChatMessages(const std::string&, std::string);
+		std::vector<DBObject> getLastMessages(const std::string&, std::string);
+		std::vector<DBObject> getNextMessages(const std::string&, std::string);
+		std::vector<DBObject> getChatsByName(const std::string&);
         //void establish_connection();
 		//actual connections settings
         std::shared_ptr<PGconn>  m_connection;

@@ -72,7 +72,7 @@ public:
 
 class SendMessage : public iHandler {
 public:
-    explicit SendMessage(DBConnection<iConnection>* conn, std::shared_ptr<iAuthDb> auth): connections(conn), auth(auth){};
+    explicit SendMessage(DBConnection<iConnection>* conn, std::shared_ptr<iAuthDb> auth): auth(auth), connections(conn) {};
     bool CanHandle(Request) override;
 
     Response Handle(Request) override;
@@ -102,7 +102,7 @@ private:
 
 class SendVoice : public iHandler {
 public:
-    SendVoice(DBConnection<iConnection>* conn, std::shared_ptr<iAuthDb> auth): connections(conn), auth(auth){};
+    SendVoice(DBConnection<iConnection>* conn, std::shared_ptr<iAuthDb> auth): auth(auth), connections(conn){};
     bool CanHandle(Request) override;
 
     Response Handle(Request) override;

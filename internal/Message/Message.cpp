@@ -23,7 +23,7 @@ Message::Message(int _id) {
 	type = textMessage;
 };
 
-Message::Message(std::string _content, time_t time, int sender, int chat){
+Message::Message(const std::string& _content, time_t time, int sender, int chat){
 	id = 0;
 	content = _content;
 	sendTime = time;
@@ -32,7 +32,7 @@ Message::Message(std::string _content, time_t time, int sender, int chat){
 	type = textMessage;
 };
 
-Message::Message(int _id, std::string _content, time_t time, int sender, int chat){
+Message::Message(int _id, const std::string& _content, time_t time, int sender, int chat){
 	id = _id;
 	content = _content;
 	sendTime = time;
@@ -62,7 +62,7 @@ Message::Message(const iMessage& mes){
 	type = textMessage;
 };
 
-Message Message::operator=(const Message& mes){
+Message& Message::operator=(const Message& mes){
 	id = mes.id;
 	senderId = mes.senderId;
 	chatId = mes.chatId;
@@ -98,7 +98,7 @@ VoiceMessage::VoiceMessage(int _id) {
 	type = voiceMessage;
 };
 
-VoiceMessage::VoiceMessage(std::string _content, time_t time, int sender, int chat){
+VoiceMessage::VoiceMessage(const std::string& _content, time_t time, int sender, int chat){
 	id = 0;
 	content = _content;
 	sendTime = time;
@@ -107,7 +107,7 @@ VoiceMessage::VoiceMessage(std::string _content, time_t time, int sender, int ch
 	type = voiceMessage;
 };
 
-VoiceMessage::VoiceMessage(int _id, std::string _content, time_t time, int sender, int chat){
+VoiceMessage::VoiceMessage(int _id, const std::string& _content, time_t time, int sender, int chat){
 	id = _id;
 	content = _content;
 	sendTime = time;
@@ -137,7 +137,7 @@ VoiceMessage::VoiceMessage(const iMessage& mes){
 	type = voiceMessage;
 };
 
-VoiceMessage VoiceMessage::operator=(const VoiceMessage& mes){
+VoiceMessage& VoiceMessage::operator=(const VoiceMessage& mes){
 	id = mes.id;
 	senderId = mes.senderId;
 	chatId = mes.chatId;

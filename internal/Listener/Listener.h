@@ -42,7 +42,7 @@ public:
             std::shared_ptr<iRouter> router,
             std::shared_ptr<iBufferFabric> fabric
     )
-            : acceptor_(std::move(acceptor)), socket(std::move(sock)), router(std::move(router)), fabric(std::move(fabric)) {
+            : acceptor_(std::move(acceptor)), router(std::move(router)), socket(std::move(sock)), fabric(std::move(fabric)) {
          error_code ec;
         // Open the acceptor
         acceptor_->open(ec);
@@ -74,7 +74,7 @@ public:
     }
 
     // Start accepting incoming connections
-    void run() {
+    void run() override {
         do_accept();
     }
 
