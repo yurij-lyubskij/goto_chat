@@ -162,7 +162,7 @@ private:
     struct Frag {
         Frag(SizeType s, SizeType o, SizeType m) : start(s), out(o), minIndex(m) {}
         SizeType start;
-        SizeType out; //!< link-list of all output states
+        SizeType out; //!< link-list.txt of all output states
         SizeType minIndex;
     };
 

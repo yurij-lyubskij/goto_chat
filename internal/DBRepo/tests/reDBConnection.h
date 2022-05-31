@@ -37,7 +37,7 @@ class MockConnection: public iConnection{
         MOCK_METHOD(bool, reExec, (DBRequest, std::vector<DBObject>), ());
         MOCK_METHOD(std::vector<DBObject>, reGet, (DBRequest), ());
     private:
-        std::vector<DBObject> exec(DBRequest, std::vector<DBObject>) override;
+        std::vector<DBObject> exec(DBRequest, const std::vector<DBObject>&) override;
         std::vector<DBObject> get(DBRequest) override;
 };
 

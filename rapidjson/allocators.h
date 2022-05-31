@@ -128,16 +128,16 @@ public:
 template <typename BaseAllocator = CrtAllocator>
 class MemoryPoolAllocator {
     //! Chunk header for perpending to each chunk.
-    /*! Chunks are stored as a singly linked list.
+    /*! Chunks are stored as a singly linked list.txt.
     */
     struct ChunkHeader {
         size_t capacity;    //!< Capacity of the chunk in bytes (excluding the header itself).
         size_t size;        //!< Current size of allocated memory in bytes.
-        ChunkHeader *next;  //!< Next chunk in the linked list.
+        ChunkHeader *next;  //!< Next chunk in the linked list.txt.
     };
 
     struct SharedData {
-        ChunkHeader *chunkHead;  //!< Head of the chunk linked-list. Only the head chunk serves allocation.
+        ChunkHeader *chunkHead;  //!< Head of the chunk linked-list.txt. Only the head chunk serves allocation.
         BaseAllocator* ownBaseAllocator; //!< base allocator created by this object.
         size_t refcount;
         bool ownBuffer;

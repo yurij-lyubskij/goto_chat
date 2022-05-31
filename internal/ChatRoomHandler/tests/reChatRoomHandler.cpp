@@ -21,7 +21,7 @@ TEST(ChatRoomHandlersTests, GetMessage) {
     EXPECT_FALSE(handler.CanHandle(testRequest));
 
     testRequest.method = "GET";
-    testRequest.target = "/chat/message/list";
+    testRequest.target = "/chat/message/list.txt";
     testRequest.cookie = "1";
     testRequest.body = "1 range 1 2";
     EXPECT_TRUE(handler.CanHandle(testRequest));
@@ -62,7 +62,7 @@ TEST(ChatRoomHandlersTests, CreateChatRoom) {
 
     Request testRequest;
     testRequest.method = "GET";
-    testRequest.target = "/chat/message/list";
+    testRequest.target = "/chat/message/list.txt";
     EXPECT_FALSE(handler.CanHandle(testRequest));
 
     testRequest.method = "POST";
@@ -102,7 +102,7 @@ TEST(ChatRoomHandlersTests, JoinChatRoom) {
 
     Request testRequest;
     testRequest.method = "GET";
-    testRequest.target = "/chat/message/list";
+    testRequest.target = "/chat/message/list.txt";
     EXPECT_FALSE(handler.CanHandle(testRequest));
 
     testRequest.method = "POST";
@@ -132,7 +132,7 @@ TEST(ChatRoomHandlersTests, FindChatRoom) {
 
     Request testRequest;
     testRequest.method = "GET";
-    testRequest.target = "/chat/message/list";
+    testRequest.target = "/chat/message/list.txt";
     EXPECT_FALSE(handler.CanHandle(testRequest));
 
 

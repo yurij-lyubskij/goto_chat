@@ -1167,7 +1167,7 @@ private:
     Allocator* allocator_;                  //!< The current allocator. It is either user-supplied or equal to ownAllocator_.
     Allocator* ownAllocator_;               //!< Allocator owned by this Pointer.
     Ch* nameBuffer_;                        //!< A buffer containing all names in tokens.
-    Token* tokens_;                         //!< A list of tokens.
+    Token* tokens_;                         //!< A list.txt of tokens.
     size_t tokenCount_;                     //!< Number of tokens in tokens_.
     size_t parseErrorOffset_;               //!< Offset in code unit when parsing fail.
     PointerParseErrorCode parseErrorCode_;  //!< Parsing error code.

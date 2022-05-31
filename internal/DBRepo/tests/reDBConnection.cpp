@@ -7,7 +7,7 @@
 //
 //MockConnection section
 //
-std::vector<DBObject> MockConnection::exec(DBRequest request, std::vector<DBObject> objects){
+std::vector<DBObject> MockConnection::exec(DBRequest request, const std::vector<DBObject>& objects){
     std::vector<DBObject> res;
     reExec(request, objects);
     std::vector<std::string> attrs = split(request.request);
@@ -18,7 +18,9 @@ std::vector<DBObject> MockConnection::exec(DBRequest request, std::vector<DBObje
                 case user:
                     {
                     for( int i = 0; i < len; ++i ) {
-                        usrs[i] = objects[i];
+                        std::vector<User> usrs(len);
+                        auto obj = objects[i];
+                        usrs[i] = obj;
                         ++usersCount;
                         users.insert(std::make_pair(usersCount, usrs[i]));
                         userByPhone.insert(std::make_pair(usrs[i].PhoneNumber, usrs[i]));
@@ -30,7 +32,8 @@ std::vector<DBObject> MockConnection::exec(DBRequest request, std::vector<DBObje
                     {
                     std::vector<ChatRoom> chts;
                     for( int i = 0; i < len; ++i ) {
-                        chts.push_back(objects[i]);
+                        auto obj = objects[i];
+                        chts.push_back(obj);
                         ++chatsCount;
                         chats.insert(std::make_pair(chatsCount, ChatRoom(chatsCount, chts[i].getName())));
                         res.push_back(ChatRoom(chatsCount));                  
@@ -41,7 +44,8 @@ std::vector<DBObject> MockConnection::exec(DBRequest request, std::vector<DBObje
                     {
                     std::vector<iMessage> mess;
                     for( int i = 0; i < len; ++i ) {
-                        mess.push_back(objects[i]);
+                        auto obj = objects[i];
+                        mess.push_back(obj);
                         ++mesCount;
                         messages.insert(std::make_pair(mesCount, Message(mesCount, mess[i].getContent(), mess[i].getTime(), mess[i].getSender(), mess[i].getChat())));
                         res.push_back(Message(mesCount));                 
@@ -56,7 +60,8 @@ std::vector<DBObject> MockConnection::exec(DBRequest request, std::vector<DBObje
                     {
                     User usr;
                     for( int i = 0; i < len; ++i ) {
-                        usr = objects[i];
+                        auto obj = objects[i];
+                        usr = obj;
                         if ( ! users.contains(usr.Id)) return res;
                     }
                     }
@@ -64,7 +69,8 @@ std::vector<DBObject> MockConnection::exec(DBRequest request, std::vector<DBObje
                 case chat:
                     {
                     for( int i = 0; i < len; ++i ) {
-                        ChatRoom cht = objects[i].operator ChatRoom();
+                        auto obj = objects[i];
+                        ChatRoom cht = obj.operator ChatRoom();
                         if ( ! chats.contains(cht.getId())) return res;
                     }
                     }  
@@ -73,7 +79,8 @@ std::vector<DBObject> MockConnection::exec(DBRequest request, std::vector<DBObje
                     {
                     iMessage mes;
                     for( int i = 0; i < len; ++i ) {
-                        mes = objects[i];
+                        auto obj = objects[i];
+                        mes = obj;
                         if ( ! messages.contains(mes.getId())) return res;
                     }
                     }
@@ -81,8 +88,9 @@ std::vector<DBObject> MockConnection::exec(DBRequest request, std::vector<DBObje
             }
             break;
         case addMembers:
-        {   
-            ChatRoom cht = ChatRoom(objects[0]);
+        {
+            auto obj = objects[0];
+            ChatRoom cht = ChatRoom(obj);
             if ( ! chats.contains(cht.getId()) ) { return res; }
             --len;
             /*
@@ -90,7 +98,8 @@ std::vector<DBObject> MockConnection::exec(DBRequest request, std::vector<DBObje
                 if ( users_chats.contains(usrs[i].Id) ) { return res; }
             }*/
             for( int i = 0; i < len; ++i ) {
-                users_chats.insert(std::make_pair(User(objects[i+1]).Id, cht.getId()));
+                obj = objects[i+1];
+                users_chats.insert(std::make_pair(User(obj).Id, cht.getId()));
                 res.push_back(ChatRoom());
             }
         }

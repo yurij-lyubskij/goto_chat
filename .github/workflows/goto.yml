@@ -22,7 +22,7 @@ jobs:
       - run: sudo apt-get install python3-pip
       - run: pip3 install --user cpplint
       - run: sudo apt install clang-format
-      - run:  cppcheck internal/*/*.cpp internal/*/*.h main.cpp --language=c++ --enable=all --inconclusive --error-exitcode=1  -I internal/*/  --suppressions-list=list
+      - run:  cppcheck internal/*/*.cpp internal/*/*.h main.cpp --language=c++ --enable=all --inconclusive --error-exitcode=1  -I internal/*/  --suppressions-list.txt=list.txt.txt
 #      - run: cpplint --filter=-readability/casting,-legal/copyright internal/*/*.cpp internal/*/*.h main.cpp
 
   tests:

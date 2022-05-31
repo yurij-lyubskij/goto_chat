@@ -15,7 +15,7 @@ public:
     Response Handle(Request) override;
 private:
     DBConnection<iConnection>* connections;
-    const std::string REQUESTED_TARGET = "/chat/message/list";
+    const std::string REQUESTED_TARGET = "/chat/message/list.txt";
     std::vector<std::string> split(const std::string&, char);
 };
 
