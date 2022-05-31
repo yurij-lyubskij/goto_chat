@@ -15,19 +15,13 @@ class Context : public iContext {
 public:
     Context(net::io_context &ioc) : ioc(ioc) {};
 
-    void run() {
+    void run() override {
         ioc.run();
     };
 private:
     net::io_context &ioc;
 };
 
-class reContext : public iContext {
-public:
-    void run() {
-    };
-private:
-};
 
 
 #endif //GOTO_CHAT_CONTEXT_H

@@ -56,7 +56,7 @@ class DBObject{
     public:
         DBObjectType type;
         std::vector<std::string> attr;
-        DBObject();
+        DBObject() = default;
 		DBObject(const DBObject&);
 		~DBObject();
         DBObject(const User&);
@@ -65,7 +65,7 @@ class DBObject{
 		operator User();
 		operator ChatRoom();
 		operator iMessage();
-		DBObject operator=(const DBObject&);
+		DBObject& operator=(const DBObject&);
         //DBObject(InputDB);        
 };
 
@@ -74,7 +74,7 @@ class iConnection{
         virtual std::vector<DBObject> exec(DBRequest, std::vector<DBObject>) = 0;
         virtual std::vector<DBObject> get(DBRequest) = 0;
 	protected:
-		std::vector<std::string> split(const std::string&);
+		static std::vector<std::string> split(const std::string&);
 };
 
 
@@ -154,30 +154,17 @@ private:
     const int POOL = 4;
 };
 
-//Interface Block
-//class iUserRepo{
-//protected:
-//    DBConnection<iConnection> *connection;
-//public:
-//    virtual bool doesExist(int id) = 0;
-//    virtual std::vector<User> getByID(std::vector<int> id) = 0;
-//    virtual bool update(std::vector<User> users) = 0;
-//    virtual bool put(std::vector<User> users) = 0;
-//    virtual std::vector<User> getChatMembers(ChatRoom chat) = 0;
-//    virtual std::vector<User> getSender(Message mes) = 0;
-//};
-
 class iChatRepo{
 protected:
     DBConnection<iConnection> *connection;
 public:
     virtual bool doesExist(int id) = 0;
-    virtual std::vector<ChatRoom> getByID(std::vector<int> id) = 0;
+    virtual std::vector<ChatRoom> getByID(std::vector<int> ids) = 0;
     virtual bool update(std::vector<ChatRoom> chats) = 0;
     virtual std::vector<int> put(std::vector<ChatRoom> chats) = 0;
     virtual bool addUsersToChat(const ChatRoom &chat, std::vector<User> users) = 0;
     virtual bool removeUsersFromChat(const ChatRoom &chat, std::vector<User> users) = 0;
-    virtual std::vector<ChatRoom> findByName(std::string) = 0;
+    virtual std::vector<ChatRoom> findByName(const std::string&) = 0;
     //virtual ChatRoom getMesChat(Message mes) = 0;
     virtual std::vector<ChatRoom> getUserChats(const User& user) = 0;
 };
@@ -212,12 +199,12 @@ class ChatRepo: public iChatRepo{
 		ChatRepo();
 		ChatRepo(DBConnection<iConnection>*);
 		bool doesExist(int id) override;
-		std::vector<ChatRoom> getByID(std::vector<int> id) override;
+		std::vector<ChatRoom> getByID(std::vector<int> ids) override;
 		bool update(std::vector<ChatRoom> chats) override;
 		std::vector<int> put(std::vector<ChatRoom> chats) override;
-		bool addUsersToChat(const ChatRoom &chat, std::vector<User> users) override;
-		bool removeUsersFromChat(const ChatRoom &chat, std::vector<User> users) override;
-		std::vector<ChatRoom> findByName(std::string) override;
+		bool addUsersToChat(const ChatRoom &updatedChat, std::vector<User> users) override;
+		bool removeUsersFromChat(const ChatRoom &updatedChat, std::vector<User> users) override;
+		std::vector<ChatRoom> findByName(const std::string&) override;
 		//ChatRoom getMesChat(Message mes);
 		std::vector<ChatRoom> getUserChats(const User& user) override;
 };
@@ -227,7 +214,7 @@ class MessageRepo: public iMessageRepo{
 		MessageRepo();
 		MessageRepo(DBConnection<iConnection>*);
 		bool doesExist(int id) override;
-		std::vector<iMessage> getByID(std::vector<int> id) override;
+		std::vector<iMessage> getByID(std::vector<int> ids) override;
 		bool update(std::vector<iMessage> mes) override;
 		std::vector<int> put(std::vector<iMessage> mes) override;
 		std::vector<iMessage> getLastFromChat(int chatId, int messageNumber) override;

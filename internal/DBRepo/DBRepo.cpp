@@ -18,12 +18,11 @@
 //DBObject Section
 //
 
-DBObject::DBObject(){};
 
 DBObject::DBObject(const DBObject& obj): type(obj.type), attr(obj.attr){};
 
 DBObject::~DBObject(){};
-DBObject DBObject::operator=(const DBObject& obj){
+DBObject& DBObject::operator=(const DBObject& obj){
 	type = obj.type;
 	attr = obj.attr;
 	return *this;
@@ -343,7 +342,7 @@ std::vector<ChatRoom> ChatRepo::getUserChats(const User& user){
 	return chats;
 };
 
-std::vector<ChatRoom> ChatRepo::findByName(std::string name){
+std::vector<ChatRoom> ChatRepo::findByName(const std::string& name){
 
 	std::shared_ptr<iConnection> conn = connection->connection();			//getting connection to DB
 
@@ -353,9 +352,8 @@ std::vector<ChatRoom> ChatRepo::findByName(std::string name){
 	request.request = name;
 	
 	std::vector<DBObject> objects = conn->get(request);
-	int len = objects.size();
 
-	len = objects.size();													//objects with some ids might don't exist so check size
+	int len = objects.size();													//objects with some ids might don't exist so check size
 	std::vector<ChatRoom> chats;
 	for( int i = 0; i < len; ++i) chats.push_back(objects[i]);
 

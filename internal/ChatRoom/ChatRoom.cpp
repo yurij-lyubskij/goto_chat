@@ -12,12 +12,12 @@ ChatRoom::ChatRoom(int _id){
 	name = "";
 };
 
-ChatRoom::ChatRoom(std::string& _name){
+ChatRoom::ChatRoom(const std::string& _name){
 	id = 0;
 	name = _name;
 };
 
-ChatRoom::ChatRoom(int _id, std::string& _name){
+ChatRoom::ChatRoom(int _id, const std::string& _name){
 	id = _id;
 	name = _name;
 };
