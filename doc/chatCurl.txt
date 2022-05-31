@@ -1,0 +1,37 @@
+curl -i --header "Content-Type: application/json" \
+  --request POST \
+  --cookie  "session=y0foibkaaTp93QLf5RksIpHeQ"\
+  --data '{"chatName": "someChat2" ,"usersCount": 2,"users": ["12345", "603931"]}' \
+  http://localhost:8080/chat/create
+
+curl -i --header "Content-Type: application/json" \
+  --request POST \
+  --cookie  "session=LyWFfYlOZe358fGSc3dpwF17U"\
+  --data '{"chatName": "someChat" ,"usersCount": 1,"users": ["12345"]}' \
+  http://localhost:8080/chat/create
+
+  curl -i --header "Content-Type: application/json" \
+  --request POST \
+  --cookie  "session=eU5hkdu1K5xsoyizblJ4y6rPJ"\
+  --data '{"chatId": "38" ,"user": "1"}' \
+  http://localhost:8080/chat/join
+
+  curl -i --header "Content-Type: application/json" \
+  --request GET \
+  --cookie  "session=ppywnXPrEAbQ4k1vgcn4XU943"\
+  http://localhost:8080/chat/find/?name=avd
+
+  curl -i --header "Content-Type: application/json" \
+  --request GET \
+  --cookie  "session=49u4PAlYo6RKjG7UBeVoY2uGx"\
+  'http://localhost:8080/chat/message/list/?mes=40&mode=0'
+
+    curl -i --header "Content-Type: application/json" \
+  --request GET \
+  --cookie  "session=49u4PAlYo6RKjG7UBeVoY2uGx"\
+  'http://localhost:8080/chat/message/list/?mes=40&mode=1'
+
+      curl -i --header "Content-Type: application/json" \
+  --request GET \
+  --cookie  "session=ppywnXPrEAbQ4k1vgcn4XU943"\
+  'http://localhost:8080/user/getchat/?user=12345'

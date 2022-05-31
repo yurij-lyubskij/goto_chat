@@ -1,0 +1,100 @@
+curl -i --header "Content-Type: application/json"   --request POST   --data '{"username": "string1",   "phone": "12345",   "password": "string" }'
+
+curl -i --header "Content-Type: application/json" \
+  --request POST \
+  --data '{"username": "string1",   "phone": "12345",   "password": "string" }' \
+  http://localhost:8080/user/create
+
+curl -i --header "Content-Type: application/json" \
+  --request POST \
+  --data '{"username": "string1",   "phone": "475789",   "password": "string" }' \
+  http://localhost:8080/user/create
+
+HTTP/1.1 200 OK
+Server: Boost.Beast/266
+Content-Type: text/plain
+Cookie: dksalfkmdada
+Content-Length: 0
+
+HTTP/1.1 400 Bad Request
+Server: Boost.Beast/266
+Content-Type: text/plain
+Cookie:
+Connection: close
+Set-Cookie:
+Content-Length: 0
+
+curl -i --header "Content-Type: application/json" \
+  --request POST \
+  --cookie  "session=rMRFz9S0ae5LWPQ87VLsUtAtN"\
+  http://localhost:8080/session/delete
+
+Server: Boost.Beast/266
+Content-Type: text/plain
+Cookie:
+Connection: close
+Set-Cookie:
+Content-Length: 0
+
+
+HTTP/1.1 404 Not Found
+Server: Boost.Beast/266
+Content-Type: text/plain
+Cookie:
+Connection: close
+Content-Length: 0
+
+
+curl -i --header "Content-Type: application/json" \
+  --request POST \
+  --data '{"phone": "12345", "password": "string" }' \
+  http://localhost:8080/session/create
+
+  curl -i --header "Content-Type: application/json" \
+    --request POST \
+    --cookie  "session=W2Dp21gIK9SF5BaWOg3npyp7O"\
+    http://localhost:8080/user/example
+
+    HTTP/1.1 401 Unauthorized
+    Server: Boost.Beast/266
+    Content-Type: text/plain
+    Cookie:
+    Connection: close
+    Set-Cookie:
+    Content-Length: 0
+
+HTTP/1.1 200 OK
+Server: Boost.Beast/266
+Content-Type: text/plain
+Cookie:
+Connection: close
+Set-Cookie:
+Content-Length: 0
+
+curl -i \
+  --request GET \
+  --cookie  "session=8Jinh2jUPBZ4kknOiOOj7r1wZ"\
+  http://localhost:8080/chat/message/getfile?name=main.cpp
+
+  curl -i \
+    --request GET \
+    --cookie  "session=U1NBraBIc7tGrhcQwqe588ixM"\
+    --output aded.mp3\
+    http://localhost:8080/chat/message/getfile?name=voice.mp3
+
+
+
+  curl -i \
+    --request POST \
+    --cookie  "session=GJC1Da9t6njn6ZY20TUND2Z3o" \
+    --header "name:voices.mp3" \
+    --header "id:1" \
+    -F "file=@faded.mp3;type=audio/mpeg" \
+    http://localhost:8080/chat/message/voice/send
+
+
+    curl -i --header "Content-Type: application/json" \
+      --request POST \
+      --cookie  "session=J5YN0UgwRF4KNz22cOoZNP4hr"\
+      --data '{"chatId": 1, "message": {"userPhone": "12345", "text": "string3"}}' \
+      http://localhost:8080/chat/message/send

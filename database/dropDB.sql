@@ -1,0 +1,1 @@
+DROP DATABASE if exists gotochatdatabase with (force); 
