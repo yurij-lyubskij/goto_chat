@@ -169,6 +169,7 @@ void App_window::on_pushButton_5_clicked()
 // функция отображения чатов
 void App_window::show_chats()
 {
+    model = std::shared_ptr<QStringListModel>(new QStringListModel);
     *person_chats = cl.get()->get_users_chats(ui->phone_label->text().toStdString());
     QStringList chats;
     for(const auto& chat : *person_chats){
@@ -181,7 +182,7 @@ void App_window::show_chats()
 // функция отображения сообщений
 void App_window::show_messages(const QString &chat_id)
 {
-
+    model2 = std::shared_ptr<QStringListModel>(new QStringListModel);
     std::vector<Message> m = cl.get()->get_last_chat_messages(chat_id.toStdString());
 
     QStringList messages;
