@@ -1,0 +1,25 @@
+cmake_minimum_required(VERSION 3.18.4)
+project(tests)
+
+set(CMAKE_CXX_STANDARD 11)
+string(APPEND CMAKE_CXX_FLAGS " -fprofile-arcs -ftest-coverage -O0")
+if (BUILD_SANITIZERS)
+    string(APPEND CMAKE_CXX_FLAGS " -fsanitize=address -fsanitize=undefined -fsanitize=leak")
+endif()
+if (BUILD_SANITIZERS_THREAD)
+    string(APPEND CMAKE_CXX_FLAGS " -fsanitize=thread")
+endif()
+string(APPEND CMAKE_EXE_LINKER_FLAGS " -coverage")
+
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(GTest gtest_main)
+find_package(Qt6 REQUIRED COMPONENTS Widgets)
+
+message("INCLUDES = "${GTest_INCLUDE_DIRS})
+add_executable(${PROJECT_NAME} tests.cpp)
+#target_link_libraries(client_lib PRIVATE Qt6::Widgets)
+target_include_directories(${PROJECT_NAME} PUBLIC ${CLIENT_LIB_INCLUDE_DIRS} ${CHECKER_LIB_INCLUDE_DIRS} ${GTest_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} ${CLIENT_LIB_LIBRARIES} ${CHECKER_LIB_LIBRARIES} ${GTest_LINK_LIBRARIES})
+
+
+
