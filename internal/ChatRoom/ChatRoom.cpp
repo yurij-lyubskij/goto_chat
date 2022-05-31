@@ -22,12 +22,12 @@ ChatRoom::ChatRoom(int _id, std::string _name){
 	name = _name;
 };
 
-ChatRoom::ChatRoom(const ChatRoom& cht){
+ChatRoom::ChatRoom(const ChatRoom& cht) : iChatRoom(cht) {
 	id = cht.id;
 	name = cht.name;
 };
 
-ChatRoom ChatRoom::operator=(const ChatRoom& cht){
+ChatRoom& ChatRoom::operator=(const ChatRoom& cht){
 	id = cht.id;
 	name = cht.name;
 	return *this;

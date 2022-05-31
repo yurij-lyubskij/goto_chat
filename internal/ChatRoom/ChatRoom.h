@@ -22,7 +22,7 @@ class ChatRoom: public iChatRoom{
 		ChatRoom(std::string);		//Creates object with id = 0 to add to database
 		ChatRoom(int, std::string);
 		ChatRoom(const ChatRoom&);
-		ChatRoom operator=(const ChatRoom&);
+		ChatRoom& operator=(const ChatRoom&);
 };
 
 #endif
