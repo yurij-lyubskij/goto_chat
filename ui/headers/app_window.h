@@ -10,6 +10,7 @@
 #include <QTableView>
 #include <algorithm>
 #include <QTime>
+#include <mutex>
 #include "recorder.h"
 #include "client.h"
 #include "parser.h"
@@ -111,6 +112,7 @@ private:
     // клиент который осуществляет связь с сервером
     std::shared_ptr<Client> cl;
 
+    std::mutex locker;
     // поля этого окна
     find_chat_window* chat_window;
     QString login;

@@ -43,8 +43,10 @@ void App_window::refresh_messages()
     std::string chat_id = *temp_chat_id;
     while(*temp_chat_id == chat_id){
         std::this_thread::sleep_for(std::chrono::seconds(2));
+        locker.lock();
         show_messages(QString::fromStdString(chat_id));
         show_chats();
+        locker.unlock();
     }
 }
 
@@ -144,8 +146,8 @@ void App_window::on_listView_doubleClicked(const QModelIndex &index)
     QString chat_name = index.data(0).toString();
     ui->messages->setTitle(chat_name);
 
-//    std::thread th(&App_window::refresh_messages, this);
-//    th.detach();
+    std::thread th(&App_window::refresh_messages, this);
+    th.detach();
     show_messages(QString::fromStdString(*temp_chat_id));
 }
 
