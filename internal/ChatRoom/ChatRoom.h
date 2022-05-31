@@ -18,11 +18,9 @@ class iChatRoom{
 class ChatRoom: public iChatRoom{
 	public:
 		ChatRoom();					//Creates empty(false) object
-    // cppcheck-suppress noExplicitConstructor
 		ChatRoom(int);
-    // cppcheck-suppress noExplicitConstructor
-		ChatRoom(std::string);		//Creates object with id = 0 to add to database
-		ChatRoom(int, std::string);
+		ChatRoom(std::string&);		//Creates object with id = 0 to add to database
+		ChatRoom(int, std::string&);
 		ChatRoom(const ChatRoom&);
 		ChatRoom& operator=(const ChatRoom&);
 };

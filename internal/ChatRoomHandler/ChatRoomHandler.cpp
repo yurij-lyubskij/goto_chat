@@ -110,7 +110,7 @@ Response CreateChatRoom::Handle(Request request){
     const char* json = request.body.c_str();
     d.Parse(json);
     if(! d.HasMember("chatName")) return response;
-    newChat = ChatRoom(d["chatName"].GetString());
+    std::string name = d["chatName"].GetString();    newChat = ChatRoom(name);
     /*
     int usersCount = 0;
     if(! d.HasMember("usersCount")) return response;
